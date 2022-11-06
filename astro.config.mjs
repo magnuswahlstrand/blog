@@ -10,6 +10,7 @@ import mdx from "@astrojs/mdx";
 // https://astro.build/config
 export default defineConfig({
     site: "https://astro-paper.pages.dev/",
+    vite: { optimizeDeps: { include: ['asciinema-player'] } },
     integrations: [tailwind({
         config: {
             applyBaseStyles: false

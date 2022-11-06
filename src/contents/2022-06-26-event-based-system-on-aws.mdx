@@ -4,14 +4,15 @@ slug: 2022-06-26-event-based-system-on-aws
 datetime: 2022-06-26
 tags: ["sst","serverless","cdk","lambda","event-based","eventbridge", "aws", "go"]
 ---
+import Sidenote from '../components/Sidenote.astro';
+import Caption from '../components/Caption.astro';
 
 In this post I will build a small [event-driven system](https://en.wikipedia.org/wiki/Event-driven_architecture) with Go. It will be serverless app with an API Gateway in front. I will use [AWS EventBridge](https://aws.amazon.com/eventbridge/) as message bus that serves as glue between our components and the app will be deployed using [Serverless Stack ](https://sst.dev/).
 
-<div style="position: fixed; bottom: 20px; left: 40px;">
-
-{{< figure src="/img/event-based-system-on-aws/teaser.png" width="70%" >}}
+<div class="b-8 l-16 max-w-xl mx-auto">
+  <img src="/img/event-based-system-on-aws/teaser.png" alt="Event-based system" class=""/>
 </div>
-<!--more-->
+
 
 ## Overview
 
@@ -20,7 +21,7 @@ Our overall goal is quite simple. We want to build a simple system where we can 
 In this tutorial, we will build an order taking app. On the one side, orders are placed through a public API endpoint `POST /orders`. The handler for that endpoint is a Lambda function that "creates" order by publishing them to EventBridge. It in turn is configured to route messages to our consumers, two Lambda functions. **CreateInvoice** and **LogEvents** will receive `order.created` events and log them to standard out, just to showcase the broadcasting of events.
 
 ![overview](/img/event-based-system-on-aws/overview.png)
-{{% table_caption %}} Target architecture {{% /table_caption %}}
+<Caption> Target architecture </Caption>
 
 Our app is deployed to AWS using my new favorite tool: [Serverless Stack](https://sst.dev/) (SST). It has great [CDK](https://aws.amazon.com/cdk/) constructs for quick development, and gives us hot reload of the Lambda functions. Great!
 
@@ -60,7 +61,7 @@ In this tutorial, we are interested in two parts
 We also install [Dave Cheney](https://dave.cheney.net/)'s package [go-spew](https://github.com/davecgh/go-spew). It is a Go package to dump things to the logs. I often use it to explore what data is passed around in a new service, in this case AWS EventBridge.
 
 ```
-cd eventbus/services 
+cd eventbus/services
 go get github.com/davecgh/go-spew/spew
 ```
 
@@ -102,7 +103,9 @@ Now we can start building! First out we will get the **_event consuming_** to wo
 
 ![consume](/img/event-based-system-on-aws/consume.png)
 
-{{% table_caption %}} **Goal:** produce events from the terminal, through EventBridge and consume in our Lambda function {{% /table_caption %}}
+<Caption>
+**Goal:** produce events from the terminal, through EventBridge and consume in our Lambda function
+</Caption>
 
 First up, let's create a serverless function that listens to events from the event bus. SST makes this easy for us! All we need to do is to replace the initial stack in `./stack/MyStack.ts` with the following:
 
@@ -124,7 +127,7 @@ export function Stack({stack}: StackContext) {
             }
         }
     })
-    
+
 	// 3. Output the event bus name
     stack.addOutputs({
         BusName: bus.eventBusName
@@ -347,10 +350,10 @@ Here we do the following:
 3. Marshal the JSON we want to send in our event
 4. Send our event to EventBridge
 
-{{% sidenote title="Note:" %}}
+<Sidenote title="Note:">
 We could probably get away with creating a global client and re-use that between requests. During testing, I got an authentication error due to stale credentials. This might only be a test environment problem, but for now we will create the client on every request.
 
-{{% /sidenote %}}
+</Sidenote>
 
 Once again, let SST deploy all updates.
 
@@ -373,8 +376,8 @@ Content-Type: application/json
 Going back to the terminal, we see the result:
 
 ```bash
-# 1. create_order invoked via the API gateway 
-e31bc6c6-fe85-4e92-b30d-050bf33f0498 REQUEST magnus-eventbus-Stack-apiLambdaPOSTorderCF2979AB-jZgSzQgXMeRR [functions/create_order.go] invoked by API POST /order 
+# 1. create_order invoked via the API gateway
+e31bc6c6-fe85-4e92-b30d-050bf33f0498 REQUEST magnus-eventbus-Stack-apiLambdaPOSTorderCF2979AB-jZgSzQgXMeRR [functions/create_order.go] invoked by API POST /order
 e31bc6c6-fe85-4e92-b30d-050bf33f0498 RESPONSE null
 
 # 2. log_events.go invoked (by event from event bus)
@@ -461,7 +464,7 @@ Then we add it as a target for our stack:
 
 Now all we need to do is to create a new order
 ```bash
-# 1. create_order invoked via the API gateway 
+# 1. create_order invoked via the API gateway
 60647f24-3e36-438c-964e-e6644e472f84 REQUEST magnus-eventbus-Stack-apiLambdaPOSTorderCF2979AB-jZgSzQgXMeRR [functions/create.go] invoked by API POST /order
 60647f24-3e36-438c-964e-e6644e472f84 RESPONSE null
 
@@ -493,4 +496,4 @@ I hope you enjoyed this article. Feel free to reach out to me at [@wahlstra](htt
 ### Resources
 
 * [AWS Lambda function handler in Go](https://docs.aws.amazon.com/lambda/latest/dg/golang-handler.html)
-* YouTube: [SST Weekly: Event Bus](https://www.youtube.com/watch?v=iMsPztMiFIk) - inspiration for this video 
+* YouTube: [SST Weekly: Event Bus](https://www.youtube.com/watch?v=iMsPztMiFIk) - inspiration for this video

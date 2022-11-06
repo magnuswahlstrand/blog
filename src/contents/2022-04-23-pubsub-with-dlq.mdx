@@ -4,6 +4,7 @@ slug: 2022-04-23-pubsub-with-dlq
 datetime: 2022-04-23
 tags: ["go", "pubsub", "gcp","dlq"]
 ---
+import Asciinema from '../components/Asciinema.astro';
 
 Today we will build a simple system with Google Pub/Sub to explore the basic components needed for an asynchronous [publisher-subscriber pattern](https://en.wikipedia.org/wiki/Publish%E2%80%93subscribe_pattern). We will use Terraform for creating the infrastucture, and go for the application code. All code [here](https://github.com/magnuswahlstrand/blog-code/tree/main/gcp-pubsub-with-dlq).
 
@@ -14,9 +15,6 @@ At the end of this post, you should know
 - Why do I need a dead letter queue?
 - How do I retry message from my dead letter queue?
 
-
-
-<!--more-->
 
 ## Background
 
@@ -37,10 +35,10 @@ A problem in messaging systems is "what do you do with bad messages?". Let's say
 
 **Retry forever** - with this we might also ultimately lose data, if the messaging service fills up. This could also cause increase latency in the system.
 
-A third option is a **dead letter queue (DLQ)**. The main purpose of a dead letter queue is to handle messages that cannot be handled by the consumer. After a certain amount of time or retries, we can send messages "somewhere else", where the problematic messages can be handled manually. For example, an operator can inspect and drop the messages, or resend them to the service after a bug-fix has been released. 
+A third option is a **dead letter queue (DLQ)**. The main purpose of a dead letter queue is to handle messages that cannot be handled by the consumer. After a certain amount of time or retries, we can send messages "somewhere else", where the problematic messages can be handled manually. For example, an operator can inspect and drop the messages, or resend them to the service after a bug-fix has been released.
 
 
-### Pub/Sub with DLQ on GCP 
+### Pub/Sub with DLQ on GCP
 
 In GCP, it works as follows:
 
@@ -49,14 +47,14 @@ In GCP, it works as follows:
 
 1. An application publishes a message to a topic, e.g. `used-created`
 2. The consuming application is subscribed to this topic via a subscription `myapp.user-created`
-3. When the retry limit is reached, the message is moved over to the dead letter queue topic, `myapp.used-created.dlq`. 
+3. When the retry limit is reached, the message is moved over to the dead letter queue topic, `myapp.used-created.dlq`.
 4. The messages end up in the subscription `myapp.user-created.dlq`, where it can handled manually by an operator.
 
 ## Infrastructure
 
 We use [Terraform](https://www.terraform.io/) to set up the necessary infrastructure in GCP.
 
-Next we set up our main topic and subscription. There is a Terraform module that simplifies the setup, called [terraform-google-modules/pubsub/google](https://registry.terraform.io/modules/terraform-google-modules/pubsub/google/latest). 
+Next we set up our main topic and subscription. There is a Terraform module that simplifies the setup, called [terraform-google-modules/pubsub/google](https://registry.terraform.io/modules/terraform-google-modules/pubsub/google/latest).
 
 _Note: For this demo, we keep retries few, and short. Normally I would configure exponential back-off over a longer period._
 ```terraform
@@ -106,11 +104,11 @@ module "pubsub-dlq" {
 
 Then we run `terraform apply`
 
-{{< asciicast src="/casts/pubsub-with-dlq/terraform.cast" poster="npt:0:04" loop="true" rows="16" cols="100" autoplay="true">}}
+<Asciinema src="/pubsub-with-dlq/terraform.cast"/>
 
 
 ### Publish messages
-Now that we have our infrastructure in place, we can publish a couple of messages. The easiest way to publish messages to pub/sub is with the `gcloud`-cli. 
+Now that we have our infrastructure in place, we can publish a couple of messages. The easiest way to publish messages to pub/sub is with the `gcloud`-cli.
 
 ```bash
 gcloud pubsub topics publish \
@@ -151,21 +149,21 @@ func ProcessMessages(ctx context.Context, projectID, subID string) error {
 ***Note**: we use googles pubsub client cloud.google.com/go/pubsub*
 
 Now we can run our app.
-{{< asciicast src="/casts/pubsub-with-dlq/process-messages.cast" poster="npt:0:04" loop="true" rows="16" cols="100" autoplay="true">}}
+<Asciinema src="/pubsub-with-dlq/process-messages.cast"/>
 
-We can see that we receive the two messages we published earlier, _"alive"_ and _"dead"_. The former is `Ack`:ed, while "dead" gets `Nack`:ed. After attempt 5, it disappears. Is it lost forever? No! It got automatically sent over to our DLQ! Success! 
+We can see that we receive the two messages we published earlier, _"alive"_ and _"dead"_. The former is `Ack`:ed, while "dead" gets `Nack`:ed. After attempt 5, it disappears. Is it lost forever? No! It got automatically sent over to our DLQ! Success!
 
 
 ## What now?
-Before we wrap up, we need to cover two things. 
+Before we wrap up, we need to cover two things.
 1. How do we know that something is stuck in the DLQ?
-2. What do we do when it is stuck there? 
+2. What do we do when it is stuck there?
 
 ### Monitoring
 
 The answer to the first question is "monitoring", which GCP has good support for! The GCP app is surprisingly good for this purpose I think. I will not cover the details, but here is an additional Terraform-snippet I used to set up monitoring for our app. It checks if the `num_undelivered_messages` on the dlq-subscription is greater than 0.
 
-The notification_channel refers to the phone on my app. I set this up separately. 
+The notification_channel refers to the phone on my app. I set this up separately.
 
 ```terraform
 resource "google_monitoring_alert_policy" "alert_policy" {
@@ -197,7 +195,7 @@ resource "google_monitoring_alert_policy" "alert_policy" {
 
 When an operator has received the alarm from the monitor, they manually inspect the messages in the DLQ. If the message is completely invalid, they can just pull and acknowledge that specific message in the cloud console.
 
-If the message ended up in the DLQ because of a bug in the application. We can republish it to the main topic with the following code. 
+If the message ended up in the DLQ because of a bug in the application. We can republish it to the main topic with the following code.
 
 ```go
 func RepublishMessages(ctx context.Context, projectID, dlqSubID, toTopicID string) error {
@@ -234,6 +232,6 @@ A few caveats on this method.
 
 # Conclusion
 
-That's all. Now we have a simple publisher-subscriber setup that we can use for our application. We even have a dead letter queue with monitoring if something goes wrong. 
+That's all. Now we have a simple publisher-subscriber setup that we can use for our application. We even have a dead letter queue with monitoring if something goes wrong.
 
 Good luck!

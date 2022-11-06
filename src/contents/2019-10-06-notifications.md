@@ -6,7 +6,9 @@ datetime: 2019-10-06
 tags: ["android", "push notifications", "notifications", "mobile", "fcm"]
 ---
 
-In [Part 1](./2019-10-05-push-notifications) we learned how to send push notifications from [Firebase Cloud Messaging console](https://console.firebase.google.com). There are a number of improvements we can make:
+In [Part 1](./2019-10-05-push-notifications) we learned how to send push notifications
+from [Firebase Cloud Messaging console](https://console.firebase.google.com). There are a number of improvements we can
+make:
 
 - [Show notification when the app in in the foreground](#show-notification-in-foregrounded-app)
 - [Go to a specific view in the app when clicked](#go-to-specific-view)
@@ -27,13 +29,16 @@ _First of all, the documentation for Android notifications is great. Here are a 
 
 ### Creating a notification channel
 
-From Android API level 26, all notifications need to be assigned to a `notification channel`. The reason for this is that the user can control notifications per channel for an app. In my app below you could disable notifications about Taxis, while keeping the one for E-mails.
+From Android API level 26, all notifications need to be assigned to a `notification channel`. The reason for this is
+that the user can control notifications per channel for an app. In my app below you could disable notifications about
+Taxis, while keeping the one for E-mails.
 
-{{< gallery caption-effect="fade" >}}
-  {{< figure thumb="-thumb" link="/img/push-notifications/2_notification_channel_1.jpg" caption="Notifications settings">}}
-  {{< figure thumb="-thumb" link="/img/push-notifications/2_notification_channel_2.jpg" caption="App notification channels" >}}
-  {{< figure thumb="-thumb" link="/img/push-notifications/2_notification_channel_3.jpg" caption="E-mail notification channel" alt="Detailed settings for e-mail notification channel" >}}
-{{< /gallery >}}
+
+<div class="flex flex-row h-96 w-full">
+<img src="/img/push-notifications/2_notification_channel_1-thumb.jpg" />
+<img src="/img/push-notifications/2_notification_channel_2-thumb.jpg" />
+<img src="/img/push-notifications/2_notification_channel_3-thumb.jpg" />
+</div>
 
 This code will only be called for API level 26 and above.
 
@@ -67,7 +72,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-More info here: [Android: notification channels](https://developer.android.com/training/notify-user/channels). 
+More info here: [Android: notification channels](https://developer.android.com/training/notify-user/channels).
 
 ### Creating a notification
 
@@ -103,32 +108,33 @@ Now if we build the app:
 **activity_main.xml**
 
 ```xml
+
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".MainActivity">
+                                                   xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                   xmlns:tools="http://schemas.android.com/tools"
+                                                   android:layout_width="match_parent"
+                                                   android:layout_height="match_parent"
+                                                   tools:context=".MainActivity">
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toTopOf="@+id/notify_button"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hello World!"
+            app:layout_constraintBottom_toTopOf="@+id/notify_button"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
 
     <!-- Added -->
     <Button
-        android:id="@+id/notify_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="280dp"
-        android:text="Notify!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+            android:id="@+id/notify_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="280dp"
+            android:text="Notify!"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 ```
@@ -145,11 +151,16 @@ Now if we build the app:
 ```
 
 ### Code
-_The code for the push notification is foreground mode is [here](https://github.com/magnuswahlstrand/android-push-notifications/tree/foreground-mode)._
+
+_The code for the push notification is foreground mode
+is [here](https://github.com/magnuswahlstrand/android-push-notifications/tree/foreground-mode)._
 
 ## Go to specific view
 
-When the user clicks on a notification, the app will open with the main activity active. In many cases we want to go an activity that is related to the notification itself. For example, if we get a notification that our taxi has arrived, we could open a screen with that particular ride. We do this by passing an intent to the notification (more information [here](https://developer.android.com/training/notify-user/build-notification.html#click)).
+When the user clicks on a notification, the app will open with the main activity active. In many cases we want to go an
+activity that is related to the notification itself. For example, if we get a notification that our taxi has arrived, we
+could open a screen with that particular ride. We do this by passing an intent to the notification (more
+information [here](https://developer.android.com/training/notify-user/build-notification.html#click)).
 
 1. Create a new Activity (**File > New > Activity > Empty Activity**). For example, **DetailsActivity**
 2. Create an `Intent` and add it to the notificationBuilder
@@ -179,4 +190,6 @@ Here is the result.
 ![Go to specific view](/img/push-notifications/2_specific_view.gif)
 
 ### Code
-_The code to go to a specific view is [here](https://github.com/magnuswahlstrand/android-push-notifications/tree/goto-view)._
+
+_The code to go to a specific view
+is [here](https://github.com/magnuswahlstrand/android-push-notifications/tree/goto-view)._
