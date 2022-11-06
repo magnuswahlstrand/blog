@@ -5,6 +5,7 @@ import Footer from "@components/Footer.astro";
 import LinkButton from "@components/LinkButton.astro";
 import Hr from "@components/Hr.astro";
 import Card from "@components/Card";
+import Welcome from "@components/Welcome.astro";
 import getSortedPosts from "@utils/getSortedPosts";
 import slugify from "@utils/slugify";
 import type { Frontmatter } from "src/types";
@@ -36,16 +37,7 @@ const sortedPosts = getSortedPosts(posts);
         </svg>
       </a>
 
-      <p>
-        AstroPaper is a minimal, responsive and SEO-friendly Astro blog theme.
-        This theme is aimed to be accessible out of the box. Light and dark mode
-        are supported by default and additional color schemes can also be
-        configured. Read posts or see the <LinkButton
-          className="hover:text-skin-accent underline underline-offset-4 decoration-dashed"
-          href="https://github.com/satnaing/astro-paper#readme"
-          >documentation</LinkButton
-        > for more info.
-      </p>
+      <Welcome />
       <div class="social-wrapper">
         <div class="social-links">Social Links:</div>
         <Socials />

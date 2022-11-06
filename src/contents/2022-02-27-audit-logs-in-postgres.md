@@ -2,7 +2,7 @@
 title: "Audit tables in Postgres"
 slug: 2022-02-27-audit-logs-in-postgres
 datetime: 2022-02-27 
-tags: ["psql", "postgres", "cdc"]
+tags: ["postgres", "cdc"]
 --- 
 
 A while back I watched [this video](https://www.youtube.com/watch?v=j6ow-UemzBc) (summary [here](https://www.infoq.com/news/2018/07/bryzek-microservice-architecture/)) with Michael Bryzek (Flow.io, Gilt). He presented how they do [Change Data Capture](https://en.wikipedia.org/wiki/Change_data_capture) (CDC) with PostgreSQL and DynamoDB. One goal with CDC is that changes to databases rows and tables can be propagated to other parts of the system. In microservices systems, this can be used to build read-projections, or just keep local caches of data. 

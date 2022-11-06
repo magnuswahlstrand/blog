@@ -2,7 +2,7 @@
 title: "SQLALchemy: One to many-relationships"
 slug: 2022-03-07-one-to-many
 datetime: 2022-03-07
-tags: ["python","sqlalchemy","psql", "postgres"]
+tags: ["python","sqlalchemy", "postgres"]
 --- 
 
 When learning a new tech stack, the database layer is usually one of the harder and the most fun activities. In my current project, our services are written in Python, and most of them use PostgreSQL for storage. 

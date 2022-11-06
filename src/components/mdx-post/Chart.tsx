@@ -31,7 +31,7 @@ export function Chart(props: Props) {
     return (
         <div className="mx-auto my-5 max-w-xs rounded-lg border-2 border-gray-300 p-6 sm:max-w-lg">
             <div className="text-3xl">
-                <span>Lines of code written in year </span>
+                <p>Lines of code written in year </p>
                 <div>
                     <select value={year} onChange={handleChange} className="border rounded-lg">
                         {Array.from(yearlyData, ([key, value]) => (
@@ -45,7 +45,7 @@ export function Chart(props: Props) {
             <p className="text-lg">
                 Semi-accurate estimation of number of lines of code that I have written
                 in a given year. Inspired by reality and then weighted by{" "}
-                <a href="src/components/mdx-post/Chart">fair dice roll</a>.
+                <a href="https://xkcd.com/221">fair dice roll</a>.
             </p>
 
             <div
@@ -69,7 +69,7 @@ export function Chart(props: Props) {
                             key={index}
                             className="text-bold m-1 w-full text-center text-sm"
                         >
-                            {month}
+                            <p>{month}</p>
                         </div>
                     );
                 })}

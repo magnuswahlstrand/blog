@@ -4,7 +4,7 @@ title: "About me"
 navName: "about"
 ---
 
-My name is Magnus Wahlstrand. I am a software engineer, based in Stockholm, Sweden. I love programming.
+My name is Magnus Wahlstrand. I am a software engineer, based in Stockholm, Sweden. I love programming, and I run my own company, [32 Bytes](https://32b.se). 
 
 I enjoy developing things that are easy to maintain and observe long term. If shortcuts are needed, I believe in taking the time to clean up afterwards to keep the quality of the code base high over time.
 

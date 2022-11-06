@@ -15,8 +15,10 @@ Collaborative and end-to-end encrypted.
 
 In this post I will go through a few of Exalidraw's features that are useful and great.
 
+## Table of contents
+
 <!--more-->
-### Basics
+## Basics
 
 First, Excalidraw can draw most of the basic shapes you expect from a white boarding-tool.
 
@@ -128,7 +130,7 @@ And, of course, the most useful feature of them all. `E` for the eraser!
 
 ![Eraser](/img/excalidraw/eraser.gif)
 
-# Conclusion
+## Conclusion
 That's all. Happy diagramming!
 
 ## Resources
@@ -137,7 +139,7 @@ That's all. Happy diagramming!
 
 <br><br>
 
-### Bonus: *features I don't use at all*
+## Bonus: *features I don't use at all*
 
 * **Draw tool (`X`)** - I prefer not to free hand anything...
 * **Flip horizontal/vertical (`shift`+`H`/`V`)** - Does almost _nothing_ to rectangles, diamonds, ellipses. Does _exactly_ nothing to texts and library objects.

@@ -12,7 +12,7 @@ export default function Example(props: Props) {
         <div className="flex justify-center">
             <button className="bg-indigo-300 rounded-lg py-2 px-4 hover:bg-indigo-100"
                 onClick={() => setCounter(v => v + 1)}
-            >I'm a JSX component! You have clicked me {counter} times.</button>
+            >I'm a JSX component! You have clicked me <b>{counter}</b> times.</button>
         </div>
     );
 };
