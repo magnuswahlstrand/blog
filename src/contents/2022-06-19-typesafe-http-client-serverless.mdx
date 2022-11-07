@@ -2,9 +2,8 @@
 title: "Typesafe serverless API with tRPC"
 slug: 2022-06-19-typesafe-http-client-serverless
 datetime: 2022-06-19
-tags: ["aws","serverless", "sst","typescript", "cdk", "trpc"]
+tags: ["aws", "serverless", "sst", "typescript", "cdk", "trpc"]
 ---
-import Caption from '../components/Caption.astro';
 
 I have been using React and [React Query](https://react-query.tanstack.com/) for most of my hobby projects lately. I
 mainly use Typescript, and one of main pain points for me with React Query is the amount of work needed to get the
@@ -14,14 +13,13 @@ Yesterday, [Dax Raad](https://twitter.com/thdxr) from the [Serverless Stack](htt
 me in the direction of the [tRPC](https://trpc.io/) project. It is a framework creating typesafe client and server code
 in Typescript. **tRPC** is a great fit for me as it has
 
-1) great integration with [React and React Query](https://trpc.io/docs/react) and
-2) an adapter for [AWS Lambda and the AWS Gateway](https://trpc.io/docs/aws-lambda)
+1. great integration with [React and React Query](https://trpc.io/docs/react) and
+2. an adapter for [AWS Lambda and the AWS Gateway](https://trpc.io/docs/aws-lambda)
 
 In this post, I will show you how to set up a typesafe API in **Typescript**, with **React** in the frontend with **AWS
 Lambda** in the backend using **tRPC** as the glue.
 
 ![setup](/img/typesafe-http-client-serverless/setup.png)
-
 
 ## Intro to tRPC
 
@@ -37,43 +35,40 @@ In our case, it can look like this. We have a procedure called `"hello"` that ta
 
 ```typescript jsx
 export function Hello() {
-    const hello = trpc.useQuery(['hello', {name: "Magnus"}]);
-    if (!hello.data) return <div>Loading...</div>;
+  const hello = trpc.useQuery(["hello", { name: "Magnus" }]);
+  if (!hello.data) return <div>Loading...</div>;
 
-    return (
-        <div>{hello.data.message}</div>
-    );
+  return <div>{hello.data.message}</div>;
 }
 ```
 
 What happens behind the scenes is that **tRPC** will convert the client call to an HTTP request, send it to the server, where it is converted back to typescript.
 
 ```typescript
-import * as trpc from '@trpc/server';
-import {z} from 'zod';
-import {awsLambdaRequestHandler} from '@trpc/server/adapters/aws-lambda';
+import * as trpc from "@trpc/server";
+import { z } from "zod";
+import { awsLambdaRequestHandler } from "@trpc/server/adapters/aws-lambda";
 
-const appRouter = trpc.router()
-    .query('hello', {
-        input: z.object({
-            name: z.string()
-        }),
-        async resolve(req) {
-            return {message: `Hello, ${req.input.name}!`};
-        },
-    });
+const appRouter = trpc.router().query("hello", {
+  input: z.object({
+    name: z.string(),
+  }),
+  async resolve(req) {
+    return { message: `Hello, ${req.input.name}!` };
+  },
+});
 ```
+
 First it is validated (and type narrowed to `{name: string}`), and then we can use the typed object as `req` in our application code in the `resolve`-function.
 
 There are two variants or RPCs in **tRPC**: query (read) and mutation (write). This table shows the mapping to HTTP requests.
 
-| HTTP Method | Mapping       | Notes                                                                                                 |
-|-------------|---------------|-------------------------------------------------------------------------------------------------------|
+| HTTP Method | Mapping       | Notes                                                                                                   |
+| ----------- | ------------- | ------------------------------------------------------------------------------------------------------- |
 | `GET`       | `.query()`    | Input JSON-stringified in query param. e.g. `myQuery?input=${encodeURIComponent(JSON.stringify(input))` |
-| `POST`      | `.mutation()` | Input as POST body.                                                                                   |
+| `POST`      | `.mutation()` | Input as POST body.                                                                                     |
 
-<Caption> from [trpc.io: HTTP RPC specification](https://trpc.io/docs/rpc) </Caption>
-<br/>
+<br />
 
 Those are the basics of **tRPC**. Let's start building things!
 
@@ -113,6 +108,7 @@ npm install @serverless-stack/static-site-env --save-dev
 ```
 
 Finally, we go into `./frontend/package.json` and replace the start command
+
 ```diff
 "scripts": {
 -   "start": "react-scripts start",
@@ -123,8 +119,8 @@ Finally, we go into `./frontend/package.json` and replace the start command
 },
 ```
 
-
 **Note:** if you have [jq](https://stedolan.github.io/jq/) installed, you can use
+
 ```bash
 jq '.scripts.start="sst-env -- react-scripts start"' package.json > package.json
 ```
@@ -138,17 +134,17 @@ If we look inside `./stack/MyStack.ts`, we see the stack created by `sst init`. 
 3. Output the API Gateway URL
 
 ```typescript
-import {StackContext, Api} from "@serverless-stack/resources";
+import { StackContext, Api } from "@serverless-stack/resources";
 
-export function MyStack({stack}: StackContext) {
-    const api = new Api(stack, "api", {
-        routes: {
-            "GET /": "functions/lambda.handler",
-        },
-    });
-    stack.addOutputs({
-        ApiEndpoint: api.url
-    });
+export function MyStack({ stack }: StackContext) {
+  const api = new Api(stack, "api", {
+    routes: {
+      "GET /": "functions/lambda.handler",
+    },
+  });
+  stack.addOutputs({
+    ApiEndpoint: api.url,
+  });
 }
 ```
 
@@ -228,41 +224,43 @@ Press _Enter_ and it will deploy our changes.
 
 Now, let's get into the code. This guide is loosely based on the [tRPC Quickstart](https://trpc.io/docs/quickstart).
 
-**The handler** (api/functions/lambda.ts) is what will receive our request. This is our backend. In this tutorial we return a simple and friendly "Hello, {name}!" where the name is taken from the request input.
+**The handler** (api/functions/lambda.ts) is what will receive our request. This is our backend. In this tutorial we return a simple and friendly `"Hello, {name}!"` where the name is taken from the request input.
 
 ```typescript
-import * as trpc from '@trpc/server';
-import {z} from 'zod';
-import {awsLambdaRequestHandler} from '@trpc/server/adapters/aws-lambda';
+import * as trpc from "@trpc/server";
+import { z } from "zod";
+import { awsLambdaRequestHandler } from "@trpc/server/adapters/aws-lambda";
 
 // 1. Define the tRPC Router
-const appRouter = trpc.router()
-    .query('hello', {          // i.   Define query
-        input: z.object({      // ii.  Input validation and type narrowing
-            name: z.string()
-        }),
-        async resolve(req) {   // iii. Application logic
-            return {message: `Hello, ${req.input.name}!`};
-        },
-    });
+const appRouter = trpc.router().query("hello", {
+  // i.   Define query
+  input: z.object({
+    // ii.  Input validation and type narrowing
+    name: z.string(),
+  }),
+  async resolve(req) {
+    // iii. Application logic
+    return { message: `Hello, ${req.input.name}!` };
+  },
+});
 
 // 2. Define the AppRouter type, needed on the client side
 export type AppRouter = typeof appRouter;
 
 // 3. Export the handler.
 export const handler = awsLambdaRequestHandler({
-    router: appRouter,
-})
+  router: appRouter,
+});
 ```
 
 Let's see what we have done
 
 1. **Define the tRPC router**
-    1. Here we define that we have a remote procedure call (RPC) that is a `query`. The
-       procedure is called "hello".
-    1. We use [Zod](https://github.com/colinhacks/zod) to define the input types, in this case an object of
-       type `{name: string}`. It does type narrowing for us!
-    1. Application logic, e.g. make database requests.
+   1. Here we define that we have a remote procedure call (RPC) that is a `query`. The
+      procedure is called "hello".
+   1. We use [Zod](https://github.com/colinhacks/zod) to define the input types, in this case an object of
+      type `{name: string}`. It does type narrowing for us!
+   1. Application logic, e.g. make database requests.
 2. **Define the AppRouter type**. This is needed on the client side
 3. **Export the handler**. The receiver of `GET /hello`
 
@@ -271,8 +269,8 @@ Let's see what we have done
 Next we create a new file in `frontend/src` called `utils/trpc.ts`
 
 ```typescript
-import {createReactQueryHooks} from '@trpc/react';
-import type {AppRouter} from '../../../api/functions/lambda';
+import { createReactQueryHooks } from "@trpc/react";
+import type { AppRouter } from "../../../api/functions/lambda";
 
 export const trpc = createReactQueryHooks<AppRouter>();
 ```
@@ -283,27 +281,27 @@ We set up our **tRPC** client and **React Query** client, and wrap our main appl
 the **tRPC** client with the URL from the `REACT_APP_API_URL` that we propagated in the stack.
 
 ```typescript jsx
-import React, {useState} from 'react';
-import {QueryClient, QueryClientProvider} from 'react-query';
-import {trpc} from './utils/trpc';
+import React, { useState } from "react";
+import { QueryClient, QueryClientProvider } from "react-query";
+import { trpc } from "./utils/trpc";
 
-const apiUrl = process.env.REACT_APP_API_URL ?? ""
+const apiUrl = process.env.REACT_APP_API_URL ?? "";
 
 export default function App() {
-    const [queryClient] = useState(() => new QueryClient());
-    const [trpcClient] = useState(() =>
-        trpc.createClient({
-            url: `${apiUrl}`,
-        }),
-    );
+  const [queryClient] = useState(() => new QueryClient());
+  const [trpcClient] = useState(() =>
+    trpc.createClient({
+      url: `${apiUrl}`,
+    })
+  );
 
-    return (
-        <trpc.Provider client={trpcClient} queryClient={queryClient}>
-            <QueryClientProvider client={queryClient}>
-                <Hello/>
-            </QueryClientProvider>
-        </trpc.Provider>
-    );
+  return (
+    <trpc.Provider client={trpcClient} queryClient={queryClient}>
+      <QueryClientProvider client={queryClient}>
+        <Hello />
+      </QueryClientProvider>
+    </trpc.Provider>
+  );
 }
 ```
 
@@ -312,10 +310,10 @@ use our typesafe client 🎉!
 
 ```typescript jsx
 export function Hello() {
-    const hello = trpc.useQuery(['hello', {name: "Magnus"}]);
-    if (!hello.data) return <div>Loading...</div>;
+  const hello = trpc.useQuery(["hello", { name: "Magnus" }]);
+  if (!hello.data) return <div>Loading...</div>;
 
-    return <div>{hello.data.message}</div>
+  return <div>{hello.data.message}</div>;
 }
 ```
 
@@ -325,6 +323,7 @@ a `hello.data` which is of type `{message: string}`.
 ### Testing our app
 
 Now, with everything deployed, we can start our React app and go to [localhost:3000](http://localhost:3000/).
+
 ```
 cd frontend
 npm start
@@ -335,25 +334,27 @@ If everything is configured correctly, you should see the following (perhaps wit
 ![setup](/img/typesafe-http-client-serverless/hellomagnus.gif)
 
 ## Summary
+
 We have built a simple `Hello, <Name>!`-app using Typescript, React, SST and **tRPC**. I think that the code was simple, while getting all the infrastructure up and running more complicated. The upside to all the work we have done is that would have a solid starting point if we want to add more things like databases or messages queues to our app, or publish our site to a custom domain.
 
 Some takeaways for **tRPC**:
 
 #### ✅ Pros
-* Typesafe HTTP requests 🎉
-* Good documentation
-* Good integration with React and AWS Lambda
+
+- Typesafe HTTP requests 🎉
+- Good documentation
+- Good integration with React and AWS Lambda
 
 #### ❌ Cons
-* **tRPC** is not REST, which most developers are familiar with.
-* ~~With **tRPC**, the SST stack needs to know of the internals of the application code (as far as I can tell). The API Gateway endpoint `/hello` needs to match call made by **tRPC**, e.g. `/hello` in the case of our procedure `"hello"`.~~
-  * **Update:** [Dax Raad](https://twitter.com/thdxr) informed me that I could use the catchall of `{proxy+}` instead of specifying `/hello` explicitly.
 
+- **tRPC** is not REST, which most developers are familiar with.
+- ~~With **tRPC**, the SST stack needs to know of the internals of the application code (as far as I can tell). The API Gateway endpoint `/hello` needs to match call made by **tRPC**, e.g. `/hello` in the case of our procedure `"hello"`.~~
+  - **Update:** [Dax Raad](https://twitter.com/thdxr) informed me that I could use the catchall of `{proxy+}` instead of specifying `/hello` explicitly.
 
 Overall, I had a good time. Hope you did too.
 
 ## Resources
 
-* [Serverless Stack](https://sst.dev/)
-* [SST with React.js](https://sst.dev/examples/how-to-create-a-reactjs-app-with-serverless.html)
-* [tRPC Quickstart](https://trpc.io/docs/quickstart)
+- [Serverless Stack](https://sst.dev/)
+- [SST with React.js](https://sst.dev/examples/how-to-create-a-reactjs-app-with-serverless.html)
+- [tRPC Quickstart](https://trpc.io/docs/quickstart)
