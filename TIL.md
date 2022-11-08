@@ -1,6 +1,7 @@
 
 ## `.nojekyll` for Github Pages
-### 2022-11-07
+Tags: [gh-pages]
+Datetime: 2022-11-07
 
 Today I deployed the first version of my blog ([wahlstrand.dev](wahlstrand.dev)) after migrating it to a new Static Site Generator (SSG) ([astro.build](astro.build)). Here is one of the problems I ran into.
 
@@ -15,3 +16,60 @@ After some head scratching, I found the root cause(s).
 
 ### Solution
 The solution is to tell Githug Pages to not use Jekyll at all. I'm using Astro to generate the site, so I don't need it after all. To do this, [we simply create an empty file `.nojekyll`](https://github.blog/2009-12-29-bypassing-jekyll-on-github-pages/) in the root directory, and redeploy.
+
+## Getting logs from init-containers in K8s
+Tags: [kubernetes]
+Datetime: 2022-11-08
+
+Today I had some problems with my Kubernetes (K8s). I had to figure out why one of the deployments stayed in `CrashLoopBackOff`. I tracked the problem to my [init-container](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/) that runs the database migrations. Here is how you get the logs from an init-container!
+
+First, let's get the pod status.
+
+```
+kubectl get pod <pod-name>
+```
+```
+NAME               READY                RESTARTS STATUS                         IP                  NODE              AGE           │
+<pod-name>         0/1                         0 Init:CrashLoopBackOff          172.17.0.4          minikube          13m
+```
+`Init:CrashLoopBackOff` indicates that it is indeed the init-containers are failing. If you don't know the name of the init-container, you can get it by describing the pod.
+
+```
+kubectl describe pod <pod-name>
+```
+```
+Init Containers:
+  <init-container-name>:
+    Container ID:    ...
+    ...
+    State:           Waiting
+      Reason:        CrashLoopBackOff
+    Last State:      Terminated
+      Reason:        Error
+      Exit Code:     1
+      Started:       ...
+      Finished:      ...
+    Ready:           False
+    Restart Count:   1023
+    ...
+```
+Next we can just get the init-container logs:
+
+```
+kubectl logs <pod-name> <init-container-name>
+```
+```
+Some error here, perhaps
+...
+```
+
+That's it!
+
+## Useful commands in pdb++
+Tags: [python, debug]
+Datetime: 2022-11-09
+
+"sticky"
+
+https://realpython.com/lessons/pdbpp/
+https://pypi.org/project/pdbpp/
