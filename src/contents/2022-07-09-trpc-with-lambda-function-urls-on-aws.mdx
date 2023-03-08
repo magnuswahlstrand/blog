@@ -3,11 +3,12 @@ title: "Even simpler way of calling your AWS backend"
 subtitle: "with tRPC and Lambda function URLS"
 slug: 2022-07-09-trpc-with-lambda-function-urls-on-aws
 datetime: 2022-07-09
-tags: ["aws","lambda","serverless","sst","trpc","typescript"]
+tags: ["aws", "lambda", "serverless", "sst", "trpc", "typescript"]
 ---
-import Caption from '../components/Caption.astro';
-import Sidenote from '../components/Sidenote.astro';
-import Asciinema from '../components/Asciinema.astro';
+
+import Caption from "../components/Caption.astro";
+import Sidenote from "../components/Sidenote.astro";
+import Asciinema from "../components/Asciinema.astro";
 
 A few weeks I wrote a post about using [tRPC](https://trpc.io/) to get type safe requests between a web client and the
 server. It turns out that there is an _**even simpler**_ way of calling your AWS backend (still using tRPC) 🤯!
@@ -16,17 +17,14 @@ In this post I will show you how to use tRPC and a Lambda function
 with [Lambda Function URLs](https://docs.aws.amazon.com/lambda/latest/dg/lambda-urls.html) to create a ToDo-app for my
 terminal. The backend is deployed to AWS using the [Serverless Stack](https://sst.dev/).
 
-<Asciinema
-    src='trpc-with-lambda-function-urls-on-aws/ts-prompt.cast'
-/>
+<Asciinema src="trpc-with-lambda-function-urls-on-aws/ts-prompt.cast" />
 This post is divided into two sections.
 
-
 **Section 1 -** First we set up our Lambda function with a public HTTPS endpoint and set up a type safe remote
-  procedure call using tRPC.
+procedure call using tRPC.
 
 **Section 2 -** Next, we turn the initial setup into a ToDo-app, by adding a database for persisting state, and
-  procedures to _create_, _list_ and _complete_ ToDos.
+procedures to _create_, _list_ and _complete_ ToDos.
 
 ## Overview
 
@@ -43,34 +41,41 @@ Before we get coding, let us go through what **Lambda Function URLs** and **tRPC
 First, [**Lambda Function URLs**](https://docs.aws.amazon.com/lambda/latest/dg/lambda-urls.html) is a new feature (from April, 2022) for AWS Lambda that let us expose our Lambda function as HTTPS endpoints directly, without using an API gateway. This has been available for [GCP Functions](https://cloud.google.com/functions/docs/calling/http) for a while, and it is great to see that Lambda get this feature as well. Here is a comparison of using an API Gateway in front of Lambda and using Function URLs directly:
 
 |                | API Gateway                    | Function URLs |
-|----------------|--------------------------------|---------------|
+| -------------- | ------------------------------ | ------------- |
 | Authentication | IAM, Cognito, Lambda, API keys | IAM           |
 | Timeout        | 30 seconds                     | 15 Minutes    |
-| Websocket      | ✔️                             | ❌             |
-| Custom Domains | ✔️                             | ❌             |
+| Websocket      | ✔️                             | ❌            |
+| Custom Domains | ✔️                             | ❌            |
 | CORS           | ✔️                             | ✔️            |
 | Price          | Medium                         | Low           |
 | URLs           | One URL multiple endpoints     | Multiple URLs |
 | ...            | ...                            | ...           |
-| Cool 😎        | ❓                              | ✔️            |
+| Cool 😎        | ❓                             | ✔️            |
 
 More details over
 at [Serverless Guru](https://www.serverlessguru.com/blog/aws-lambda-function-urls-vs-amazon-api-gateway)
 
 For most production scenarios, you probably want an API Gateway. For my scenario, I use Function URLs here for a few reasons.
+
 1. Curiosity: Function URLs is a new feature for AWS, and I want to try them out!
 2. Using tRPC, we only actually want and need a single endpoint. Perfect match!
 
 In short, I think Function URLs are a great match for my scenario!
-<br/>
-The second concept is **tRPC**. It is a Typescript package that lets build fully type safe APIs for both with both server and client. As you will see, it **REALLY** simplifies making requests from a client to the server, while still being type safe. All this without requiring code generation. Read more about it in my post "[Typesafe serverless API with tRPC](./
-2022-06-19-typesafe-http-client-serverless)" (or in the [official documentation](https://trpc.io/docs)).
+
+<br />
+The second concept is **tRPC**. It is a Typescript package that lets build fully
+type safe APIs for both with both server and client. As you will see, it **REALLY**
+simplifies making requests from a client to the server, while still being type safe.
+All this without requiring code generation. Read more about it in my post "[Typesafe
+serverless API with tRPC](./ 2022-06-19-typesafe-http-client-serverless)" (or in
+the [official documentation](https://trpc.io/docs)).
 
 Now we are ready to build a minimal client-server setup.
 
 # Section 1 - The basics
 
 First out, we create the boilerplate for our stack:
+
 ```bash
 # First we initialize the Serverless Stack using the Typescript starter
 npx create-sst@latest \
@@ -85,7 +90,8 @@ npm install @trpc/server @trpc/client
 ```
 
 After the SST setup, our directory looks as follows:
-```text
+
+```
 .
 ├── package.json
 ├── services
@@ -167,23 +173,23 @@ How cool is that? Next we will replace it our tRPC handler Lambda.
 Replace the code in `./services/function/lambda.ts` with the following.
 
 ```typescript
-import * as trpc from '@trpc/server';
-import * as z from "zod"
-import {awsLambdaRequestHandler} from '@trpc/server/adapters/aws-lambda';
+import * as trpc from "@trpc/server";
+import * as z from "zod";
+import { awsLambdaRequestHandler } from "@trpc/server/adapters/aws-lambda";
 
-const appRouter = trpc.router()
-    .query('sayHello', {                    // 1. Procedure name
-        input: z.string(),                  // 2. Input
-        async resolve(req) {
-            return `Hello, ${req.input}!`;  // 3. Response
-        },
-    });
+const appRouter = trpc.router().query("sayHello", {
+  // 1. Procedure name
+  input: z.string(), // 2. Input
+  async resolve(req) {
+    return `Hello, ${req.input}!`; // 3. Response
+  },
+});
 
 export type AppRouter = typeof appRouter;
 
 export const handler = awsLambdaRequestHandler({
-    router: appRouter,
-})
+  router: appRouter,
+});
 ```
 
 SST will automatically reload the handler. If you go to the same URL as before, you will get an error similar to the one
@@ -201,24 +207,23 @@ Instead, let's create our terminal client.
 Create `./client/index.ts` and add:
 
 ```typescript
-import type {AppRouter} from '../services/functions/lambda';
-import {createTRPCClient} from '@trpc/client';
+import type { AppRouter } from "../services/functions/lambda";
+import { createTRPCClient } from "@trpc/client";
 
 // 1. Replace with your Function URL, e.g.
 // https://kr2madrbusxrglf3aamfj7o4sy0hlebb.lambda-url.us-east-1.on.aws
-const function_url = "<YOUR FUNCTION URL HERE>"
-
+const function_url = "<YOUR FUNCTION URL HERE>";
 
 // 2. Create tPRC client
 const client = createTRPCClient<AppRouter>({
-    url: function_url,
+  url: function_url,
 });
 
 // 3. Make request to server
 (async function () {
-    const greeting = await client.query('sayHello', "Bilbo");
-    console.log(greeting)
-})()
+  const greeting = await client.query("sayHello", "Bilbo");
+  console.log(greeting);
+})();
 ```
 
 We invoke our client with `npx ts-node ./client`. Output:
@@ -239,7 +244,6 @@ What happened here?
    and responded with "`Hello, Bilbo!`"
 4. Our client printed the greeting to the terminal
 
-
 <Sidenote title="Note: Type safety!">
     What could be easy to miss here is that **tRPC** makes all this type safe. If I try to call a non-existent procedure, my editor
     gives me a helpful warning:
@@ -251,11 +255,13 @@ What happened here?
 
     Just as Typescripts makes our Javascript code more reliable using types and warnings in the editor, **tRPC** does the same
     for making requests to our remote backend 💘.
+
 </Sidenote>
 
 This is all we need to set up a tRPC Lambda function on AWS and call it from a client! In the next section we will make our app a lot cooler. See you there!
 
 # Part 2 - Improving the app
+
 In this section we will say goodbye to our basic app **Greeting Generating** app into a cool **ToDo** app! For this we need the following changes
 
 1. Add a DynamoDB table to store our ToDos
@@ -263,13 +269,16 @@ In this section we will say goodbye to our basic app **Greeting Generating** app
 3. Change the client from a one of command to a terminal prompt
 
 ## More setup
+
 For the next steps, we need `ksuid` that will be used as ID for our ToDos, and `prompt` that is used by our client.
+
 ```
 npm install ksuid
 npm install prompts @types/prompts
 ```
 
 ## Updating the stack
+
 Next, we add a DynamoDB table, using the SST construct [**Table**](https://docs.sst.dev/constructs/Table). Make sure to give the Lambda function permission to access the table, and set the name of the table as an environment.
 
 ```diff
@@ -299,66 +308,69 @@ Next, we add a DynamoDB table, using the SST construct [**Table**](https://docs.
 ## Updating the router
 
 To make the code a bit easier to follow, I will break out the database calls to a separate file. We will create two mutations (writers of data) and one query (reader of data).
+
 - `createToDo(id: string, description: string)` (a mutation)
 - `completeToDo(id: string)` (a mutation)
 - `listToDos()` (a query)
-Create a new file at `./services/functions/db.ts`
+  Create a new file at `./services/functions/db.ts`
 
 ```typescript
-import {DynamoDB} from "aws-sdk";
+import { DynamoDB } from "aws-sdk";
 
+const tableName = process.env.TABLE_NAME ?? ""; // <--- 1.
 
-const tableName = process.env.TABLE_NAME ?? ""   // <--- 1.
-
-const dynamoDb = new DynamoDB.DocumentClient();  // <--- 2.
+const dynamoDb = new DynamoDB.DocumentClient(); // <--- 2.
 
 type ToDo = {
-    id: string
-    description: string
-    completed: boolean
-}
-
-export const createToDo = async (id: string, description: string) => {
-    const todo = {
-        id: id,
-        description: description,
-        completed: false,
-    }
-
-    const putParams = {
-        TableName: tableName,
-        Item: todo
-    };
-
-    await dynamoDb.put(putParams).promise();
-}
-
-export const completeToDo = async (id: string) => {
-    const updateParams = {
-        TableName: tableName,
-        Key: {
-            id: id,
-        },
-        UpdateExpression: `set completed = :completed`,
-        ExpressionAttributeValues: {
-            ":completed": true,
-            ":id": id,
-        },
-        ConditionExpression: "id = :id",
-    };
-
-    await dynamoDb.update(updateParams).promise();
-}
-
-export const listToDos = async () => {
-    const resp = await dynamoDb.scan({
-        TableName: tableName
-    }).promise()
-    return resp.Items?.map((item) => item as ToDo);
+  id: string;
+  description: string;
+  completed: boolean;
 };
 
+export const createToDo = async (id: string, description: string) => {
+  const todo = {
+    id: id,
+    description: description,
+    completed: false,
+  };
+
+  const putParams = {
+    TableName: tableName,
+    Item: todo,
+  };
+
+  await dynamoDb.put(putParams).promise();
+};
+
+export const completeToDo = async (id: string) => {
+  const updateParams = {
+    TableName: tableName,
+    Key: {
+      id: id,
+    },
+    UpdateExpression: `set completed = :completed`,
+    ExpressionAttributeValues: {
+      ":completed": true,
+      ":id": id,
+    },
+    ConditionExpression: "id = :id",
+  };
+
+  await dynamoDb.update(updateParams).promise();
+};
+
+export const listToDos = async () => {
+  const resp = await dynamoDb
+    .scan({
+      TableName: tableName,
+    })
+    .promise();
+  return resp.Items?.map(item => item as ToDo);
+};
 ```
+
 I will not go into the details of how the request to DynamoDB works. A couple of notes:
+
 1. We get to use the environment variable `TABLE_NAME` we propagated in the stack.
 2. The **DynamoDB DocumentClient** is A LOT easier to use the regular SDK client. I highly recommend it!
 
@@ -367,42 +379,42 @@ For a better understanding of how to call DynamoDB with Javascript, I often refe
 Now we can update our existing Lambda at `./services/functions/lambda.ts`:
 
 ```typescript
-import * as trpc from '@trpc/server';
-import * as z from "zod"
-import KSUID from 'ksuid';
-import {awsLambdaRequestHandler} from '@trpc/server/adapters/aws-lambda';
-import {completeToDo, createToDo, listToDos} from "./db";
+import * as trpc from "@trpc/server";
+import * as z from "zod";
+import KSUID from "ksuid";
+import { awsLambdaRequestHandler } from "@trpc/server/adapters/aws-lambda";
+import { completeToDo, createToDo, listToDos } from "./db";
 
-const appRouter = trpc.router()
-    .mutation('createToDo', {
-        input: z.string(),
-        async resolve(req) {
-            const id = KSUID.randomSync().string
-            await createToDo(id, req.input)
-            return id
-        }
-    })
-    .mutation('completeToDo', {
-        input: z.string(),
-        async resolve(req) {
-            return completeToDo(req.input)
-        }
-    })
-    .query('listToDos', {
-        async resolve(_) {
-            return listToDos()
-        },
-    })
-;
-
+const appRouter = trpc
+  .router()
+  .mutation("createToDo", {
+    input: z.string(),
+    async resolve(req) {
+      const id = KSUID.randomSync().string;
+      await createToDo(id, req.input);
+      return id;
+    },
+  })
+  .mutation("completeToDo", {
+    input: z.string(),
+    async resolve(req) {
+      return completeToDo(req.input);
+    },
+  })
+  .query("listToDos", {
+    async resolve(_) {
+      return listToDos();
+    },
+  });
 export type AppRouter = typeof appRouter;
 
 export const handler = awsLambdaRequestHandler({
-    router: appRouter,
-})
+  router: appRouter,
+});
 ```
 
 Here we have created 3 remote procedures:
+
 - `createToDo` - takes a description string as input, generates a KSUID, and creates a new Todo
 - `completeToDo` - takes a KSUID string as input, marks that ToDo as completed
 - `listToDos` - takes no input, returns all ToDos
@@ -410,38 +422,39 @@ Here we have created 3 remote procedures:
 Once again, in order to test that our tRPC handler works, we need to use it in a client. Update the client as follows:
 
 ```typescript
-import type {AppRouter} from '../services/functions/lambda';
-import {createTRPCClient} from '@trpc/client';
+import type { AppRouter } from "../services/functions/lambda";
+import { createTRPCClient } from "@trpc/client";
 
-const function_url = "https://kr2madrbusxrglf3aamfj7o4sy0hlebb.lambda-url.us-east-1.on.aws"
+const function_url =
+  "https://kr2madrbusxrglf3aamfj7o4sy0hlebb.lambda-url.us-east-1.on.aws";
 
 const client = createTRPCClient<AppRouter>({
-    url: function_url,
+  url: function_url,
 });
 
 (async function () {
-    // Create two ToDos
-    const first_id = await client.mutation('createToDo', "Buy milk");
-    const secnd_id = await client.mutation('createToDo', "Buy eggs");
+  // Create two ToDos
+  const first_id = await client.mutation("createToDo", "Buy milk");
+  const secnd_id = await client.mutation("createToDo", "Buy eggs");
 
-    // Mark one as completed
-    await client.mutation('completeToDo', first_id);
+  // Mark one as completed
+  await client.mutation("completeToDo", first_id);
 
-    // List Todos
-    const todos = await client.query('listToDos');
-    if(!todos) {
-        return
-    }
+  // List Todos
+  const todos = await client.query("listToDos");
+  if (!todos) {
+    return;
+  }
 
-    todos.forEach(function (todo, i) {
-        const state = todo.completed ? "completed" : "in progress"
-        console.log(`${i+1} - ${todo.description} (${state})`, )
-    });
-})()
+  todos.forEach(function (todo, i) {
+    const state = todo.completed ? "completed" : "in progress";
+    console.log(`${i + 1} - ${todo.description} (${state})`);
+  });
+})();
 ```
 
-
 If we run the client, we get the following output.
+
 ```
 1 - Buy milk (completed)
 2 - Buy eggs (in progress)
@@ -456,6 +469,7 @@ Finally, let's turn our client into a prompt, as promised.
 I have never developed command line clients in Typescript before. There are most likely better ways to write the following application 🤓
 
 Replace the client code in `./client/index.ts` as follows:
+
 ```
 import type {AppRouter} from '../services/functions/lambda';
 import {createTRPCClient} from '@trpc/client';
@@ -528,8 +542,8 @@ async function promptForTodoComplete() {
 
 And for the last time, run the client. The app is now complete 👏!
 
-
 # Conclusion
+
 We have created a semi-useful ToDo-app using **tRPC** and Lambda functions and Function URLs. I hope by now I have made it apparent how easy **tRPC** (and **SST**) made developing this app. I spent more time writing the silly prompt than hooking up the client to the server, and deploying it all. Great developer experience!
 
 Hope you enjoyed this post.
@@ -537,7 +551,8 @@ Hope you enjoyed this post.
 Please send any feedback or comments to [@wahlstra](https://twitter.com/wahlstra).
 
 ### Resources
-* I wrote more about tRPC here: [Typesafe serverless API with tRPC](./2022-06-19-typesafe-http-client-serverless)
-* The [tRPC website](https://trpc.io/)
-* [Comparison between API Gateway and Function URLs](https://www.serverlessguru.com/blog/aws-lambda-function-urls-vs-amazon-api-gateway) by Serverless Guru
-* [DynamoDB & DocumentClient Cheat Sheet](https://dynobase.dev/dynamodb-nodejs) from Dynobase
+
+- I wrote more about tRPC here: [Typesafe serverless API with tRPC](./2022-06-19-typesafe-http-client-serverless)
+- The [tRPC website](https://trpc.io/)
+- [Comparison between API Gateway and Function URLs](https://www.serverlessguru.com/blog/aws-lambda-function-urls-vs-amazon-api-gateway) by Serverless Guru
+- [DynamoDB & DocumentClient Cheat Sheet](https://dynobase.dev/dynamodb-nodejs) from Dynobase

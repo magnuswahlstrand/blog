@@ -2,32 +2,34 @@
 title: "Getting started with sqlc"
 slug: 2020-10-25-getting-started-with-sqlc
 datetime: 2020-10-25
-tags: ["go","postgres", "database", "sqlc"]
+tags: ["go", "postgres", "database", "sqlc"]
 ---
 
 `sqlc` is a command line tool to generate type-safe Go code, based on SQL queries and schemas.
-In this article I cover how to set up a very useful application that insert animals (data about them not actual animals) to a database, and keeps a list of them forever! 
+In this article I cover how to set up a very useful application that insert animals (data about them not actual animals) to a database, and keeps a list of them forever!
 
 ![Click bait dogs. Photo by Chevanon Photography](/img/getting-started-with-sqlc/dogs.jpeg)
 
 <!--more-->
 
 ### Prerequisites
+
 For this article, I use the following tools
 
 1. Install `sqlc`
-    1. `brew install kyleconroy/sqlc/sqlc`
-2. Install `docker` - used to run local PostgresSQL instance 
-    1. https://docs.docker.com/docker-for-mac/   
-3. Install `psql` - used to connect to the local PostgresSQL database 
+   1. `brew install kyleconroy/sqlc/sqlc`
+2. Install `docker` - used to run local PostgresSQL instance
+   1. https://docs.docker.com/docker-for-mac/
+3. Install `psql` - used to connect to the local PostgresSQL database
    1. `brew install postgresql`
 
 ## Getting started
 
-First we need to setup our local database. Add the following to ***schema.sql***.
+First we need to setup our local database. Add the following to **_schema.sql_**.
 
-***schema.sql***
-```postgresql
+**_schema.sql_**
+
+```sql
 CREATE TABLE animals (
     id SERIAL PRIMARY KEY,
     name TEXT NOT NULL,
@@ -39,23 +41,27 @@ CREATE TABLE animals (
 This will be used also be used by `sqlc` to generate Go structs. For now, we will use it to bootstrap our local database.
 
 Let's start our local PostgresSQL database.
+
 ```bash
 docker run -p 5432:5432 -it --rm postgres
-``` 
+```
 
-Next we connect to it using `psql` and run the commands in ***schema.sql***  
+Next we connect to it using `psql` and run the commands in **_schema.sql_**
+
 ```bash
 > psql -h localhost --username=postgres -c "\i schema.sql"
 CREATE TABLE
-``` 
+```
 
 ### Queries
+
 Now that we have set up our table, we can run some queries. Open a psql shell
+
 ```bash
 psql -h localhost --username=postgres
 ```
 
-```postgresql
+```sql
 postgres=# INSERT INTO animals (name, type) VALUES ('Fido', 'dog');
 INSERT 0 1
 postgres=# INSERT INTO animals (name, type) VALUES ('Spot', 'cat');
@@ -74,11 +80,13 @@ postgres-# ;
 We have successfully written and read some data! For now, these are the queries we want for this simple application.
 
 ### Setup for `sqlc`
+
 We want to turn the queries and schema into code. `sqlc` needs a configuration file with the following things
-1) location of database schema - `schema.sql`
-2) location of queries schema - `queries.sql`
-3) package name for generated code - `data`
-3) path of generated code - `data/`
+
+1. location of database schema - `schema.sql`
+2. location of queries schema - `queries.sql`
+3. package name for generated code - `data`
+4. path of generated code - `data/`
 
 Create the file **sqlc.yaml**
 
@@ -92,7 +100,8 @@ packages:
 ```
 
 After this file, we need to create `queries.sql`.
-```postgresql
+
+```sql
 -- name: ListAnimals :many
 SELECT * FROM animals
 ORDER BY created_at;
@@ -101,20 +110,23 @@ ORDER BY created_at;
 INSERT INTO animals (name, type) VALUES ($1, $2)
 ```
 
-The comments are extra notation for `sqlc`.  
-* `name: ListAnimals :many` - Generate a method called `ListAnimals` that returns a slice of `Animal`
-* `name: CreateAnimal :exec` - Generate a method called `CreateAnimal` that returns an error
+The comments are extra notation for `sqlc`.
+
+- `name: ListAnimals :many` - Generate a method called `ListAnimals` that returns a slice of `Animal`
+- `name: CreateAnimal :exec` - Generate a method called `CreateAnimal` that returns an error
 
 #### Generate code
 
-Now we can run 
+Now we can run
+
 ```bash
 sqlc generate
 ```
 
 This generates the following two files of interest
 
-***data/models.go***
+**_data/models.go_**
+
 ```go
 package data
 
@@ -130,7 +142,8 @@ type Animal struct {
 }
 ```
 
-***data/queries.sql.go***
+**_data/queries.sql.go_**
+
 ```go
 package data
 
@@ -187,9 +200,11 @@ func (q *Queries) ListAnimals(ctx context.Context) ([]Animal, error) {
 ```
 
 ### Using in application
+
 Since we already have our Postgres instance up and running with database table defined. We can now use this generated code directly our application.
 
-***main.go***
+**_main.go_**
+
 ```go
 package main
 
@@ -246,7 +261,9 @@ func main() {
 	}
 }
 ```
+
 Finally, if we run the application, we get the following output
+
 ```bash
 > go run main.go
 * new animal with created
@@ -258,16 +275,19 @@ Finally, if we run the application, we get the following output
 Success!
 
 ## Conclusion
+
 `sqlc` is a neat, easy to use tool, which makes working with Postgres in Go fun!
 
-***Some things I liked***
+**_Some things I liked_**
+
 1. Easy to set up and use. Very straight forward syntax
 2. Changes to the database layer tracked easily by changes to `schema.sql` and `queries.sql`
 3. It forces you to focus on the SQL queries; what do you need to insert and read from the database? When that is decided, the models in the code can be generated, not vice-versa.
 
 A few other topics that would be worth covering in the future:
-* Delete and get methods
-* Returning a single inserted model using `:one` and `RETURNING *`
-* Using transactions with `sqlc`
-* Handling migrations
-* Handling custom types, such as `github.com/google/uuid`
+
+- Delete and get methods
+- Returning a single inserted model using `:one` and `RETURNING *`
+- Using transactions with `sqlc`
+- Handling migrations
+- Handling custom types, such as `github.com/google/uuid`
