@@ -152,10 +152,10 @@ export async function getCounter(name: string) {
 }
 
 export async function increaseCounter(name: string) {
-  const result = await db
+  await db
     .update(counters)
     .set({
-      tally: sql`tally
+      tally: sql`${counters.tally}
             + 1`,
     })
     .where(eq(counters.counter, name));
@@ -228,6 +228,22 @@ I had not used Drizzle ORM or **Planetscale** before, but I can recommend both. 
 The Drizzle team also has a tool called [Drizzle Kit](https://github.com/drizzle-team/drizzle-kit-mirror) for handling migrations that looks great, but I have yet to try it.
 
 Overall, I look forward to using these tools in the future.
+
+### _Update (2023-03-09):_
+
+_Thanks to [@bloberenober](https://twitter.com/bloberenober) on Twitter and @Alexandr from the Drizzle discord for pointing out that the `increaseCounter` function in `db.ts` can be improved slightly to ensure that the column name is correct and kept up to date._
+
+```diff
+export async function increaseCounter(name: string) {
+  await db
+  .update(counters)
+  .set({
++   tally: sql`${counters.tally} + 1`,
+-   tally: sql`tally + 1`,
+  })
+  .where(eq(counters.counter, name));
+}
+```
 
 ## Links
 
