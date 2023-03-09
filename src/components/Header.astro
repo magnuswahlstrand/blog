@@ -3,7 +3,6 @@ import { LOGO_IMAGE, SITE } from "src/config";
 import Hr from "./Hr.astro";
 import LinkButton from "./LinkButton.astro";
 
-import logoPNG from "/assets/logo.png";
 import logoSVG from "/assets/logo.svg";
 
 export interface Props {
@@ -41,10 +40,20 @@ const { activeNav } = Astro.props;
     </div>
     <nav class="display-none sm:flex">
       <ul>
-        <li><a href="/posts" class={activeNav === "posts" ? "active" : ""} >Posts</a></li>
-        <li><a href="/tags" class={activeNav === "tags" ? "active" : ""}>Tags</a></li>
-        <li><a href="/about" class={activeNav === "about" ? "active" : ""} >About</a></li>
-        <li><a href="/now" class={activeNav === "now" ? "active" : ""} >Now</a></li>
+        <li>
+          <a href="/posts" class={activeNav === "posts" ? "active" : ""}
+            >Posts</a>
+        </li>
+        <li>
+          <a href="/tags" class={activeNav === "tags" ? "active" : ""}>Tags</a>
+        </li>
+        <li>
+          <a href="/about" class={activeNav === "about" ? "active" : ""}
+            >About</a>
+        </li>
+        <li>
+          <a href="/now" class={activeNav === "now" ? "active" : ""}>Now</a>
+        </li>
       </ul>
       <div class="button-wrapper">
         <LinkButton
