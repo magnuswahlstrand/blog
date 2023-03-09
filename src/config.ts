@@ -3,7 +3,7 @@ import type { SocialsObject } from "./types";
 export const SITE = {
   website: "https://wahlstrand.dev/",
   author: "Magnus Wahlstrand",
-  desc: "A minimal, responsive and SEO-friendly Astro blog theme.",
+  desc: "Made by a minimal, responsible and friendly person.",
   title: "wahlstrand.dev",
   ogImage: "default-og.png",
   lightAndDarkMode: true,
@@ -32,5 +32,5 @@ export const SOCIALS: SocialsObject = [
     name: "Twitter",
     href: "https://twitter.com/wahlstra",
     active: true,
-  }
+  },
 ];
