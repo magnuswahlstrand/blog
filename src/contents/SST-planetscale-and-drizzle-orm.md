@@ -7,11 +7,13 @@ tags: ["aws", "sst", "planetscale", "drizzle-orm"]
 A few weeks back [SST](https://sst.dev) released their 2.0 version. It is a (almost?) complete rewrite of their framework, which I wanted
 to try it out.
 
-In this post I will show you how to use the 2.0 version of [SST](https://sst.dev) to build a serverless API with a serverless MySQL
+In this post I will show you how to use the [SST 2.0](https://sst.dev) to build a serverless API with a serverless MySQL
 database hosted on [Planetscale](https://planetscale.com) and
 a [Drizzle ORM](https://github.com/drizzle-team/drizzle-orm). We will implement the database structure as
 this [SST Guide: How to use PlanetScale in your serverless app](https://sst.dev/examples/how-to-use-planetscale-in-your-serverless-app.html),
 but adapt it for SST 2.0 and add Drizzle ORM on top for typesafe database queries.
+
+Code available here: [Github repository](https://github.com/magnuswahlstrand/magnusscale).
 
 ## Let's go!
 
@@ -229,5 +231,6 @@ Overall, I look forward to using these tools in the future.
 
 ## Links
 
-- [SST: How to use PlanetScale in your serverless app](https://sst.dev/examples/how-to-use-planetscale-in-your-serverless-app.html)
-- [Drizzle ORM: Connect using PlanetScale Serverless client](https://github.com/drizzle-team/drizzle-orm/blob/main/drizzle-orm/src/mysql-core/README.md#connect-using-planetscale-serverless-client)
+- [SST guide](https://sst.dev/examples/how-to-use-planetscale-in-your-serverless-app.html): How to use PlanetScale in your serverless app
+- [Drizzle ORM](https://github.com/drizzle-team/drizzle-orm/blob/main/drizzle-orm/src/mysql-core/README.md#connect-using-planetscale-serverless-client) - connect using PlanetScale Serverless client
+- [github.com/magnuswahlstrand/magnusscale](https://github.com/magnuswahlstrand/magnusscale) - the code from this post
