@@ -1,22 +1,9 @@
+import type { ResumeItem } from "../types/resumeItems";
+
 export function nowDate(): string {
   const now = new Date();
   return now.toLocaleDateString("en-US", { month: "short", year: "numeric" });
 }
-
-type ResumeItem = {
-  company: {
-    name: string;
-    linkedin: string;
-    location: string;
-  };
-  title: string;
-  description: string;
-  type: string;
-  from: string;
-  to: string;
-  tags: string[];
-  isOngoing?: boolean;
-};
 
 export const resumeItems: ResumeItem[] = [
   {

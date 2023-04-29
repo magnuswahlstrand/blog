@@ -1,57 +1,15 @@
 ---
 import MySiteLayout from "../layouts/AboutNowLayout.astro";
-import socialIcons from "../assets/socialIcons";
-import LinkButton from "../components/LinkButton.astro";
 import { calculateDuration, nowDate, resumeItems } from "./resumeItems";
+import ResumeItem from "../components/ResumeItem.astro";
 ---
 
 <MySiteLayout frontmatter={{ title: "Resume" }}>
-  <div class="flex flex-row mb-3 items-end gap-1">
+  <div class="flex flex-row mb-3 items-end gap-1 text-skin-base">
     <div class="text-2xl font-bold">Experience</div>
     <div class="text-xs mb-1">({calculateDuration("Jan 2012", nowDate())})</div>
   </div>
-  <div class="flex flex-col gap-3">
-    {
-      resumeItems.map(item => (
-        <div class="rounded border border-slate-500">
-          <div class="flex justify-between border-b border-slate-500 px-4 py-2">
-            <div class="flex flex-row gap-2 items-center">
-              <div class="font-bold">{item.company.name}</div>
-              <div class="social-icons">
-                <LinkButton
-                  href={item.company.linkedin}
-                  className="mb-1 pt-0 link-button"
-                  title={"LinkedIn"}
-                >
-                  <Fragment set:html={socialIcons["Linkedin"]} />
-                </LinkButton>
-              </div>
-            </div>
-            <div class="flex flex-col text-xs">
-              <div class="text-right">
-                {item.type} · {calculateDuration(item.from, item.to)}
-              </div>
-              <div class="text-right">
-                {item.from} - {item.isOngoing ? "Present" : item.to}
-              </div>
-            </div>
-          </div>
-          <div class=" px-4 py-2 text-sm">
-            <div class="font-bold">{item.title}</div>
-            <div class="">{item.company.location}</div>
-            <div class="mt-2 prose-sm">{item.description}</div>
-            <div class="flex flex-row gap-2 mt-3">
-              <div class="font-bold">Skills:</div>
-              {item.tags.map((tag, index) => (
-                <div class="text-slate-500">
-                  {index ? "· " : ""}
-                  {tag}{" "}
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      ))
-    }
+  <div class="flex flex-col gap-6">
+    {resumeItems.map(item => <ResumeItem {...item} />)}
   </div>
 </MySiteLayout>

@@ -1,0 +1,27 @@
+---
+import { SOCIALS } from "src/config";
+import LinkButton from "./LinkButton.astro";
+import socialIcons from "@assets/socialIcons";
+
+export interface Props {
+  href: string;
+  name: string;
+  className?: string;
+}
+
+const social = Astro.props;
+---
+
+<LinkButton
+  href={social.href}
+  className={`link-button ${social.className}`}
+  title={social.name}
+>
+  <Fragment set:html={socialIcons[social.name]} />
+</LinkButton>
+
+<style>
+  .link-button {
+    @apply hover:rotate-6;
+  }
+</style>
