@@ -1,42 +1,57 @@
 ---
-import { SITE } from "src/config";
-import Header from "@components/Header.astro";
-import Footer from "@components/Footer.astro";
-import Layout from "@layouts/Layout.astro";
-import Main from "@layouts/Main.astro";
-import Tag from "@components/Tag.astro";
-import getCountedTags from "@utils/getCountedTags";
-import type { Frontmatter } from "src/types";
-
-const posts = await Astro.glob<Frontmatter>("../contents/**/*.{md,mdx}");
-
-let countedTags = getCountedTags(posts);
-let sortedTags = countedTags.map(t => t.tag);
-sortedTags.sort();
+import MySiteLayout from "../layouts/AboutNowLayout.astro";
+import socialIcons from "../assets/socialIcons";
+import LinkButton from "../components/LinkButton.astro";
+import { calculateDuration, nowDate, resumeItems } from "./resumeItems";
 ---
 
-<Layout title={`Tags | ${SITE.title}`}>
-  <Header activeNav="resume" />
-  <Main pageTitle="Resume">
-    <div class="w-96 mx-auto">
-      <h2 class="text-2xl mb-2 font-bold">Top 10 tags</h2>
-      {
-        countedTags.slice(0, 10).map(tag => (
-          <div class="flex flex-row justify-between py-1 first:rounded-t-xl last:rounded-b-xl">
-            <Tag name={tag.tag} size="lg" />
-            <div>
-              <span class="bg-gray-500 text-lg rounded-full py-1 px-4 text-white font-bold inline-flex leading-none text-center">
-                {tag.count}
-              </span>
+<MySiteLayout frontmatter={{ title: "Resume" }}>
+  <div class="flex flex-row mb-3 items-end gap-1">
+    <div class="text-2xl font-bold">Experience</div>
+    <div class="text-xs mb-1">({calculateDuration("Jan 2012", nowDate())})</div>
+  </div>
+  <div class="flex flex-col gap-3">
+    {
+      resumeItems.map(item => (
+        <div class="rounded border border-slate-500">
+          <div class="flex justify-between border-b border-slate-500 px-4 py-2">
+            <div class="flex flex-row gap-2 items-center">
+              <div class="font-bold">{item.company.name}</div>
+              <div class="social-icons">
+                <LinkButton
+                  href={item.company.linkedin}
+                  className="mb-1 pt-0 link-button"
+                  title={"LinkedIn"}
+                >
+                  <Fragment set:html={socialIcons["Linkedin"]} />
+                </LinkButton>
+              </div>
+            </div>
+            <div class="flex flex-col text-xs">
+              <div class="text-right">
+                {item.type} · {calculateDuration(item.from, item.to)}
+              </div>
+              <div class="text-right">
+                {item.from} - {item.isOngoing ? "Present" : item.to}
+              </div>
             </div>
           </div>
-        ))
-      }
-    </div>
-    <h2 class="text-xl mt-8 mb-2 font-bold">All tags</h2>
-    <ul>
-      {sortedTags.map(tag => <Tag name={tag} size="lg" />)}
-    </ul>
-  </Main>
-  <Footer />
-</Layout>
+          <div class=" px-4 py-2 text-sm">
+            <div class="font-bold">{item.title}</div>
+            <div class="">{item.company.location}</div>
+            <div class="mt-2 prose-sm">{item.description}</div>
+            <div class="flex flex-row gap-2 mt-3">
+              <div class="font-bold">Skills:</div>
+              {item.tags.map((tag, index) => (
+                <div class="text-slate-500">
+                  {index ? "· " : ""}
+                  {tag}{" "}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      ))
+    }
+  </div>
+</MySiteLayout>
