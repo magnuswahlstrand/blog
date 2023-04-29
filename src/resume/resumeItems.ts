@@ -70,7 +70,7 @@ export const resumeItems: ResumeItem[] = [
       linkedin: "https://www.linkedin.com/company/ericsson/",
       location: "Stockholm, Sweden",
     },
-    title: "Developer and Team Lead",
+    title: "Developer and team lead",
     description:
       "Member of a team that developed control systems and automated tests for GSM and WCDMA base stations. As a team leader and Scrum Master, I was responsible for team planning and coordination with other parts of the project. Magnus also took the initiative to develop and maintain a tool for visualizing test results. This web-based tool was used daily by over 500 project members.",
     from: "Aug 2013",

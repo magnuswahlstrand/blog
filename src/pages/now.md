@@ -3,13 +3,15 @@ layout: ../layouts/AboutNowLayout.astro
 title: "What I'm Doing Now"
 navName: "now"
 ---
-It’s 2022. The world is no longer in lockdown. I’m working from home from my house outside of Stockholm. My son is one year old.
+
+It’s 2023. I’m working freelancer, mostly from home from my house outside of Stockholm. My son is two years old.
 
 Some things I’m working on:
-* **Learning Python, and SQLAlchemy**
-* **Becoming stronger**
-* **Write a new blog post per month**
-* **Learning "Stairways to Heaven" on guitar**
+
+- **Learning Typescript, and NextJS**
+- **Becoming stronger**
+- **Write a new blog post per month**
+- **Learning "Stairways to Heaven" on guitar**
 
 <div>
   <img src="/assets/reading.svg" class="sm:w-1/2 mx-auto" alt="coding dev illustration">

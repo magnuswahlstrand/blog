@@ -16,7 +16,7 @@ const { activeNav } = Astro.props;
   <a id="skip-to-content" href="#main-content">Skip to content</a>
   <div class="nav-container">
     <div class="top-nav-wrap">
-      <a href="/" class="logo">
+      <a href="/" class="logo break-keep text-2xl">
         {
           LOGO_IMAGE.enable ? (
             <img
@@ -50,9 +50,11 @@ const { activeNav } = Astro.props;
             >Posts</a
           >
         </li>
+        <!--
         <li>
           <a href="/tags" class={activeNav === "tags" ? "active" : ""}>Tags</a>
         </li>
+        -->
         <li>
           <a href="/about" class={activeNav === "about" ? "active" : ""}
             >About</a

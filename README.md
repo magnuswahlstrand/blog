@@ -1,8 +1,9 @@
 # My Blog
 
 ## Migration TODO:
-* Add asciinema
-* Fix articles -> post redirect
+* ~Add asciinema~
+* ~Fix articles -> post redirect~
+* Add description to posts (Card.tsx)
 
 ## 🧞 Commands
 
@@ -19,3 +20,5 @@ All commands are run from the root of the project, from a terminal:
 | `npm run cz`           | Commit code changes with commitizen                |
 | `npm run astro ...`    | Run CLI commands like `astro add`, `astro preview` |
 | `npm run astro --help` | Get help using the Astro CLI                       |
+
+

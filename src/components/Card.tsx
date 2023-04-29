@@ -24,7 +24,16 @@ export default function Card({ href, post, secHeading = true }: Props) {
           <h3 className={styles.titleHeading}>{post.title}</h3>
         )}
       </a>
-      <Datetime datetime={post.datetime} />
+      <div className="flex flex-row gap-2">
+        <Datetime datetime={post.datetime} />
+      </div>
+      <div className="flex flex-row gap-3 text-xs mt-1">
+        {post.tags?.map(tag => (
+          <div className="break-keep hover:text-skin-accent" key={tag}>
+            <a href={`/tags/${tag}`}>#{tag}</a>
+          </div>
+        ))}
+      </div>
       <p>{post.description}</p>
     </li>
   );
