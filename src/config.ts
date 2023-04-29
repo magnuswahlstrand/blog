@@ -4,7 +4,7 @@ export const SITE = {
   website: "https://wahlstrand.dev/",
   author: "Magnus Wahlstrand",
   desc: "Made by a minimal, responsible and friendly person.",
-  title: "wahlstrand.dev",
+  title: "Magnus Wahlstrand",
   ogImage: "default-og.png",
   lightAndDarkMode: true,
   postPerPage: 10,

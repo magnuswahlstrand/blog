@@ -1,7 +1,7 @@
 ---
 title: "More Planetscale and Drizzle ORM"
 datetime: 2023-04-15
-tags: ["planetscale", "drizzle-orm"]
+tags: ["planetscale", "drizzle-orm", "typescript"]
 ---
 
 In this article we create a simple `users-cli` to store and list user information in a database hosted by [Planetscale](https://planetscale.com/), using [Drizzle ORM](https://drizzle-orm.com/) for type-safety.
