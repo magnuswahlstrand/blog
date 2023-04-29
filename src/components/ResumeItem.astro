@@ -7,16 +7,23 @@ export interface Props {
     linkedin: string;
     location: string;
   };
-  title: string;
-  description: string;
-  type: string;
-  from: string;
-  to: string;
-  tags: string[];
   isOngoing?: boolean;
+  type: "Freelance" | "Full-time";
+  roles: {
+    location: string;
+    title: string;
+    description: string;
+    from: string;
+    to: string;
+    tags: string[];
+  }[];
 }
 
 const item = Astro.props;
+
+const hasMultipleRoles = item.roles.length > 1;
+const to = item.roles[0].to;
+const from = item.roles[item.roles.length - 1].from;
 ---
 
 <div class="rounded border border-slate-500 text-skin-base">
@@ -31,30 +38,51 @@ const item = Astro.props;
     </div>
     <div class="flex flex-col text-xs">
       <div class="text-right">
-        {item.type} · {calculateDuration(item.from, item.to)}
+        {item.type} · {calculateDuration(from, to)}
       </div>
-      <div class="text-right">
-        {item.from} - {item.isOngoing ? "Present" : item.to}
-      </div>
+      {
+        !hasMultipleRoles && (
+          <div class="text-right">
+            {from} - {item.isOngoing ? "Present" : to}
+          </div>
+        )
+      }
     </div>
   </div>
-  <div class="px-4 py-2 text-sm">
-    <div class="font-bold">{item.title}</div>
-    <div class="">{item.company.location}</div>
-    <div class="mt-2 prose-sm"><p>{item.description}</p></div>
-    <div class="flex flex-row gap-2 mt-3">
-      <div class="font-bold">Skills:</div>
-      <div class="flex flex-row flex-wrap gap-x-2">
-        {
-          item.tags.map((tag, index) => (
-            <div class="text-skin-accent">
-              {tag} {index !== item.tags.length - 1 ? "·" : ""}
+  {
+    item.roles.map((role, index) => {
+      return (
+        <div
+          class={`px-4 pt-2 pb-4 text-sm  ${
+            index ? "border-t border-slate-500 pt-4" : ""
+          }`}
+        >
+          <div class="flex flex-row gap-2 items-center justify-between">
+            <div class="font-bold">{role.title}</div>
+            {hasMultipleRoles && (
+              <div class="text-xs">
+                {role.from} - {role.to}
+              </div>
+            )}
+          </div>
+          <div class="">{role.location}</div>
+          <div class="mt-2 prose-sm">
+            <p>{role.description}</p>
+          </div>
+          <div class={`flex flex-row gap-2 mt-3`}>
+            <div class="font-bold">Skills:</div>
+            <div class="flex flex-row flex-wrap gap-x-2">
+              {role.tags.map((tag, index) => (
+                <div class="text-skin-accent">
+                  {tag} {index !== role.tags.length - 1 ? "·" : ""}
+                </div>
+              ))}
             </div>
-          ))
-        }
-      </div>
-    </div>
-  </div>
+          </div>
+        </div>
+      );
+    })
+  }
 </div>
 
 <!--
