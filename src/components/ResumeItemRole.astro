@@ -10,31 +10,35 @@ export interface Props {
     to: string;
     tags: string[];
   };
-  hasMultipleRoles: boolean;
+  isMultiRow: boolean;
   isFirst: boolean;
 }
 
-const { isFirst, hasMultipleRoles, role } = Astro.props;
+function formatParagraphs(input: string): string {
+  const lines = input.split("\n");
+
+  const formattedLines = lines.map(line => `<p>${line}</p>`);
+
+  return formattedLines.join("");
+}
+
+const { isFirst, isMultiRow, role } = Astro.props;
+const timespanText = `${role.from} - ${role.to}`;
 ---
 
 <div
-  class={`px-4 pt-2 pb-4 text-sm  ${
-    !isFirst ? "border-t border-slate-500 pt-4" : ""
-  }`}
+  class:list={[
+    "px-4 pt-2 pb-4 text-sm",
+    !isFirst ? "border-t border-slate-500 pt-4" : "",
+  ]}
 >
   <div class="flex flex-row gap-2 items-center justify-between">
     <div class="font-bold">{role.title}</div>
-    {
-      hasMultipleRoles && (
-        <div class="text-xs">
-          {role.from} - {role.to}
-        </div>
-      )
-    }
+    {isMultiRow && <div class="text-xs sm:block hidden">{timespanText}</div>}
   </div>
-  <div class="">{role.location}</div>
-  <div class="mt-2 prose-sm">
-    <p>{role.description}</p>
+  <div>{role.location}</div>
+  {isMultiRow && <div class="text-xs sm:hidden">{timespanText}</div>}
+  <div class="mt-2 prose-sm" set:html={formatParagraphs(role.description)}>
   </div>
   <div class={`flex flex-row gap-2 mt-3`}>
     <div class="font-bold">Skills:</div>

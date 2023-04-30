@@ -30,23 +30,11 @@ const timespanText = `${from} - ${isOngoing ? "Present" : to}`;
       className="mb-1 pt-0"
     />
   </div>
-  {
-    isMultiRow && (
-      <div class="flex flex-col text-xs text-right">
-        <div>{durationText}</div>
-        <div>{timespanText}</div>
-      </div>
-    )
-  }
-  {
-    !isMultiRow && (
-      <div class="flex flex-col text-xs text-right">
-        <div class="flex flex-row gap-1 justify-end">
-          <div>{type}</div>
-          <div class="sm:block hidden"> · {durationText}</div>
-        </div>
-        <div>{timespanText}</div>
-      </div>
-    )
-  }
+  <div class="flex flex-col text-xs text-right shrink-0">
+    <div class="flex flex-row gap-1 justify-end">
+      <div>{type}</div>
+      <div class="sm:block hidden">· {durationText}</div>
+    </div>
+    <div>{timespanText}</div>
+  </div>
 </div>
