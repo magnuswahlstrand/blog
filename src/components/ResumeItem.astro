@@ -1,11 +1,10 @@
 ---
-import { calculateDuration } from "../resume/resumeItems";
-import SocialsButton from "./SocialsButton.astro";
+import ResumeItemRole from "./ResumeItemRole.astro";
+import ResumeItemTitle from "./ResumeItemTitle.astro";
 export interface Props {
   company: {
     name: string;
     linkedin: string;
-    location: string;
   };
   isOngoing?: boolean;
   type: "Freelance" | "Full-time";
@@ -21,99 +20,24 @@ export interface Props {
 
 const item = Astro.props;
 
-const hasMultipleRoles = item.roles.length > 1;
+const isMultiRow = item.roles.length > 1;
 const to = item.roles[0].to;
 const from = item.roles[item.roles.length - 1].from;
+
+const titleProps = { ...item, to, from, isMultiRow };
 ---
 
 <div class="rounded border border-slate-500 text-skin-base">
-  <div class="flex justify-between border-b border-slate-500 px-4 py-2">
-    <div class="flex flex-row gap-2 items-center">
-      <div class="font-bold">{item.company.name}</div>
-      <SocialsButton
-        name="Linkedin"
-        href={item.company.linkedin}
-        className="mb-1 pt-0"
-      />
-    </div>
-    <div class="flex flex-col text-xs">
-      <div class="text-right">
-        {item.type} · {calculateDuration(from, to)}
-      </div>
-      {
-        !hasMultipleRoles && (
-          <div class="text-right">
-            {from} - {item.isOngoing ? "Present" : to}
-          </div>
-        )
-      }
-    </div>
-  </div>
+  <ResumeItemTitle {...titleProps} />
   {
     item.roles.map((role, index) => {
       return (
-        <div
-          class={`px-4 pt-2 pb-4 text-sm  ${
-            index ? "border-t border-slate-500 pt-4" : ""
-          }`}
-        >
-          <div class="flex flex-row gap-2 items-center justify-between">
-            <div class="font-bold">{role.title}</div>
-            {hasMultipleRoles && (
-              <div class="text-xs">
-                {role.from} - {role.to}
-              </div>
-            )}
-          </div>
-          <div class="">{role.location}</div>
-          <div class="mt-2 prose-sm">
-            <p>{role.description}</p>
-          </div>
-          <div class={`flex flex-row gap-2 mt-3`}>
-            <div class="font-bold">Skills:</div>
-            <div class="flex flex-row flex-wrap gap-x-2">
-              {role.tags.map((tag, index) => (
-                <div class="text-skin-accent">
-                  {tag} {index !== role.tags.length - 1 ? "·" : ""}
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
+        <ResumeItemRole
+          role={role}
+          isFirst={index === 0}
+          hasMultipleRoles={isMultiRow}
+        />
       );
     })
   }
 </div>
-
-<!--
-<div class={`social-icons ${centered ? "flex" : ""}`}>
-  {
-    SOCIALS.filter(social => social.active).map(social => (
-        <LinkButton
-            href={social.href}
-            className="link-button"
-            title={social.name}
-        >
-          <Fragment set:html={socialIcons[social.name]} />
-        </LinkButton>
-    ))
-  }
-</div>
-
-<article class="prose max-w-none pt-2">
-  <p>
-    <span class="font-bold">I'm Magnus Wahlstrand,</span> and this is my blog. Here
-    I share my thoughts on software development, and things I'm learning about. Currently,
-    I am interested in:
-    <a href="./tags/react">React</a>,
-    <a href="./tags/typescript">Typescript</a>,
-    <a href="./tags/aws">AWS</a>,
-    <a href="./tags/serverless">Serverless</a>
-  </p>
-  <p>
-    Read the blog posts or check out my <a href="./resume">RESUME</a> to know more
-    about me.
-  </p>
-</article>
-
--->

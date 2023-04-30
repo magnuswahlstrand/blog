@@ -1,0 +1,52 @@
+---
+import { calculateDuration } from "../resume/resumeItems";
+import SocialsButton from "./SocialsButton.astro";
+export interface Props {
+  company: {
+    name: string;
+    linkedin: string;
+    location: string;
+  };
+  isOngoing?: boolean;
+  type: "Freelance" | "Full-time";
+  to: string;
+  from: string;
+  isMultiRow: boolean;
+}
+
+const { company, isOngoing, type, to, from, isMultiRow } = Astro.props;
+const durationText = calculateDuration(from, to);
+const timespanText = `${from} - ${isOngoing ? "Present" : to}`;
+---
+
+<div
+  class="flex justify-between border-b border-slate-500 px-4 py-2 items-center"
+>
+  <div class="flex flex-row gap-2 items-center">
+    <div class="font-bold">{company.name}</div>
+    <SocialsButton
+      name="Linkedin"
+      href={company.linkedin}
+      className="mb-1 pt-0"
+    />
+  </div>
+  {
+    isMultiRow && (
+      <div class="flex flex-col text-xs text-right">
+        <div>{durationText}</div>
+        <div>{timespanText}</div>
+      </div>
+    )
+  }
+  {
+    !isMultiRow && (
+      <div class="flex flex-col text-xs text-right">
+        <div class="flex flex-row gap-1 justify-end">
+          <div>{type}</div>
+          <div class="sm:block hidden"> · {durationText}</div>
+        </div>
+        <div>{timespanText}</div>
+      </div>
+    )
+  }
+</div>

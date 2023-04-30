@@ -1,0 +1,51 @@
+---
+import { calculateDuration } from "../resume/resumeItems";
+import SocialsButton from "./SocialsButton.astro";
+export interface Props {
+  role: {
+    location: string;
+    title: string;
+    description: string;
+    from: string;
+    to: string;
+    tags: string[];
+  };
+  hasMultipleRoles: boolean;
+  isFirst: boolean;
+}
+
+const { isFirst, hasMultipleRoles, role } = Astro.props;
+---
+
+<div
+  class={`px-4 pt-2 pb-4 text-sm  ${
+    !isFirst ? "border-t border-slate-500 pt-4" : ""
+  }`}
+>
+  <div class="flex flex-row gap-2 items-center justify-between">
+    <div class="font-bold">{role.title}</div>
+    {
+      hasMultipleRoles && (
+        <div class="text-xs">
+          {role.from} - {role.to}
+        </div>
+      )
+    }
+  </div>
+  <div class="">{role.location}</div>
+  <div class="mt-2 prose-sm">
+    <p>{role.description}</p>
+  </div>
+  <div class={`flex flex-row gap-2 mt-3`}>
+    <div class="font-bold">Skills:</div>
+    <div class="flex flex-row flex-wrap gap-x-2">
+      {
+        role.tags.map((tag, index) => (
+          <div class="text-skin-accent">
+            {tag} {index !== role.tags.length - 1 ? "·" : ""}
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</div>
