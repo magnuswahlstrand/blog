@@ -45,7 +45,7 @@ export const resumeItems: ResumeItem[] = [
         location: "Stockholm, Sweden",
         title: "Senior Software Engineer",
         description:
-          "As part of the API Governance team, I was responsible for designing and developing the future API gateway solutions to be used by the bank. This included both on-premises and cloud-based solutions.\nOur team led the migration of the banks API Gateway from a proprietary API gateway to a more cost-effective and modern open-source variant. The project was completed on schedule, with minimal downtime for the bank's 100+ APIs.",
+          "Designed and developed API gateway solutions as part of the API Governance team at SEB, including both on-prem and cloud solutions.\nSuccessfully migrated over 100 APIs from a proprietary API gateway to a more cost-effective and modern open source variant on time and with minimal downtime, using Go, Typescript, and hosted on OpenShift and in GCP.",
         from: "May 2021",
         to: "Jan 2022",
         tags: ["Go", "Typescript", "Openshift", "Kong", "GCP"],
@@ -63,7 +63,7 @@ export const resumeItems: ResumeItem[] = [
         location: "Stockholm, Sweden",
         title: "Senior Software Developer",
         description:
-          "We built a mobile-first personal banking app to help our customers attain financial well-being. We developed every-day banking services and ensured that they were available for our customers 24/7.\nI was responsible for the platform architecture and evolution. I also led a key project for the company, replacing our existing card issuer and processor with a new provider.",
+          "We built a mobile-first personal banking app to help our customers attain financial well-being. We developed every-day banking services and ensured that they were available for our customers 24/7.\nMost of our services were microservices, written in Go. Either API based services or event-based using RabbitMQ. My responsibilities included platform architecture and evolution. I also led a key project for the company, replacing our existing card issuer and processor with a new provider. The project was completed three weeks ahead of schedule with accolades.",
         from: "May 2019",
         to: "May 2021",
         tags: ["Go", "DevOps", "Docker", "PostgreSQL", "AWS", "Heroku"],
@@ -81,7 +81,7 @@ export const resumeItems: ResumeItem[] = [
         location: "Stockholm, Sweden",
         title: "Project Manager & Team Lead",
         description:
-          "Initially, team lead for one of the five teams that led Ericsson's first 5G rollouts in China. Then I took led a project with 12 developer teams located in Sweden, Poland, China, and Korea, developing virtualized radio access network solution for larger-scale 5G rollout, again in China.",
+          "Initially, team lead for one of the five teams that led Ericsson's first 5G rollouts in China. Then I led another part of project, developing virtualized radio access network solution for larger-scale 5G rollouts, again in China. My project consisted of a total of twelve developer teams located in Sweden, Poland, China, and Korea.",
         from: "Oct 2016",
         to: "May 2019",
         tags: ["Go", "Python", "OpenStack", "RabbitMQ", "C++"],
@@ -99,7 +99,7 @@ export const resumeItems: ResumeItem[] = [
         location: "Linköping, Sweden",
         title: "Junior Developer",
         description:
-          "Part of a team that developed features for Ericsson's 4G base stations. The team focus was automatic system configuration and early warning systems.",
+          "Part of a team that developed features for Ericsson's 4G base stations. The team focus was automatic system configuration and early warning systems for natural disasters.",
         from: "Jan 2012",
         to: "Aug 2013",
         tags: ["Java", "UML modelling", "ClearCase"],
