@@ -4,6 +4,8 @@ datetime: 2023-05-01
 tags: ["adyen", "nextjs", "typescript", "frontend"]
 ---
 
+import Code from "../components/GithubCode.astro";
+
 The last couple of months, I've been working on adding card payments to our product at work. We use [Adyen](https://www.adyen.com/) as our payment provider, and they have been great so far.
 
 As I have mostly worked on the backend parts of this
@@ -73,52 +75,10 @@ ADYEN_MERCHANT_ACCOUNT=<YOUR MERCHANT ACCOUNT>
 
 This will be the endpoint that we will use to get the session data from Adyen. Create a file called `pages/api/session.ts`.
 
-```typescript
-import type { NextApiRequest, NextApiResponse } from "next";
-
-import { randomUUID } from "crypto";
-import { CheckoutAPI, Client, Config } from "@adyen/api-library";
-
-const config = new Config({
-  apiKey: process.env.ADYEN_API_KEY,
-  environment: "TEST",
-});
-
-// 1. Initialize the client & checkout
-const client = new Client({ config });
-const checkout = new CheckoutAPI(client);
-
-const merchantAccount = process.env.ADYEN_MERCHANT_ACCOUNT ?? "";
-
-// 2. Define the return data
-export type SessionData = {
-  id: string;
-  sessionData: string;
-};
-
-// 3. NextJS handler
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<SessionData>
-) {
-  // 4. Use Adyen SDK to create a session
-  const response = await checkout.sessions({
-    amount: { currency: "EUR", value: 10000 }, // value is 100€ in minor units
-    countryCode: "NL",
-    merchantAccount,
-    reference: randomUUID(), // Merchant reference
-    returnUrl: `http://localhost.com`,
-    // 👆 Not important for our use case.
-    // Needed for more complex authorization flows.
-  });
-
-  // 5. Return the session data to the caller
-  res.status(200).json({
-    id: response.id,
-    sessionData: response.sessionData ?? "",
-  });
-}
-```
+<Code
+  repo={`magnuswahlstrand/nextjs-with-adyen`}
+  path={`src/pages/api/session.ts`}
+/>
 
 5. **Testing the endpoint**
 
@@ -154,116 +114,21 @@ NEXT_PUBLIC_ADYEN_CLIENT_KEY="test_2C8...."
 
 Create a file `src/components/Checkout.tsx` and add the following code. This will be the payment page. (_Inspired by Adyen's own example repo, and specifically [this file](https://github.com/adyen-examples/adyen-react-online-payments/blob/main/src/features/payment/Payment.js)._)
 
-**src/components/Checkout.tsx**
-
-```tsx
-import React, { useEffect, useRef } from "react";
-import AdyenCheckout from "@adyen/adyen-web";
-import "@adyen/adyen-web/dist/adyen.css";
-import { Fetcher } from "swr";
-import { SessionData } from "@/types";
-import useSWRImmutable from "swr/immutable";
-
-export const PaymentContainer = () => {
-  return (
-    <div id="payment-page">
-      <div className="container">
-        <Checkout />
-      </div>
-    </div>
-  );
-};
-
-const fetcher: Fetcher<SessionData, string> = (...args) =>
-  fetch(...args).then(res => res.json());
-
-type PaymentCompleteResponse = {
-  resultCode: "Authorised" | "Refused" | "Cancelled" | "Error";
-  sessionDate?: string;
-  sessionResult?: string;
-};
-
-const Checkout = () => {
-  const paymentContainer = useRef(null);
-  const { data: session, error } = useSWRImmutable("/api/session", fetcher);
-
-  useEffect(() => {
-    let ignore = false;
-
-    if (!session || !paymentContainer.current) {
-      return;
-    }
-
-    const config = {
-      environment: process.env.NEXT_PUBLIC_ADYEN_ENVIRONMENT,
-      clientKey: process.env.NEXT_PUBLIC_ADYEN_CLIENT_KEY,
-    };
-
-    const createCheckout = async () => {
-      console.log("create checkout");
-      const checkout = await AdyenCheckout({
-        ...config,
-        session,
-        onPaymentCompleted: (
-          response: PaymentCompleteResponse,
-          _component: any
-        ) => {
-          if (response.resultCode !== "Authorised") {
-            alert(`Unhandled payment result "${response.resultCode}!"`);
-            return;
-          }
-        },
-        onError: (error: any, _component: any) => {
-          alert(`Error: ${error.message}`);
-        },
-      });
-
-      // The 'ignore' flag is used to avoid double re-rendering caused by React 18 StrictMode
-      // More about it here: https://beta.reactjs.org/learn/synchronizing-with-effects#fetching-data
-      if (paymentContainer.current && !ignore) {
-        console.log("create checkout at the end");
-        checkout.create("dropin").mount(paymentContainer.current);
-      }
-    };
-
-    createCheckout();
-
-    return () => {
-      ignore = true;
-    };
-  }, [session]);
-
-  if (error) return <div>Failed to load</div>;
-  if (!session) return <div>Loading...</div>;
-
-  return (
-    <div className="payment-container">
-      <div ref={paymentContainer} className="payment"></div>
-    </div>
-  );
-};
-```
+<Code
+  repo={`magnuswahlstrand/nextjs-with-adyen`}
+  path={`src/components/Checkout.tsx`}
+/>
 
 Then we use the component in `pages/index.tsx`:
 
-```tsx
-import { Inter } from "next/font/google";
-import { PaymentContainer } from "@/components/Checkout";
+<Code
+  repo={`magnuswahlstrand/nextjs-with-adyen`}
+  path={`src/pages/index.tsx`}
+/>
 
-const inter = Inter({ subsets: ["latin"] });
+Now, start your application (`npm run dev`) and go to [http://localhost:3000](localhost:3000) and you should see the payment page:
 
-export default function Home() {
-  return (
-    <main className={`flex flex-col items-center ${inter.className}`}>
-      <PaymentContainer />
-    </main>
-  );
-}
-```
-
-Now, start your application (`npm run dev`) and go to [http://localhost:3000](localhost:3000) and you should see the payment page.
-
-![payment page](/img/adyen-checkout-with-nextjs/payment_page.png)
+![payment page](/img/adyen-checkout-with-nextjs/preview.png)
 
 # Make a test payment
 

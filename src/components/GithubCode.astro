@@ -1,0 +1,24 @@
+---
+import { Code } from "astro/components";
+export interface Props {
+  repo: string;
+  path: string;
+}
+
+const { repo, path } = Astro.props;
+const rawUrl = `https://raw.githubusercontent.com/${repo}/main/${path}`;
+const url = `https://github.com/${repo}/blob/main/${path}`;
+const fileEnding = url.split(".").pop();
+
+const response = await fetch(rawUrl);
+const data = await response.text();
+---
+
+<div>
+  <div class="bg-[#282c34] rounded-t-lg z px-5 pt-1 pb-3 relative top-8 w-fit">
+    <a class="!text-white" href={url}>{path}</a>
+  </div>
+  <Code code={data} lang={fileEnding} theme="one-dark-pro">
+    <div>{data}</div>
+  </Code>
+</div>
