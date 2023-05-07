@@ -1,5 +1,6 @@
 ---
 import { Code } from "astro/components";
+
 export interface Props {
   repo: string;
   path: string;
@@ -18,7 +19,6 @@ const data = await response.text();
   <div class="bg-[#282c34] rounded-t-lg z px-5 pt-1 pb-3 relative top-8 w-fit">
     <a class="!text-white" href={url}>{path}</a>
   </div>
-  <Code code={data} lang={fileEnding} theme="one-dark-pro">
-    <div>{data}</div>
-  </Code>
+
+  <Code code={data} lang={fileEnding} theme="one-dark-pro" />
 </div>

@@ -5,6 +5,7 @@ tags: ["adyen", "nextjs", "typescript", "frontend"]
 ---
 
 import Code from "../components/GithubCode.astro";
+export const repo = `magnuswahlstrand/nextjs-with-adyen`;
 
 The last couple of months, I've been working on adding card payments to our product at work. We use [Adyen](https://www.adyen.com/) as our payment provider, and they have been great so far.
 
@@ -75,10 +76,7 @@ ADYEN_MERCHANT_ACCOUNT=<YOUR MERCHANT ACCOUNT>
 
 This will be the endpoint that we will use to get the session data from Adyen. Create a file called `pages/api/session.ts`.
 
-<Code
-  repo={`magnuswahlstrand/nextjs-with-adyen`}
-  path={`src/pages/api/session.ts`}
-/>
+<Code repo={repo} path={`src/pages/api/session.ts`} />
 
 5. **Testing the endpoint**
 
@@ -114,17 +112,11 @@ NEXT_PUBLIC_ADYEN_CLIENT_KEY="test_2C8...."
 
 Create a file `src/components/Checkout.tsx` and add the following code. This will be the payment page. (_Inspired by Adyen's own example repo, and specifically [this file](https://github.com/adyen-examples/adyen-react-online-payments/blob/main/src/features/payment/Payment.js)._)
 
-<Code
-  repo={`magnuswahlstrand/nextjs-with-adyen`}
-  path={`src/components/Checkout.tsx`}
-/>
+<Code repo={repo} path={`src/components/Checkout.tsx`} />
 
 Then we use the component in `pages/index.tsx`:
 
-<Code
-  repo={`magnuswahlstrand/nextjs-with-adyen`}
-  path={`src/pages/index.tsx`}
-/>
+<Code repo={repo} path={`src/pages/index.tsx`} />
 
 Now, start your application (`npm run dev`) and go to [http://localhost:3000](localhost:3000) and you should see the payment page:
 
