@@ -15,9 +15,11 @@
     "deploy": "./scripts/deploy.sh"
   },
   "dependencies": {
+    "@astro-github-elements/clipboard-copy": "^0.0.4",
     "@astrojs/markdown-component": "^1.0.2",
     "@astrojs/mdx": "^0.11.5",
     "@astrojs/rss": "^1.0.3",
+    "@github/clipboard-copy-element": "^1.1.2",
     "asciinema-player": "^3.0.1",
     "astro": "^1.6.2",
     "astro-terminal-player": "^0.1.4",

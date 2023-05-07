@@ -1,5 +1,6 @@
 ---
 import { Code } from "astro/components";
+import { ClipboardCopy } from "@astro-github-elements/clipboard-copy";
 
 export interface Props {
   repo: string;
@@ -12,13 +13,22 @@ const url = `https://github.com/${repo}/blob/main/${path}`;
 const fileEnding = url.split(".").pop();
 
 const response = await fetch(rawUrl);
-const data = await response.text();
+const code = await response.text();
 ---
 
 <div>
-  <div class="bg-[#282c34] rounded-t-lg z px-5 pt-1 pb-3 relative top-8 w-fit">
-    <a class="!text-white" href={url}>{path}</a>
+  <div class="flex flex-row justify-between relative top-8">
+    <a class="bg-[#282c34] rounded-t-lg z px-5 pt-1 pb-3 !text-white" href={url}
+      >{path}</a
+    >
+    <a
+      class="bg-[#282c34] rounded-t-lg z px-5 pt-1 pb-3 !text-white"
+      href="#"
+      onclick="return false;"
+    >
+      <ClipboardCopy value={code}>copy</ClipboardCopy>
+    </a>
   </div>
 
-  <Code code={data} lang={fileEnding} theme="one-dark-pro" />
+  <Code code={code} lang={fileEnding} theme="one-dark-pro" />
 </div>
