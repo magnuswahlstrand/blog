@@ -17,12 +17,13 @@ const code = await response.text();
 ---
 
 <div>
-  <div class="flex flex-row justify-between relative top-8">
-    <a class="bg-[#282c34] rounded-t-lg z px-5 pt-1 pb-3 !text-white" href={url}
-      >{path}</a
+  <div class="flex flex-row justify-between relative top-8 overflow-clip">
+    <a
+      class="bg-[#282c34] rounded-t-lg z px-5 pt-1 pb-3 !text-white text-sm sm:text-base"
+      href={url}>{path}</a
     >
     <a
-      class="bg-[#282c34] rounded-t-lg z px-5 pt-1 pb-3 !text-white"
+      class="bg-[#282c34] rounded-t-lg z px-5 pt-1 pb-3 !text-white text-sm sm:text-base"
       href="#"
       onclick="return false;"
     >
