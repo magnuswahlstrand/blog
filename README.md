@@ -4,6 +4,7 @@
 * ~Add asciinema~
 * ~Fix articles -> post redirect~
 * Add description to posts (Card.tsx)
+* Fix resources layout
 
 ## 🧞 Commands
 
