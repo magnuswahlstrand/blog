@@ -4,14 +4,13 @@ title: "What I'm Doing Now"
 navName: "now"
 ---
 
-It’s 2023. I’m working freelancer, mostly from home from my house outside of Stockholm. My son is two years old.
+It’s 2024. I’m working freelancer, mostly from home from my house outside of Stockholm. My son is three years old.
 
 Some things I’m working on:
 
-- **Learning Typescript, and NextJS**
-- **Becoming stronger**
-- **Write a new blog post per month**
-- **Learning "Stairways to Heaven" on guitar**
+- **Learning NodeJS** - Doing my jobs
+- **Becoming stronger** - Being able to do 15 push-ups
+- **Mastering AWS** - Getting certified
 
 <div>
   <img src="/assets/reading.svg" class="sm:w-1/2 mx-auto" alt="coding dev illustration">

@@ -5,4 +5,4 @@ navName: ""
 ---
 
 - Free (and paid) SVG illustrations - [https://freesvgillustration.com](https://freesvgillustration.com/)
-- SQL seed data - for prototyping - [SQL Seed data](./resources/seed-data)
+- SQL seed data - for prototyping - [SQL Seed data](./seed-data)

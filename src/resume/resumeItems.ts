@@ -9,10 +9,38 @@ export const resumeItems: ResumeItem[] = [
   {
     type: "Freelance",
     company: {
+      name: "TV4 Play",
+      linkedin: "https://www.linkedin.com/company/tv4/",
+    },
+    isOngoing: true,
+    roles: [
+      {
+        location: "Stockholm, Sweden",
+        title: "Senior Backend Developer",
+        description:
+          "TV4 Play is one of Sweden’s leading streaming services, offering engaging news, entertainment and live sports. " +
+          "As a backend developer at TV4 Play, I'm responsible for building and maintaining the systems that power user authentication, profile management, and secure user handling across our platforms.",
+        from: "June 2024",
+        to: nowDate(),
+        tags: [
+          "NodeJS",
+          "Typescript",
+          "AWS",
+          "DynamoDB",
+          "PostgresSQL",
+          "Observability",
+          "Grafana",
+        ],
+      },
+    ],
+  },
+  {
+    type: "Freelance",
+    company: {
       name: "Creator Studio",
       linkedin: "https://www.linkedin.com/company/thisisyourstudio/mycompany/",
     },
-    isOngoing: true,
+    isOngoing: false,
     roles: [
       {
         location: "Stockholm, Sweden",
@@ -20,7 +48,7 @@ export const resumeItems: ResumeItem[] = [
         description:
           "Creator Studio is a part of the H&M Group and is a platform that allows creators all over the world to create and sell high-quality, locally sourced, print on-demand, merchandise.\nAs a member of the Payments & Reporting team, I'm responsible for the developing and operating the payment solutions for platform, as well as building systems to integrate with existing ERP solution and to create financial reports.",
         from: "Jan 2022",
-        to: nowDate(),
+        to: "June 2024",
         tags: [
           "Python",
           "Typescript",
