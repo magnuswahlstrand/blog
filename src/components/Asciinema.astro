@@ -3,7 +3,7 @@ const { src } = Astro.props;
 import "asciinema-player/dist/bundle/asciinema-player.css";
 ---
 
-<div class="text-white">
+<div class="text-white not-prose">
   <div
     data-astro-asciinema-src={"/assets/casts/" + src}
     data-astro-asciinema-settings={JSON.stringify({
