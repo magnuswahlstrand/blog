@@ -15,13 +15,13 @@ This article covers how to create Android app shortcuts like the one below.
 
 First, since this article will be using icons quite a bit, let's add a few vector graphics and replace the default Android app icon with our own.
 
-* **New > Vector Asset > Clip Art >** Select the icon you want
+- **New > Vector Asset > Clip Art >** Select the icon you want
 
-I used 
+I used
 
-* ic_app_icon.xml (from **fiber\_new** icon)
-* ic_battery_shortcut.xml (from **battery\_unknown** icon)
-* ic_widgets_shortcut.xml (from **widgets** icon)
+- ic_app_icon.xml (from **fiber_new** icon)
+- ic_battery_shortcut.xml (from **battery_unknown** icon)
+- ic_widgets_shortcut.xml (from **widgets** icon)
 
 Then we can change the app icon by updating the AndroidManifest
 
@@ -139,5 +139,5 @@ The code can be found [here](https://github.com/magnuswahlstrand/android-app-sho
 
 ### Links
 
-* [Android: creating shortcuts](https://developer.android.com/guide/topics/ui/shortcuts/creating-shortcuts)
-* [SO: How to add data to app shortcut Intent](https://stackoverflow.com/questions/42554349/how-to-add-data-to-app-shortcut-intent)
+- [Android: creating shortcuts](https://developer.android.com/guide/topics/ui/shortcuts/creating-shortcuts)
+- [SO: How to add data to app shortcut Intent](https://stackoverflow.com/questions/42554349/how-to-add-data-to-app-shortcut-intent)

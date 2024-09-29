@@ -3,29 +3,31 @@ title: "Running Google Pub/Sub locally"
 slug: 2021-07-11-testing-pubsub-locally
 datetime: 2021-07-11
 tags: ["gcp", "pubsub", "go"]
---- 
+---
 
-I have recently started using Google's event queue "[**Cloud Pub/Sub**](https://cloud.google.com/pubsub)" for a few projects at work, and I enjoyed how straightforward it is to configure and use in production.  Their documentation is usually great, but often misses how to tie everything for your local environment. 
+I have recently started using Google's event queue "[**Cloud Pub/Sub**](https://cloud.google.com/pubsub)" for a few projects at work, and I enjoyed how straightforward it is to configure and use in production. Their documentation is usually great, but often misses how to tie everything for your local environment.
 
-Here is a quick guide how I set up my integration test locally using the **Pub/Sub** emulator. Code examples are written in Go.   
+Here is a quick guide how I set up my integration test locally using the **Pub/Sub** emulator. Code examples are written in Go.
 
 <!--more-->
 
 ## Starting the emulator
 
 To run the emulator, you first need the `gcloud` cli ([setup instructions](https://cloud.google.com/sdk/docs/install)). Next can we install the emulator.
+
 ```
 gcloud components install pubsub-emulator
 gcloud components update
 ```
 
-Finally, we start the emulator on **localhost:8085**.  
+Finally, we start the emulator on **localhost:8085**.
 
 ```
 gcloud beta emulators pubsub start --project=test-project
 ```
 
 Output:
+
 ```
 Executing: /Users/test/Downloads/google-cloud-sdk/platform/pubsub-emulator/bin/cloud-pubsub-emulator --host=localhost --port=8085
 [pubsub] This is the Google Pub/Sub fake.
@@ -34,13 +36,16 @@ Executing: /Users/test/Downloads/google-cloud-sdk/platform/pubsub-emulator/bin/c
 ```
 
 ## Code
+
 We can use the Google Pub/Sub client to publish or subscribe on a topic.
+
 ```
 go get -u cloud.google.com/go/pubsub
 ```
 
 #### Setup the client
-We need to point the `pubsub.Client` to our emulator. For this purpose, `pubsub.NewClient` uses a magic environment variable ```PUBSUB_EMULATOR_HOST```.
+
+We need to point the `pubsub.Client` to our emulator. For this purpose, `pubsub.NewClient` uses a magic environment variable `PUBSUB_EMULATOR_HOST`.
 You can set it in a shell using `$(gcloud beta emulators pubsub env-init)`. For our test code, we use `os.Setenv`.
 
 **Note**: If we don't set `PUBSUB_EMULATOR_HOST`, the client will default to an actual Google project. Be careful :-).
@@ -51,7 +56,7 @@ os.Setenv("PUBSUB_EMULATOR_HOST", "localhost:8085")
 client, err := pubsub.NewClient(ctx, "test-project")
 ...
 
-#### Receive message 
+#### Receive message
 
 #### Receive message
 // Create topic
@@ -59,14 +64,15 @@ topic, err := client.CreateTopic(ctx, "some-topic")
 ...
 ```
 
-#### Receive message 
+#### Receive message
 
 Now that we have a topic, we could publish a message. However, we don't have any subscriptions yet, and so the published message would be discared.
 
-* Push - **Pub/Sub** is responsible for pushing any incoming messages on a topic to a specific endpoint in the service
-* Pull - Service is responsible for setting up a connection to a **Pub/Sub** topic, and waits for incoming messages. 
+- Push - **Pub/Sub** is responsible for pushing any incoming messages on a topic to a specific endpoint in the service
+- Pull - Service is responsible for setting up a connection to a **Pub/Sub** topic, and waits for incoming messages.
 
 ##### Creating a pull subscription
+
 ```go
 sub, err := client.CreateSubscription(ctx, "some-subscription-id", pubsub.SubscriptionConfig{
     Topic: topic,
@@ -78,14 +84,16 @@ cctx, cancel := context.WithCancel(ctx)
 // Receive will block until the context is cancelled, or we get a non-recoverable error
 err = sub.Receive(cctx, func(_ context.Context, m *pubsub.Message) {
     m.Ack()
-    cancel() // for test purpose, shut down after first message 
+    cancel() // for test purpose, shut down after first message
 })
 ```
+
 **Note**: If we don't receive a message for some reason, the `Receive` call will be stuck forever. I will fix this in the full test code example.
 
 ##### Creating a push subscription
 
-For the push example, we need a endpoint that can receive and decode the PubSub message. 
+For the push example, we need a endpoint that can receive and decode the PubSub message.
+
 ```go
 func pubSubHandler(w http.ResponseWriter, r *http.Request) {
 	var event pubSubMessage
@@ -100,7 +108,9 @@ func pubSubHandler(w http.ResponseWriter, r *http.Request) {
 	// ...
 }
 ```
-Then all we need to do is to add  `pubsub.PushConfig` with our endpoint, when we configure create a subscription.
+
+Then all we need to do is to add `pubsub.PushConfig` with our endpoint, when we configure create a subscription.
+
 ```go
 _, err = client.CreateSubscription(ctx, "some-subscription-id-2", pubsub.SubscriptionConfig{
     Topic: topic,
@@ -112,26 +122,27 @@ _, err = client.CreateSubscription(ctx, "some-subscription-id-2", pubsub.Subscri
 
 #### Publishing a message
 
-Finally, we can publish a message to **Pub/Sub**. Keep in mind that `Publish` is asynchronous, and you should use `res.Get` afterwards if the result is important.  
+Finally, we can publish a message to **Pub/Sub**. Keep in mind that `Publish` is asynchronous, and you should use `res.Get` afterwards if the result is important.
+
 ```go
 res := topic.Publish(ctx, &pubsub.Message{
     Data: []byte("hello test"),
 })
 
-// Wait for result, if you care about it :-) 
+// Wait for result, if you care about it :-)
 messageID, err = res.Get(ctx)
 ...
 ```
 
-
 ## Summary
 
 In this guide I showed how to do the following:
+
 1. Start the **Pub/Sub** emulator
 1. Configure the Go client
-2. Create topics
-3. Create *pull* and *push* subscriptions
-5. Publish and receive events
+1. Create topics
+1. Create _pull_ and _push_ subscriptions
+1. Publish and receive events
 
 If you are interested in the full code I have included two testcases below.
 
@@ -252,7 +263,7 @@ func TestSendWithPush(t *testing.T) {
 }
 ```
 
-
 ## Resources
-* [Installing Google Cloud SDK](https://cloud.google.com/sdk/docs/install)
-* [Testing apps locally with the emulator](https://cloud.google.com/pubsub/docs/emulator)
+
+- [Installing Google Cloud SDK](https://cloud.google.com/sdk/docs/install)
+- [Testing apps locally with the emulator](https://cloud.google.com/pubsub/docs/emulator)

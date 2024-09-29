@@ -146,21 +146,21 @@ _Styling:_
 Using jQuery and some javascript, we can complete the solution.
 
 ```javascript
-$(document).ready(function() {
+$(document).ready(function () {
   // Focus the search input whenever the modal is shown
-  $("#search_modal").on("hidden.bs.modal", function(e) {
+  $("#search_modal").on("hidden.bs.modal", function (e) {
     $("#search_input").val("");
     $(".search_results").hide();
   });
 
   // Focus the search input whenever the modal is shown
-  $("#search_modal").on("shown.bs.modal", function(e) {
+  $("#search_modal").on("shown.bs.modal", function (e) {
     $("#search_input").focus();
   });
 
   // Show search results when the input field has some text in it
   // Hide it when it empty
-  $("#search_input").keyup(function() {
+  $("#search_input").keyup(function () {
     if ($(this).val() == "") {
       $(".search_results").hide();
     } else {

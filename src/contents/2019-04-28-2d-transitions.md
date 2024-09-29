@@ -10,7 +10,7 @@ The other day, I watched a a playthrough of the 2D platformer [Shovel Knight](ht
 
 ![End result](/img/2d-transitions/final.gif)
 
-*Note: I have borrowed the background images and scoreboard in the from [Shovel Knight](https://yachtclubgames.com/shovel-knight/) itself.*
+_Note: I have borrowed the background images and scoreboard in the from [Shovel Knight](https://yachtclubgames.com/shovel-knight/) itself._
 
 <!--more-->
 
@@ -21,7 +21,7 @@ Before we can create transitions, we need some nice graphics to transition to an
 As I want to be able compile the examples using GopherJS, I had to do a few extra steps:
 
 1. Save the images as `[]byte` using [go-bindata](https://github.com/jteeuwen/go-bindata)
-   * In my case `go-bindata -pkg shovelknightresources *.png`
+   - In my case `go-bindata -pkg shovelknightresources *.png`
 2. The images `[]byte` are then accessed as `shovelknightresources.Asset("scene_1.png")`
 3. Use my utility package [magnuswahlstrand/ebitendrawutil](https://github.com/magnuswahlstrand/ebitendrawutil) to simplify the loading of the images
 
@@ -63,15 +63,15 @@ func update(screen *ebiten.Image) error {
 
 ## Growing Rectangle
 
-Let's start with the easiest transition: *a rectangle that expands from the center*
+Let's start with the easiest transition: _a rectangle that expands from the center_
 
 The function below takes care of drawing and growing a rectangle from width and height = 0 to full size of `maxRect`. It uses a few utility strucs and functions from Peter Hellberg's [gfx](https://godoc.org/github.com/peterhellberg/gfx) package. Specifically:
 
-* `gfx.Vec` - representing a 2D point, or vector
-* `gfx.Rect` - representing a rectangle
-* `gfx.Lerp/Vec.Lerp` - [linear interpolation](https://en.wikipedia.org/wiki/Linear_interpolation) between two values or vectors
+- `gfx.Vec` - representing a 2D point, or vector
+- `gfx.Rect` - representing a rectangle
+- `gfx.Lerp/Vec.Lerp` - [linear interpolation](https://en.wikipedia.org/wiki/Linear_interpolation) between two values or vectors
 
-Note: *`ebitenutil.DrawRect` is really intended for debugging*
+Note: _`ebitenutil.DrawRect` is really intended for debugging_
 
 ```go
 // TransitionGrowingRect draws a rectangle that grows from the center to fill maxRect as t goes from 0 to 1
@@ -103,7 +103,7 @@ func update(screen *ebiten.Image) error {
 }
 ```
 
-*code for part two > [here](https://github.com/magnuswahlstrand/animex/blob/transitions-part-2/transitions/)*
+_code for part two > [here](https://github.com/magnuswahlstrand/animex/blob/transitions-part-2/transitions/)_
 
 ![Growing rectangle](/img/2d-transitions/grow-rect.gif)
 
@@ -119,7 +119,7 @@ func TransitionShrinkingRect(screen *ebiten.Image, maxRect gfx.Rect, t float64, 
 
 Now we can transition for real between scenes. I have added a second scene `"scene_2.png"` and made the `update` function toggle between them.
 
-__Note:__ _I have put `TransitionShrinkingRect` before `TransitionGrowingRect` in the second switch below_.
+**Note:** _I have put `TransitionShrinkingRect` before `TransitionGrowingRect` in the second switch below_.
 
 ```go
 func update(screen *ebiten.Image) error {
@@ -154,11 +154,12 @@ func update(screen *ebiten.Image) error {
 }
 ```
 
-*code for part three > [here](https://github.com/magnuswahlstrand/animex/blob/transitions-part-3/transitions/)*
+_code for part three > [here](https://github.com/magnuswahlstrand/animex/blob/transitions-part-3/transitions/)_
 
 ![Growing-Shrinking rectangle](/img/2d-transitions/grow-shrink-rect.gif)
 
 ## Shrinking/Growing Frame
+
 Neither of the effects in the previous sections _are actually in_ Shovel Knight, as far as I know. What we need is a growing/shinking frame!
 For this I use my own util-package [magnuswahlstrand/ebitendrawutil](https://github.com/magnuswahlstrand/ebitendrawutil) and especially `DrawRect()`. This draws a rectangle with a border and a transparent fill.
 
@@ -175,7 +176,7 @@ func TransitionShrinkingBorder(screen *ebiten.Image, maxRect gfx.Rect, t float64
 }
 ```
 
-*code for part four > [here](https://github.com/magnuswahlstrand/animex/blob/transitions-part-4/transitions/)*
+_code for part four > [here](https://github.com/magnuswahlstrand/animex/blob/transitions-part-4/transitions/)_
 
 ![Growing-Shrinking rectangle and frame](/img/2d-transitions/grow-shrink-rect-frame.gif)
 
@@ -196,8 +197,8 @@ func TransitionBlinds(screen *ebiten.Image, maxRect gfx.Rect, nRectangles int, t
 }
 ```
 
-Here is the end result. *The final code > [here](https://github.com/magnuswahlstrand/animex/tree/master/transitions)*
+Here is the end result. _The final code > [here](https://github.com/magnuswahlstrand/animex/tree/master/transitions)_
 
 ![End result](/img/2d-transitions/final.gif)
 
---------
+---

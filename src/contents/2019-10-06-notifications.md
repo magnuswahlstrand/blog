@@ -33,7 +33,6 @@ From Android API level 26, all notifications need to be assigned to a `notificat
 that the user can control notifications per channel for an app. In my app below you could disable notifications about
 Taxis, while keeping the one for E-mails.
 
-
 <div class="flex flex-row h-96 w-full">
 <img src="/img/push-notifications/2_notification_channel_1-thumb.jpg" />
 <img src="/img/push-notifications/2_notification_channel_2-thumb.jpg" />

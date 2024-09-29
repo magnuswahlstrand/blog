@@ -2,17 +2,31 @@
 title: "Event-based apps with Go and EventBridge"
 slug: 2022-06-26-event-based-system-on-aws
 datetime: 2022-06-26
-tags: ["sst","serverless","cdk","lambda","event-based","eventbridge", "aws", "go"]
+tags:
+  [
+    "sst",
+    "serverless",
+    "cdk",
+    "lambda",
+    "event-based",
+    "eventbridge",
+    "aws",
+    "go",
+  ]
 ---
-import Sidenote from '../components/Sidenote.astro';
-import Caption from '../components/Caption.astro';
+
+import Sidenote from "../components/Sidenote.astro";
+import Caption from "../components/Caption.astro";
 
 In this post I will build a small [event-driven system](https://en.wikipedia.org/wiki/Event-driven_architecture) with Go. It will be serverless app with an API Gateway in front. I will use [AWS EventBridge](https://aws.amazon.com/eventbridge/) as message bus that serves as glue between our components and the app will be deployed using [Serverless Stack ](https://sst.dev/).
 
 <div class="b-8 l-16 max-w-xl mx-auto">
-  <img src="/img/event-based-system-on-aws/teaser.png" alt="Event-based system" class=""/>
+  <img
+    src="/img/event-based-system-on-aws/teaser.png"
+    alt="Event-based system"
+    class=""
+  />
 </div>
-
 
 ## Overview
 
@@ -21,6 +35,7 @@ Our overall goal is quite simple. We want to build a simple system where we can 
 In this tutorial, we will build an order taking app. On the one side, orders are placed through a public API endpoint `POST /orders`. The handler for that endpoint is a Lambda function that "creates" order by publishing them to EventBridge. It in turn is configured to route messages to our consumers, two Lambda functions. **CreateInvoice** and **LogEvents** will receive `order.created` events and log them to standard out, just to showcase the broadcasting of events.
 
 ![overview](/img/event-based-system-on-aws/overview.png)
+
 <Caption> Target architecture </Caption>
 
 Our app is deployed to AWS using my new favorite tool: [Serverless Stack](https://sst.dev/) (SST). It has great [CDK](https://aws.amazon.com/cdk/) constructs for quick development, and gives us hot reload of the Lambda functions. Great!
@@ -33,7 +48,9 @@ First we need to bootstrap our project. The [SST CLI](https://sst.dev/) will do 
 npx create-sst@latest --template=starters/go-starter eventbus
 cd eventbus
 ```
+
 Our directory now looks as follows.
+
 ```
 > tree -a -L 2
 .
@@ -54,9 +71,11 @@ Our directory now looks as follows.
 ├── tsconfig.json
 └── vitest.config.ts
 ```
+
 In this tutorial, we are interested in two parts
-* `./stack/MyStack.ts` - This is where our SST/CDK stack is defined. It will define the infrastructure for API Gateway, EventBridge and our Lambda functions.
-* `./services/functions/` - Here we define our Lambda functions. The go-starter template comes with a single function called `lambda.go`.
+
+- `./stack/MyStack.ts` - This is where our SST/CDK stack is defined. It will define the infrastructure for API Gateway, EventBridge and our Lambda functions.
+- `./services/functions/` - Here we define our Lambda functions. The go-starter template comes with a single function called `lambda.go`.
 
 We also install [Dave Cheney](https://dave.cheney.net/)'s package [go-spew](https://github.com/davecgh/go-spew). It is a Go package to dump things to the logs. I often use it to explore what data is passed around in a new service, in this case AWS EventBridge.
 
@@ -73,6 +92,7 @@ npm start
 ```
 
 Output:
+
 ```
 ...
 
@@ -104,7 +124,8 @@ Now we can start building! First out we will get the **_event consuming_** to wo
 ![consume](/img/event-based-system-on-aws/consume.png)
 
 <Caption>
-**Goal:** produce events from the terminal, through EventBridge and consume in our Lambda function
+  **Goal:** produce events from the terminal, through EventBridge and consume in
+  our Lambda function
 </Caption>
 
 First up, let's create a serverless function that listens to events from the event bus. SST makes this easy for us! All we need to do is to replace the initial stack in `./stack/MyStack.ts` with the following:
@@ -134,6 +155,7 @@ export function Stack({stack}: StackContext) {
     });
 }
 ```
+
 Let's break this down.
 
 1. We create our event bus using `EventBus` from `@serverless-stack/resources`. This is a higher order CDK construct that simplifies our set up. This create a new custom EventBridge bus.
@@ -141,6 +163,7 @@ Let's break this down.
 3. Finally, we output the name of the created event.
 
 We haven't actually created our function yet. Create a new file called `functions/log_events.go`.
+
 ```go
 package main
 
@@ -178,6 +201,7 @@ Before we run our tests, make sure that the SST CLI is still running. If not, st
   }
 ]
 ```
+
 This is the minimal payload (I believe). Full definition [here](https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-events.html).
 
 ```
@@ -185,14 +209,15 @@ aws --region us-east-1 events put-events --entries file://order_created.json
 ```
 
 You should see something like this to indicate that the publishing was successful:
+
 ```json
 {
-    "FailedEntryCount": 0,
-    "Entries": [
-        {
-            "EventId": "4d2d7ae8-57e4-5e17-97be-dcd98c22014b"
-        }
-    ]
+  "FailedEntryCount": 0,
+  "Entries": [
+    {
+      "EventId": "4d2d7ae8-57e4-5e17-97be-dcd98c22014b"
+    }
+  ]
 }
 ```
 
@@ -220,8 +245,9 @@ received event of type "order.created"
 ```
 
 As you can see, this is mostly the same event as we sent from using `aws events put-events`. The most interesting fields here are
-* `DetailType`: **order.created**, this is the field that we use for routing.
-* `Detail` contains our payload. In Go, reprepsented as `json.RawMessage/[]byte`.
+
+- `DetailType`: **order.created**, this is the field that we use for routing.
+- `Detail` contains our payload. In Go, reprepsented as `json.RawMessage/[]byte`.
 
 Consuming events is working! 🎉
 
@@ -232,6 +258,7 @@ Now we can work on our _**event producing**_. We will work on the part of the le
 ![consume](/img/event-based-system-on-aws/producer.png)
 
 Once again, SST makes this easy.
+
 1. We import `Api` from `@serverless-stack/resources`.
 2. Our route is defined in the props under `routers`, we point it to a new function defined in the file `create_order.go`.
 3. We add permission to publish to the event bus, and define the environment variable **EVENT_BUS_NAME**, needed when publishing events.
@@ -343,6 +370,7 @@ func main() {
 	lambda.Start(CreateOrderHandler)
 }
 ```
+
 Here we do the following:
 
 1. Unmarshal the request body from the API gateway into `CreateOrderRequest`.
@@ -360,7 +388,9 @@ Once again, let SST deploy all updates.
 ### Testing the event producer
 
 Now we are ready to test our new event producer. There are at least two ways of doing this.
-* Use curl, or your favorite HTTP client and make the request. _Remember to update the API gateway URL._
+
+- Use curl, or your favorite HTTP client and make the request. _Remember to update the API gateway URL._
+
 ```
 POST https://4ty44qcuya.execute-api.us-east-1.amazonaws.com/order
 Content-Type: application/json
@@ -370,7 +400,8 @@ Content-Type: application/json
   "line_items": ["food", "shelter"]
 }
 ```
-* Or, the option I used: go to the SST console and make the request.
+
+- Or, the option I used: go to the SST console and make the request.
   ![SST console](/img/event-based-system-on-aws/sst-console.png)
 
 Going back to the terminal, we see the result:
@@ -409,6 +440,7 @@ Not only did we test event producing, but we ended up consuming the events as we
 ## Adding a new consumer
 
 Now, imagine the following scenario. The accounting department contacts us:
+
 > We are happy that we have started receiving a lot of orders in our system, but where are the corresponding invoices?
 
 We have forgotten our second event consumer, `CreateInvoice` 😱.
@@ -445,6 +477,7 @@ func main() {
 	lambda.Start(CreateInvoiceHandler)
 }
 ```
+
 Then we add it as a target for our stack:
 
 ```diff
@@ -463,6 +496,7 @@ Then we add it as a target for our stack:
 ```
 
 Now all we need to do is to create a new order
+
 ```bash
 # 1. create_order invoked via the API gateway
 60647f24-3e36-438c-964e-e6644e472f84 REQUEST magnus-eventbus-Stack-apiLambdaPOSTorderCF2979AB-jZgSzQgXMeRR [functions/create.go] invoked by API POST /order
@@ -487,7 +521,7 @@ If we forward this log to the accounting department, they will surely be happy!
 
 # Conclusion
 
-We have built an event-based system using Go and AWS services.  SST helps us quickly set up the infrastructure, and simplifies things like IAM permissions and propagating environment variables.
+We have built an event-based system using Go and AWS services. SST helps us quickly set up the infrastructure, and simplifies things like IAM permissions and propagating environment variables.
 
 There are a few **improvements** we could make to our system. One would be to put SQS queues between EventBridge and our event consuming Lambda function. This would make retries possible if the functions are unavailable for some reason. Another improvement could be to let our event consumers actually do something useful, like storing data to a DynamoDB table or sending e-mail notifications using SNS. But that's for another time.
 
@@ -495,5 +529,5 @@ I hope you enjoyed this article. Feel free to reach out to me at [@wahlstra](htt
 
 ### Resources
 
-* [AWS Lambda function handler in Go](https://docs.aws.amazon.com/lambda/latest/dg/golang-handler.html)
-* YouTube: [SST Weekly: Event Bus](https://www.youtube.com/watch?v=iMsPztMiFIk) - inspiration for this video
+- [AWS Lambda function handler in Go](https://docs.aws.amazon.com/lambda/latest/dg/golang-handler.html)
+- YouTube: [SST Weekly: Event Bus](https://www.youtube.com/watch?v=iMsPztMiFIk) - inspiration for this video
