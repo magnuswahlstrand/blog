@@ -8,8 +8,8 @@ It’s 2024. I’m working freelancer, mostly from home from my house outside of
 
 Some things I’m working on:
 
-- **Learning NodeJS** - Doing my jobs
-- **Becoming stronger** - Being able to do 15 push-ups
+- **Learning NodeJS** - On the job
+- **Becoming stronger** - Being able to do 15 pull-ups
 - **Mastering AWS** - Getting certified
 
 <div>

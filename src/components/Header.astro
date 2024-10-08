@@ -53,7 +53,7 @@ const { activeNav } = Astro.props;
           <a href="/now" class={activeNav === "now" ? "active" : ""}>Now</a>
         </li>
       </ul>
-      <div class="button-wrapper">
+      <div class="button-wrapper sm:display-none">
         <LinkButton
           href="/search"
           className={`focus-outline p-1 ${
@@ -115,7 +115,7 @@ const { activeNav } = Astro.props;
     @apply fill-skin-base w-6 h-6 scale-125;
   }
   nav {
-    @apply w-full py-2 sm:py-0 flex flex-col items-center sm:justify-end sm:flex-row sm:space-x-4 bg-skin-fill;
+    @apply w-full py-2 sm:py-0 sm:flex flex-col items-center sm:justify-end sm:flex-row sm:space-x-4 bg-skin-fill;
   }
   nav ul {
     @apply flex flex-col sm:flex-row sm:space-x-4;
@@ -131,6 +131,9 @@ const { activeNav } = Astro.props;
   }
   .button-wrapper {
     @apply flex my-2 sm:my-0 space-x-4;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
   }
   .button-wrapper a.active svg {
     @apply fill-skin-accent;
