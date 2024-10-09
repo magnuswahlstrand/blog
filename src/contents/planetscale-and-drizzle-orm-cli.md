@@ -70,7 +70,7 @@ main()
 
 #### Test run
 
-```
+```sh
 > npx ts-node index.ts --add magnus
 
 Add user magnus
@@ -81,7 +81,7 @@ Success!
 
 - First, install the planetscale database driver
 
-```
+```bash
 npm install @planetscale/database
 ```
 
@@ -89,7 +89,7 @@ npm install @planetscale/database
 - Follow the instructions to initialize the planetscale CLI and connect to your database.
 - Now we can connect to our database **(magnusscale)** and create to our table
 
-```
+```sh
 > pscale shell magnusscale main
 magnusscale/main>
 ```
@@ -112,7 +112,7 @@ Done!
 
 1. Install drizzle-orm and the mysql2 driver
 
-```
+```bash
 npm i drizzle-orm mysql2
 ```
 
@@ -153,7 +153,7 @@ export async function listUsersFromDb() {
 
 4. Get the planetscale credentials and store somewhere. I use `direnv` and an `.env` file
 
-```
+```sh
 PLANETSCALE_USERNAME=cgiyexqws13g...
 PLANETSCALE_PASSWORD=pscale_pw_2R...
 ```
@@ -254,14 +254,14 @@ work. 🥴
 
 Let's add some users...
 
-```
+```sh
 > npx ts-node index.ts --add magnus
 > npx ts-node index.ts --add eve
 ```
 
 ...and list them
 
-```
+```sh
 > npx ts-node index.ts --list
 ID        Name
 -----      -----

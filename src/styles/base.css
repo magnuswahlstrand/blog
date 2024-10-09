@@ -77,6 +77,10 @@
         prose-blockquote:!border-l-skin-accent prose-blockquote:border-opacity-50;
   }
 
+  .prose-code {
+    color: green;
+  }
+
   .prose a {
     @apply hover:!text-skin-accent;
   }
