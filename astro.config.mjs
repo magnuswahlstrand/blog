@@ -16,6 +16,8 @@ import {
   transformerRenderWhitespace,
 } from "@shikijs/transformers";
 
+import { addCopyButton } from "shiki-transformer-copy-button";
+
 // https://astro.build/config
 export default defineConfig({
   site: "https://wahlstrand.dev/",
@@ -44,6 +46,9 @@ export default defineConfig({
       theme: "one-dark-pro",
       wrap: true,
       transformers: [
+        addCopyButton({
+          toggle: 500,
+        }),
         transformerNotationDiff(),
         transformerNotationHighlight(),
         transformerNotationWordHighlight(),

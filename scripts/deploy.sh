@@ -22,5 +22,5 @@ fi
 git commit -m "$msg"
 
 # Push source and build repos.
-GIT_SSH_COMMAND='ssh -i ~/.ssh/id_rsa_magnus' git push
+GIT_SSH_COMMAND='ssh -i ~/.ssh/id_rsa' git push
 cd -
