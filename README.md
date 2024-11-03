@@ -32,7 +32,8 @@ All commands are run from the root of the project, from a terminal:
 ### TODO
 
 * [x] Fix broken menu
-* [ ] Fix dark colors in code examples (prose)
+* [x] Fix dark colors in code examples (prose)
 * [ ] Fix multiple themes for dark and light
 * [ ] Add shiki copy
 * [ ] Add markdown collapse
+* [ ] Add links to headlines
