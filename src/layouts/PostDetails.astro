@@ -25,63 +25,45 @@ const { title, author, description, ogImage, datetime, tags } = frontmatter;
   ogImage={ogImage}
 >
   <Header />
-  <main>
-    <GoBackButton />
-    <div class="justify-start">
-      <h1 class="post-title">{title}</h1>
-      <Datetime datetime={datetime} size="lg" className="my-2" />
-      <ul class="tags-container">
-        {tags?.map(tag => <Tag name={tag} size="sm" />)}
-      </ul>
+  <div>
+    <div class="bg-white shadow">
+      <div class="max-w-7xl mx-auto py-1 bg-gray-100">Quora</div>
     </div>
-    <article id="article" role="article" class="max-w-3xl mt-8 prose">
-      <Content />
-    </article>
-  </main>
-  <!--<div>-->
-  <!--</div>-->
-  <!--<div>-->
-  <!--    aaaaa a a a a a a a-->
 
-  <!--    aaaaa a a a a a a a-->
-
-  <!--    aaaaa a a a a a a a-->
-
-  <!--    aaaaa a a a a a a a-->
-  <!--    aaaaa a a a a a a a-->
-  <!--    aaaaa a a a a a a a-->
-
-  <!--    aaaaa a a a a a a a-->
-
-  <!--</div>-->
-  <!--<div class="row">-->
-  <!--    <div class="left-column"></div>-->
-  <!--    <div class="right-column"></div>-->
-  <!--</div>-->
-  <!--<div class="row">-->
-  <!--    <div class="left-column border-r-2"></div>-->
-  <!--    <main class="center-column">-->
-  <!--        <article id="article" role="article" class="max-w-3xl mt-8 prose">-->
-  <!--            <Content/>-->
-  <!--        </article>-->
-  <!--    </main>-->
-  <!--    <div class="toc">-->
-  <!--        <TOC headings={Astro.props.post.getHeadings()}/>-->
-  <!--    </div>-->
-  <!--</div>-->
-
-  <!--</div>-->
-
+    <div class="bg-red-50">
+      <div class="mx-auto grid grid-cols-12 bg-red-200 max-w-7xl">
+        <div class="xl:col-span-3 hidden xl:block"></div>
+        <div
+          class="col-span-12
+                lg:col-span-10
+                xl:col-span-6
+                bg-gray-300"
+        >
+          <div>
+            <div class="justify-start mx-auto">
+              <h1 class="post-title">{title}</h1>
+              <Datetime datetime={datetime} size="lg" className="my-2" />
+              <ul class="tags-container">
+                {tags?.map(tag => <Tag name={tag} size="sm" />)}
+              </ul>
+            </div>
+            <article id="article" role="article" class="mt-8 prose max-w-3xl">
+              <Content />
+            </article>
+          </div>
+        </div>
+        <div class="col-span-3 hidden lg:block">
+          <TOC headings={Astro.props.post.getHeadings()} />
+        </div>
+      </div>
+    </div>
+  </div>
   <Footer />
 </Layout>
 
 <style>
   main {
-    @apply pb-12 mx-auto max-w-3xl w-full;
-  }
-
-  .row {
-    @apply mx-auto flex px-4;
+    @apply px-2 pb-12 mx-auto w-full;
   }
 
   #main-content-wrapper {
@@ -96,16 +78,8 @@ const { title, author, description, ogImage, datetime, tags } = frontmatter;
     @apply my-1 text-sm;
   }
 
-  .left-column {
-    @apply w-[300px] hidden 2xl:block;
-  }
-
-  .right-column {
-    @apply w-[300px] hidden xl:block;
-  }
-
   .toc {
-    @apply right-column text-xs border-l-2 pl-6;
+    @apply text-xs border-l-2 pl-4;
   }
 
   .toc a {

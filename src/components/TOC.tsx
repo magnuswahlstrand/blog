@@ -37,7 +37,7 @@ const TOC = ({ headings }: TOCProps) => {
   // Recursive function to render nested lists
 
   return (
-    <nav className="sticky top-5 prose prose-sm">
+    <nav className="sticky top-5 prose prose-sm w-full">
       <h3 className="font-bold">Outline</h3>
       {renderList(headings, headings[0].depth)}
     </nav>
