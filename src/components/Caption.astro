@@ -1,7 +1,8 @@
 ---
-// import Markdown from '@astrojs/markdown-component';
+import Markdown from '@astrojs/markdown-component';
 ---
-
 <p class="block mx-auto flex justify-center text-sm italic mt-0">
-  <slot />
+    <Markdown>
+        <slot/>
+    </Markdown>
 </p>

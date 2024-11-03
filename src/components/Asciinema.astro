@@ -1,66 +1,16 @@
 ---
+import { TerminalPlayer } from 'astro-terminal-player';
 const { src } = Astro.props;
-import "asciinema-player/dist/bundle/asciinema-player.css";
 ---
 
-<div class="text-white not-prose">
-  <div
-    data-astro-asciinema-src={"/assets/casts/" + src}
-    data-astro-asciinema-settings={JSON.stringify({
-      loop: true,
-      speed: 1.7,
-      rows: 14,
-      cols: 80,
-      theme: "solarized-dark",
-      terminalFontSize: "big",
-    })}
-  >
-  </div>
-</div>
-
-<script>
-  import * as AsciinemaPlayer from "asciinema-player";
-  // FIXME: Typings for asciinema-player
-
-  const containerElements = document.querySelectorAll(
-    "[data-astro-asciinema-src]"
-  );
-
-  if (containerElements.length) {
-    const options = {
-      root: null,
-      rootMargin: "400px 0px",
-    };
-
-    const players: Map<Element, Record<string, unknown>> = new Map();
-
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        const player = players.get(entry.target);
-
-        if (player) {
-          if (entry.isIntersecting) {
-            player.play();
-          } else {
-            player.pause();
-          }
-        }
-      });
-    }, options);
-
-    containerElements.forEach(elem => {
-      observer.observe(elem);
-
-      const url = elem.getAttribute("data-astro-asciinema-src");
-      const settings = elem.getAttribute("data-astro-asciinema-settings");
-
-      const player = AsciinemaPlayer.create(
-        url,
-        elem,
-        settings ? JSON.parse(settings) : undefined
-      );
-
-      players.set(elem, player);
-    });
-  }
-</script>
+<TerminalPlayer
+        src={'/assets/casts/' + src}
+        settings={{
+        loop: true,
+        speed: 1.7,
+        rows: 14,
+        cols: 80,
+        theme: "solarized-dark",
+        terminalFontSize: 'big',
+    }}
+/>

@@ -15,6 +15,8 @@ A tool that I have used and enjoyed the last few years is [Excalidraw](https://e
 
 In this post I will go through a few of Exalidraw's features that are useful and great.
 
+## Table of contents
+
 <!--more-->
 
 ## Basics
