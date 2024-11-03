@@ -7,6 +7,7 @@ import Datetime from "@components/Datetime";
 import TOC from "@components/TOC.tsx";
 import type { MarkdownInstance } from "astro";
 import type { Frontmatter } from "src/types";
+import GoBackButton from "../components/GoBackButton.astro";
 
 export interface Props {
   post: MarkdownInstance<Frontmatter>;
@@ -24,39 +25,50 @@ const { title, author, description, ogImage, datetime, tags } = frontmatter;
   ogImage={ogImage}
 >
   <Header />
-  <div class="row">
-    <div class="left-column"></div>
-    <div class="justify-start w-screen max-w-3xl">
-      <button
-        class="mt-8 mb-2 hover:opacity-75 flex focus-outline"
-        onclick="history.back()"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg">
-          <path
-            d="M13.293 6.293 7.586 12l5.707 5.707 1.414-1.414L10.414 12l4.293-4.293z"
-          ></path>
-        </svg>
-        <span>Go back</span>
-      </button>
+  <main>
+    <GoBackButton />
+    <div class="justify-start">
       <h1 class="post-title">{title}</h1>
       <Datetime datetime={datetime} size="lg" className="my-2" />
       <ul class="tags-container">
         {tags?.map(tag => <Tag name={tag} size="sm" />)}
       </ul>
     </div>
-    <div class="right-column"></div>
-  </div>
-  <div class="row">
-    <div class="left-column border-r-2"></div>
-    <main class="center-column">
-      <article id="article" role="article" class="max-w-3xl mt-8 prose">
-        <Content />
-      </article>
-    </main>
-    <div class="toc">
-      <TOC headings={Astro.props.post.getHeadings()} />
-    </div>
-  </div>
+    <article id="article" role="article" class="max-w-3xl mt-8 prose">
+      <Content />
+    </article>
+  </main>
+  <!--<div>-->
+  <!--</div>-->
+  <!--<div>-->
+  <!--    aaaaa a a a a a a a-->
+
+  <!--    aaaaa a a a a a a a-->
+
+  <!--    aaaaa a a a a a a a-->
+
+  <!--    aaaaa a a a a a a a-->
+  <!--    aaaaa a a a a a a a-->
+  <!--    aaaaa a a a a a a a-->
+
+  <!--    aaaaa a a a a a a a-->
+
+  <!--</div>-->
+  <!--<div class="row">-->
+  <!--    <div class="left-column"></div>-->
+  <!--    <div class="right-column"></div>-->
+  <!--</div>-->
+  <!--<div class="row">-->
+  <!--    <div class="left-column border-r-2"></div>-->
+  <!--    <main class="center-column">-->
+  <!--        <article id="article" role="article" class="max-w-3xl mt-8 prose">-->
+  <!--            <Content/>-->
+  <!--        </article>-->
+  <!--    </main>-->
+  <!--    <div class="toc">-->
+  <!--        <TOC headings={Astro.props.post.getHeadings()}/>-->
+  <!--    </div>-->
+  <!--</div>-->
 
   <!--</div>-->
 
@@ -64,19 +76,16 @@ const { title, author, description, ogImage, datetime, tags } = frontmatter;
 </Layout>
 
 <style>
+  main {
+    @apply pb-12 mx-auto max-w-3xl w-full;
+  }
+
   .row {
     @apply mx-auto flex px-4;
   }
 
-  .centered-content {
-    @apply mx-auto max-w-3xl w-full;
-  }
-
   #main-content-wrapper {
     @apply mx-auto;
-  }
-  main {
-    @apply pb-12;
   }
 
   .post-title {
@@ -89,10 +98,6 @@ const { title, author, description, ogImage, datetime, tags } = frontmatter;
 
   .left-column {
     @apply w-[300px] hidden 2xl:block;
-  }
-
-  .center-column {
-    @apply w-full max-w-3xl;
   }
 
   .right-column {
