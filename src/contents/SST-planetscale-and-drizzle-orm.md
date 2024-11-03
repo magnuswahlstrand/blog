@@ -46,7 +46,7 @@ VALUES ('hits', 0);
 
 Our main secret in this project is the planetscale password. We store it in the SST secret store.
 
-```
+```bash
 pnpm sst secrets set PLANETSCALE_PASSWORD <YOUR PASSWORD>
 ```
 
@@ -54,7 +54,7 @@ pnpm sst secrets set PLANETSCALE_PASSWORD <YOUR PASSWORD>
 
 Now we create our SST project
 
-```
+```bash
 pnpx create-sst@latest --template=base/example magnusscale
 cd magnusscale
 pnpm install
@@ -185,13 +185,13 @@ export const handler: APIGatewayProxyHandlerV2 = async () => {
 
 If we did everything correctly, we can now deploy our app.
 
-```
+```bash
 pnpm run dev
 ```
 
 **Output:**
 
-```
+```bash
 SST v2.1.15  ready!
 
 ➜  App:     magnusscale
