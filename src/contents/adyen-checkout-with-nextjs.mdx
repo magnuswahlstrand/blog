@@ -37,7 +37,7 @@ _Feel free to skip to the next section if you just want to see the code_ 🤓
 
 9. **Adyen:** Sends payment confirmation webhook to the backend. While there is a `onPaymentComplete` hook in the client, it is best practice to rely on these notifications instead.
 
-We will be implementing 1-8 in this guide.
+We will be implementing 1-9 in this guide.
 
 ![flow](/img/adyen-checkout-with-nextjs/payment_flow_overview_modded_2.png)
 
@@ -53,13 +53,13 @@ Now we can start implementing! First, we make sure that we can get an Adyen sess
 
 1. **Initialize the NextJS app** - I prefer using typescript, then defaults for everything else.
 
-```sh
+```
 npx create-next-app@latest --typescript
 ```
 
 2. **Install dependencies** - For this step, we only need the [Adyen Node SDK](https://www.npmjs.com/package/@adyen/api-library)
 
-```sh
+```
 npm install @adyen/api-library
 ```
 

@@ -14,7 +14,7 @@ const { name, size = "sm" } = Astro.props;
 >
   <a
     href={`/tags/${name}`}
-    class={`${size === "sm" ? "pr-1 text-xs" : "pr-2 text-lg"} group`}
+    class={`${size === "sm" ? "pr-1 text-sm" : "pr-2 text-lg"} group`}
   >
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -34,6 +34,6 @@ const { name, size = "sm" } = Astro.props;
   }
 
   a svg {
-    @apply w-6 h-6 text-skin-base opacity-80 -mr-4 group-hover:fill-skin-accent;
+    @apply w-6 h-6 text-skin-base scale-95 opacity-80 -mr-2.5 group-hover:fill-skin-accent;
   }
 </style>

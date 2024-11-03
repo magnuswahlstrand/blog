@@ -15,20 +15,20 @@ Here is a quick guide how I set up my integration test locally using the **Pub/S
 
 To run the emulator, you first need the `gcloud` cli ([setup instructions](https://cloud.google.com/sdk/docs/install)). Next can we install the emulator.
 
-```bash
+```
 gcloud components install pubsub-emulator
 gcloud components update
 ```
 
 Finally, we start the emulator on **localhost:8085**.
 
-```bash
+```
 gcloud beta emulators pubsub start --project=test-project
 ```
 
 Output:
 
-```bash
+```
 Executing: /Users/test/Downloads/google-cloud-sdk/platform/pubsub-emulator/bin/cloud-pubsub-emulator --host=localhost --port=8085
 [pubsub] This is the Google Pub/Sub fake.
 [pubsub] Implementation may be incomplete or differ from the real system.
@@ -39,7 +39,7 @@ Executing: /Users/test/Downloads/google-cloud-sdk/platform/pubsub-emulator/bin/c
 
 We can use the Google Pub/Sub client to publish or subscribe on a topic.
 
-```bash
+```
 go get -u cloud.google.com/go/pubsub
 ```
 

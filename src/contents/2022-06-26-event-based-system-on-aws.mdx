@@ -44,14 +44,14 @@ Our app is deployed to AWS using my new favorite tool: [Serverless Stack](https:
 
 First we need to bootstrap our project. The [SST CLI](https://sst.dev/) will do most of the heavy lifting. Since most of our application code is Go, I use the **starters/go-starter** template.
 
-```bash
+```
 npx create-sst@latest --template=starters/go-starter eventbus
 cd eventbus
 ```
 
 Our directory now looks as follows.
 
-```bash
+```
 > tree -a -L 2
 .
 ├── .env
@@ -79,21 +79,21 @@ In this tutorial, we are interested in two parts
 
 We also install [Dave Cheney](https://dave.cheney.net/)'s package [go-spew](https://github.com/davecgh/go-spew). It is a Go package to dump things to the logs. I often use it to explore what data is passed around in a new service, in this case AWS EventBridge.
 
-```bash
+```
 cd eventbus/services
 go get github.com/davecgh/go-spew/spew
 ```
 
 With everything in place, we can deploy our initial stack
 
-```bash
+```
 npm install
 npm start
 ```
 
 Output:
 
-```bash
+```
 ...
 
  ✅  magnus-eventbus-MyStack
@@ -391,7 +391,7 @@ Now we are ready to test our new event producer. There are at least two ways of 
 
 - Use curl, or your favorite HTTP client and make the request. _Remember to update the API gateway URL._
 
-```bash
+```
 POST https://4ty44qcuya.execute-api.us-east-1.amazonaws.com/order
 Content-Type: application/json
 

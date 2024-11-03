@@ -7,7 +7,6 @@ tags: ["mdx", "markdown"]
 import { Chart } from "../components/mdx-post/Chart";
 import { Poll } from "../components/mdx-post/Poll";
 import MDXResult from "../components/mdx-post/MDXResult.astro";
-import Example from "../components/mdx-post/Example";
 
 One of my favorite sites on the internet is [Red Blog Games](https://www.redblobgames.com/) by Amit Patel. It contains a ton of visual explanations of math and algorithms, often related to computer games. Best part is that it is interactive!
 
@@ -35,7 +34,7 @@ MDX is supported by many of the modern JS runtimes. The MDX website has a good [
 
 In my case, I use [Astro](astro.build) to generate this site. Enabling MDX support is as easy as running:
 
-```bash
+```
 npm run astro add mdx
 ```
 
@@ -59,26 +58,22 @@ This is a paragraph of regular Markdown with **bold**,
 __italic__ and ~~strikethrough~~. This works as expected.
 
 // We can import components from other files
-
-import Example from "../components/mdx-post/Example";
+import Example from '../components/Example.tsx';
 
 <Example initialValue={2} />
 ```
 
-export const frameworkName = "MDX";
-
 <MDXResult>
-    export const frameworkName = 'MDX';
+export const frameworkName = 'MDX';
 
     <h3>Hello, {frameworkName}!</h3>
 
     This is a paragraph of regular Markdown with **bold**,
     __italic__ and ~~strikethrough~~. This works as expected.
 
-    import Example from "../components/mdx-post/Example.tsx";
+import Example from "../components/mdx-post/Example.tsx";
 
-    <Example initialValue={2} client:load />
-
+<Example initialValue={2} client:load />
 </MDXResult>
 
 That's pretty neat!
@@ -92,6 +87,7 @@ Before we continue, here are a few gotchas that I ran into.
 ```js
 // ❌ Not good
 import Example from "../components/Example.tsx";
+
 <Example initialValue={2} />;
 
 // ✅ Good!
@@ -101,6 +97,16 @@ import Example from "../components/Example.tsx";
 ```
 
 **2)** **Variables need to be exported**, otherwise they are not accessible to the templates.
+
+```js
+// ❌ --> "frameworkName is not defined"
+const frameworkName = "MDX";
+<h3>Hello, {frameworkName}!</h3>;
+
+// ✅ Good!
+export const frameworkName = "MDX";
+<h3>Hello, {frameworkName}!</h3>;
+```
 
 **3)** I am using MDX inside the static site generator [Astro](astro.build) for this blog. By default it doesn't ship any javascript to the frontend, meaning the counter will not work. We can add the client directive `client:load` to fix that. More about it here: [astro.build#client-directives](https://docs.astro.build/en/reference/directives-reference/#client-directives).
 

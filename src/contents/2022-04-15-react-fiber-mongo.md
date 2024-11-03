@@ -163,13 +163,13 @@ _**Note**: We could also add uniqueness checks on email and phone number, by add
 
 The frontend is bootstrapped using [Create React App (CRA)](https://create-react-app.dev/).
 
-```bash
+```
 npx create-react-app frontend --template typescript
 ```
 
 We install our dependencies:
 
-```bash
+```
 npm install @mantine/hooks @mantine/core react-query axios tabler-icons-react
 ```
 
