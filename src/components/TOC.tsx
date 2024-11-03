@@ -11,7 +11,6 @@ const renderList = (items: MarkdownHeading[], currentDepth: number) => {
   for (const item of items) {
     if (item.depth <= currentDepth) {
       if (!sameLevel) {
-        console.log("foo", collector);
         currentList.push(renderList(collector, currentDepth + 1));
         collector = [];
       }
