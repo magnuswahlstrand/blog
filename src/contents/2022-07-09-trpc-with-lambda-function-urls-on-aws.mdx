@@ -64,11 +64,12 @@ In short, I think Function URLs are a great match for my scenario!
 
 <br />
 The second concept is **tRPC**. It is a Typescript package that lets build fully
-type safe APIs for both with both server and client. As you will see, it **REALLY**
-simplifies making requests from a client to the server, while still being type safe.
-All this without requiring code generation. Read more about it in my post "[Typesafe
-serverless API with tRPC](./ 2022-06-19-typesafe-http-client-serverless)" (or in
-the [official documentation](https://trpc.io/docs)).
+type safe APIs for both with both server and client. As you will see, it
+**REALLY** simplifies making requests from a client to the server, while still
+being type safe. All this without requiring code generation. Read more about it
+in my post "[Typesafe serverless API with tRPC](./
+2022-06-19-typesafe-http-client-serverless)" (or in the [official
+documentation](https://trpc.io/docs)).
 
 Now we are ready to build a minimal client-server setup.
 
@@ -91,7 +92,7 @@ npm install @trpc/server @trpc/client
 
 After the SST setup, our directory looks as follows:
 
-```
+```bash
 .
 ├── package.json
 ├── services
@@ -138,7 +139,7 @@ As I mentioned in the introduction, we do not need the API gateway in our stack.
 
 Then we can deploy our stack for the first time. It takes around a minute.
 
-```
+```bash
 npm start
 ```
 
@@ -272,7 +273,7 @@ In this section we will say goodbye to our basic app **Greeting Generating** app
 
 For the next steps, we need `ksuid` that will be used as ID for our ToDos, and `prompt` that is used by our client.
 
-```
+```bash
 npm install ksuid
 npm install prompts @types/prompts
 ```
@@ -455,7 +456,7 @@ const client = createTRPCClient<AppRouter>({
 
 If we run the client, we get the following output.
 
-```
+```bash
 1 - Buy milk (completed)
 2 - Buy eggs (in progress)
 ```
@@ -470,73 +471,73 @@ I have never developed command line clients in Typescript before. There are most
 
 Replace the client code in `./client/index.ts` as follows:
 
-```
-import type {AppRouter} from '../services/functions/lambda';
-import {createTRPCClient} from '@trpc/client';
-import prompts from "prompts"
+```typescript
+import type { AppRouter } from "../services/functions/lambda";
+import { createTRPCClient } from "@trpc/client";
+import prompts from "prompts";
 
-const function_url = "https://kr2madrbusxrglf3aamfj7o4sy0hlebb.lambda-url.us-east-1.on.aws"
+const function_url =
+  "https://kr2madrbusxrglf3aamfj7o4sy0hlebb.lambda-url.us-east-1.on.aws";
 
 const client = createTRPCClient<AppRouter>({
-    url: function_url,
+  url: function_url,
 });
 
 const promptNewTodo = async () => {
-    const entered = await prompts({
-        type: 'text',
-        name: 'description',
-        message: `Please describe your ToDo`,
-    });
+  const entered = await prompts({
+    type: "text",
+    name: "description",
+    message: `Please describe your ToDo`,
+  });
 
-    await client.mutation('createToDo', entered.description)
-}
+  await client.mutation("createToDo", entered.description);
+};
 
 async function promptForTodoComplete() {
-    const todos = await client.query('listToDos') ?? [];
-    const todoChoices = todos.map((todo) => {
-        return {
-            title: todo.description + (todo.completed ? " (completed)" : ""),
-            description: `Mark as completed`,
-            value: todo.id,
-            disabled: todo.completed,
-        }
-    })
+  const todos = (await client.query("listToDos")) ?? [];
+  const todoChoices = todos.map(todo => {
+    return {
+      title: todo.description + (todo.completed ? " (completed)" : ""),
+      description: `Mark as completed`,
+      value: todo.id,
+      disabled: todo.completed,
+    };
+  });
 
-    const choices = [
-        ...todoChoices,
-        {title: "ACTION: CREATE TODO", value: "new"},
-        {title: "ACTION: EXIT", value: "exit"}
-    ]
+  const choices = [
+    ...todoChoices,
+    { title: "ACTION: CREATE TODO", value: "new" },
+    { title: "ACTION: EXIT", value: "exit" },
+  ];
 
-    const selected = await prompts({
-        type: 'select',
-        name: "id",
-        message: 'Select an action',
-        warn: " ",
-        hint: " ",
-        choices: choices,
-    });
+  const selected = await prompts({
+    type: "select",
+    name: "id",
+    message: "Select an action",
+    warn: " ",
+    hint: " ",
+    choices: choices,
+  });
 
-    if (!selected.id || selected.id == "exit") {
-        return {id: "", exit: true}
-    }
-    return {id: selected.id, exit: false}
+  if (!selected.id || selected.id == "exit") {
+    return { id: "", exit: true };
+  }
+  return { id: selected.id, exit: false };
 }
 
 (async () => {
-    console.log("Loading ToDos...")
-    let exit = false;
-    while (!exit) {
-        const {id, exit} = await promptForTodoComplete();
-        if (exit)
-            break
+  console.log("Loading ToDos...");
+  let exit = false;
+  while (!exit) {
+    const { id, exit } = await promptForTodoComplete();
+    if (exit) break;
 
-        if (id == "new") {
-            await promptNewTodo()
-        } else {
-            await client.mutation('completeToDo', id)
-        }
+    if (id == "new") {
+      await promptNewTodo();
+    } else {
+      await client.mutation("completeToDo", id);
     }
+  }
 })();
 ```
 

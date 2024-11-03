@@ -3,7 +3,7 @@ import { LOGO_IMAGE, SITE } from "src/config";
 import Hr from "./Hr.astro";
 import LinkButton from "./LinkButton.astro";
 
-import logoSVG from "/assets/logo.svg";
+// import logoSVG from "/assets/logo.svg";
 
 export interface Props {
   activeNav?: "posts" | "tags" | "about" | "search" | "resume" | "now";
@@ -17,18 +17,7 @@ const { activeNav } = Astro.props;
   <div class="nav-container">
     <div class="top-nav-wrap">
       <a href="/" class="logo break-keep text-2xl">
-        {
-          LOGO_IMAGE.enable ? (
-            <img
-              src={LOGO_IMAGE.svg ? logoSVG : logoPNG}
-              alt="AstroPaper Logo"
-              width={LOGO_IMAGE.width}
-              height={LOGO_IMAGE.height}
-            />
-          ) : (
-            SITE.title
-          )
-        }
+        {SITE.title}
       </a>
       <button class="hamburger-menu" aria-label="menu">
         <div class="icon-container flex">
@@ -64,7 +53,7 @@ const { activeNav } = Astro.props;
           <a href="/now" class={activeNav === "now" ? "active" : ""}>Now</a>
         </li>
       </ul>
-      <div class="button-wrapper">
+      <div class="button-wrapper sm:display-none">
         <LinkButton
           href="/search"
           className={`focus-outline p-1 ${
@@ -126,7 +115,7 @@ const { activeNav } = Astro.props;
     @apply fill-skin-base w-6 h-6 scale-125;
   }
   nav {
-    @apply w-full py-2 sm:py-0 flex flex-col items-center sm:justify-end sm:flex-row sm:space-x-4 bg-skin-fill;
+    @apply w-full py-2 sm:py-0 sm:flex flex-col items-center sm:justify-end sm:flex-row sm:space-x-4 bg-skin-fill;
   }
   nav ul {
     @apply flex flex-col sm:flex-row sm:space-x-4;
@@ -138,10 +127,13 @@ const { activeNav } = Astro.props;
     @apply py-2 px-3 font-medium hover:text-skin-accent;
   }
   nav a.active {
-    @apply underline underline-offset-4 decoration-wavy decoration-2;
+    @apply underline underline-offset-4 decoration-2;
   }
   .button-wrapper {
     @apply flex my-2 sm:my-0 space-x-4;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
   }
   .button-wrapper a.active svg {
     @apply fill-skin-accent;

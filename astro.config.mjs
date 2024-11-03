@@ -5,6 +5,18 @@ import remarkToc from "remark-toc";
 import remarkCollapse from "remark-collapse";
 import sitemap from "@astrojs/sitemap";
 import mdx from "@astrojs/mdx";
+import {
+  transformerMetaHighlight,
+  transformerMetaWordHighlight,
+  transformerNotationDiff,
+  transformerNotationErrorLevel,
+  transformerNotationFocus,
+  transformerNotationHighlight,
+  transformerNotationWordHighlight,
+  transformerRenderWhitespace,
+} from "@shikijs/transformers";
+
+import { addCopyButton } from "shiki-transformer-copy-button";
 
 // https://astro.build/config
 export default defineConfig({
@@ -21,18 +33,23 @@ export default defineConfig({
     mdx(),
   ],
   markdown: {
-    remarkPlugins: [
-      remarkToc,
-      [
-        remarkCollapse,
-        {
-          test: "Table of contents",
-        },
-      ],
-    ],
+    remarkPlugins: [remarkToc],
     shikiConfig: {
       theme: "one-dark-pro",
       wrap: true,
+      transformers: [
+        addCopyButton({
+          toggle: 500,
+        }),
+        transformerNotationDiff(),
+        transformerNotationHighlight(),
+        transformerNotationWordHighlight(),
+        transformerNotationFocus(),
+        transformerNotationErrorLevel(),
+        transformerMetaHighlight(),
+        transformerMetaWordHighlight(),
+        transformerRenderWhitespace(),
+      ],
     },
     extendDefaultPlugins: true,
   },
