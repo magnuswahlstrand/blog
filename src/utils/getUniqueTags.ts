@@ -1,10 +1,11 @@
 import { slugifyStr } from "./slugify";
 import type { MarkdownInstance } from "astro";
 import type { Frontmatter } from "../types";
+import { filterDraftPostsInProd } from "@utils/filterDraftPostsInProd.ts";
 
 const getUniqueTags = (posts: MarkdownInstance<Frontmatter>[]) => {
   let tags: string[] = [];
-  const filteredPosts = posts.filter(({ frontmatter }) => !frontmatter.draft);
+  const filteredPosts = posts.filter(filterDraftPostsInProd);
   filteredPosts.forEach(post => {
     tags = [...tags, ...post.frontmatter.tags]
       .map(tag => slugifyStr(tag))

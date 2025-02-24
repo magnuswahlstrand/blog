@@ -36,7 +36,7 @@
   }
 
   body {
-    @apply font-mono bg-skin-fill text-skin-base min-h-screen flex flex-col
+    @apply font-sans bg-skin-fill text-skin-base min-h-screen flex flex-col
         selection:bg-skin-accent selection:text-skin-inverted selection:bg-opacity-70;
   }
 
@@ -61,15 +61,13 @@
 
   .prose {
     @apply prose-a:underline-offset-8 prose-ul:overflow-x-clip
-        /*prose-a:!decoration-dashed */
+            /*prose-a:!decoration-dashed */
         hover:prose-a:text-skin-accent
         prose-img:mx-auto prose-img:border-2 prose-img:border-skin-line
         prose-img:!mt-2 prose-headings:!mb-3
         prose-th:border prose-th:border-skin-line
         prose-td:border prose-td:border-skin-line
-        prose-h3:italic
-
-
+            /*prose-h3:italic*/
         prose-p:!text-skin-base prose-headings:!text-skin-base
         prose-ol:!text-skin-base prose-ul:!text-skin-base prose-blockquote:opacity-80
         prose-figcaption:!text-skin-base prose-figcaption:opacity-70

@@ -1,9 +1,10 @@
 import type { MarkdownInstance } from "astro";
 import type { Frontmatter } from "../types";
+import { filterDraftPostsInProd } from "@utils/filterDraftPostsInProd.ts";
 
 const getSortedPosts = (posts: MarkdownInstance<Frontmatter>[]) =>
   posts
-    .filter(({ frontmatter }) => !frontmatter.draft)
+    .filter(filterDraftPostsInProd)
     .sort(
       (a, b) =>
         Math.floor(new Date(b.frontmatter.datetime).getTime() / 1000) -
