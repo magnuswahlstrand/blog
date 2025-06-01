@@ -16,13 +16,13 @@
   },
   "dependencies": {
     "@astro-github-elements/clipboard-copy": "^0.0.4",
-    "@astrojs/markdown-component": "^1.0.2",
-    "@astrojs/mdx": "^3.1.7",
-    "@astrojs/rss": "^4.0.7",
+    "@astrojs/markdown-component": "^1.0.5",
+    "@astrojs/mdx": "^4.3.0",
+    "@astrojs/rss": "^4.0.11",
     "@github/clipboard-copy-element": "^1.1.2",
     "@shikijs/transformers": "^1.22.0",
     "asciinema-player": "^3.0.1",
-    "astro": "^4.15.12",
+    "astro": "^5.8.1",
     "astro-terminal-player": "^0.1.4",
     "fuse.js": "^7.0.0",
     "github-slugger": "^2.0.0",
@@ -31,9 +31,9 @@
     "tailwindcss": "^3.2.2"
   },
   "devDependencies": {
-    "@astrojs/react": "^3.6.2",
-    "@astrojs/sitemap": "^3.1.6",
-    "@astrojs/tailwind": "^5.1.1",
+    "@astrojs/react": "^4.3.0",
+    "@astrojs/sitemap": "^3.4.0",
+    "@astrojs/tailwind": "^6.0.2",
     "@tailwindcss/typography": "^0.5.7",
     "@types/github-slugger": "^2.0.0",
     "@types/react": "^18.0.24",
@@ -49,7 +49,7 @@
     "shiki-transformer-copy-button": "^0.0.3"
   },
   "overrides": {
-    "vite": "3.2.0-beta.2"
+    "vite": "^4.5.0"
   },
   "config": {
     "commitizen": {
