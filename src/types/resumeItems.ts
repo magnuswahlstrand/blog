@@ -6,7 +6,7 @@ export type ResumeItem = {
   isOngoing?: boolean;
   type: "Freelance" | "Full-time";
   roles: {
-    location: string;
+    location?: string;
     title: string;
     description: string;
     from: string;

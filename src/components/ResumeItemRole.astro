@@ -3,7 +3,7 @@ import { calculateDuration } from "../resume/resumeItems";
 import SocialsButton from "./SocialsButton.astro";
 export interface Props {
   role: {
-    location: string;
+    location?: string;
     title: string;
     description: string;
     from: string;
@@ -12,6 +12,7 @@ export interface Props {
   };
   isMultiRow: boolean;
   isFirst: boolean;
+  isOngoing?: boolean;
 }
 
 function formatParagraphs(input: string): string {
@@ -22,8 +23,8 @@ function formatParagraphs(input: string): string {
   return formattedLines.join("");
 }
 
-const { isFirst, isMultiRow, role } = Astro.props;
-const timespanText = `${role.from} - ${role.to}`;
+const { isFirst, isMultiRow, isOngoing, role } = Astro.props;
+const timespanText = `${role.from} - ${isOngoing && isFirst ? "Present" : role.to}`;
 ---
 
 <div
@@ -36,10 +37,9 @@ const timespanText = `${role.from} - ${role.to}`;
     <div class="font-bold">{role.title}</div>
     {isMultiRow && <div class="text-xs sm:block hidden">{timespanText}</div>}
   </div>
-  <div>{role.location}</div>
+  {role.location && <div>{role.location}</div>}
   {isMultiRow && <div class="text-xs sm:hidden">{timespanText}</div>}
-  <div class="mt-2 prose-sm" set:html={formatParagraphs(role.description)}>
-  </div>
+  <div class="mt-2 prose-sm" set:html={formatParagraphs(role.description)} />
   <div class={`flex flex-row gap-2 mt-3`}>
     <div class="font-bold">Skills:</div>
     <div class="flex flex-row flex-wrap gap-x-2">

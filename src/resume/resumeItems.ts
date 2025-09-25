@@ -15,19 +15,37 @@ export const resumeItems: ResumeItem[] = [
     isOngoing: true,
     roles: [
       {
-        location: "Stockholm, Sweden",
         title: "Senior Backend Developer",
         description:
-          "TV4 Play is one of Sweden’s leading streaming services, offering engaging news, entertainment and live sports. " +
-          "As a backend developer at TV4 Play, I'm responsible for building and maintaining the systems that power user authentication, profile management, and secure user handling across our platforms.",
-        from: "June 2024",
+          "TV4 Play is one of Sweden's leading streaming services, offering news, entertainment and live sports. " +
+          "I lead the team responsible for recommendations and personalization at TV4 Play. " +
+          "We design, build, and operate the systems that deliver tailored content to users, handling everything from development to deployment and operations.",
+        from: "May 2025",
         to: nowDate(),
         tags: [
-          "NodeJS",
-          "Typescript",
+          "Recommendations",
+          "Node.js",
+          "TypeScript",
+          "Go",
           "AWS",
           "DynamoDB",
-          "PostgresSQL",
+          "Athena",
+          "S3",
+        ],
+      },
+      {
+        title: "Senior Backend Developer",
+        description:
+          "Team lead in the User and Authentication team at TV4 Play. " +
+          "We built and maintained the systems for authentication, profile management, and secure customer data handling in Sweden and Finland.",
+        from: "June 2024",
+        to: "May 2025",
+        tags: [
+          "Node.js",
+          "TypeScript",
+          "AWS",
+          "DynamoDB",
+          "PostgreSQL",
           "Observability",
           "Grafana",
         ],
@@ -40,7 +58,6 @@ export const resumeItems: ResumeItem[] = [
       name: "Creator Studio",
       linkedin: "https://www.linkedin.com/company/thisisyourstudio/mycompany/",
     },
-    isOngoing: false,
     roles: [
       {
         location: "Stockholm, Sweden",
