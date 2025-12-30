@@ -1,0 +1,51 @@
+{
+  "menus": [
+    {
+      "slug": "nyar-2025",
+      "title": "Nyårsafton 2025",
+      "date": "December 31, 2025",
+      "entree": [
+        {
+          "name": "Baconlindade dadlar",
+          "description": ""
+        },
+        {
+          "name": "Ägghalvor",
+          "description": ""
+        },
+        {
+          "name": "Krustader med räkröra",
+          "description": ""
+        },
+        {
+          "name": "Krustader med svamp, rökt gräddfil och cheddarchips",
+          "description": ""
+        },
+        {
+          "name": "Baguette med smör",
+          "description": ""
+        },
+        {
+          "name": "Gravad lax",
+          "description": ""
+        }
+      ],
+      "main": [
+        {
+          "name": "Långbakad högrev",
+          "description": "Med tomat och vitlökssmör."
+        }
+      ],
+      "dessert": [
+        {
+          "name": "Crème brûlée",
+          "description": ""
+        },
+        {
+          "name": "Glass och bär",
+          "description": ""
+        }
+      ]
+    }
+  ]
+}

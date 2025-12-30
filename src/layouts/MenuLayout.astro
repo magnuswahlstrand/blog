@@ -1,0 +1,183 @@
+---
+import { SITE } from "src/config";
+
+export interface Props {
+  title: string;
+  date?: string;
+}
+
+const { title, date } = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const socialImageURL = new URL(SITE.ogImage, Astro.url.origin);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={canonicalURL} />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <meta name="title" content={title} />
+    <meta name="description" content={SITE.desc} />
+    <meta name="author" content={SITE.author} />
+  </head>
+  <body>
+    <main class="menu-container">
+      <header class="menu-header">
+        <h1 class="menu-title">Le Menu</h1>
+        <h2 class="menu-subtitle">{title}</h2>
+        {
+          date && (
+            <div class="menu-date">
+              <time datetime={date}>{date}</time>
+            </div>
+          )
+        }
+      </header>
+
+      <section class="menu-content">
+        <slot />
+      </section>
+    </main>
+  </body>
+</html>
+
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: Garamond, Georgia, serif;
+    background: #fafaf8;
+    min-height: 100vh;
+    padding: 60px 20px;
+  }
+
+  .menu-container {
+    max-width: 700px;
+    margin: 0 auto;
+    background: #fff;
+    border: 1px solid #e8e8e6;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  }
+
+  .menu-header {
+    background: #fff;
+    color: #2c2c2c;
+    padding: 60px 50px 50px;
+    text-align: center;
+  }
+
+  .menu-title {
+    font-size: 2.8em;
+    margin-bottom: 15px;
+    font-weight: 400;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #1a1a1a;
+  }
+
+  .menu-subtitle {
+    font-size: 1.1em;
+    font-weight: 300;
+    color: #666;
+    margin-bottom: 8px;
+    letter-spacing: 1px;
+  }
+
+  .menu-date {
+    font-size: 0.85em;
+    color: #999;
+    font-style: italic;
+    margin-top: 10px;
+  }
+
+  .menu-content {
+    padding: 50px 50px 60px;
+  }
+
+  /* Course sections */
+  :global(.course) {
+    margin-bottom: 55px;
+  }
+  :global(.course:last-child) {
+    margin-bottom: 0;
+  }
+
+  :global(.course-title) {
+    font-size: 1.4em;
+    color: #1a1a1a;
+    text-align: center;
+    padding-bottom: 12px;
+    margin-bottom: 30px;
+    font-weight: 400;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  :global(.menu-item) {
+    margin-bottom: 28px;
+    text-align: center;
+  }
+  :global(.menu-item:last-child) {
+    margin-bottom: 0;
+  }
+
+  :global(.dish-header) {
+    margin-bottom: 6px;
+  }
+
+  :global(.dish-name) {
+    font-size: 1.15em;
+    color: #2c2c2c;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+  }
+
+  :global(.dish-price) {
+    font-size: 1em;
+    color: #666;
+    font-weight: 300;
+    margin-top: 4px;
+  }
+
+  :global(.dish-description) {
+    color: #888;
+    line-height: 1.7;
+    font-size: 1.05em;
+    font-style: italic;
+    font-weight: 300;
+  }
+
+  @media (max-width: 768px) {
+    body {
+      padding: 30px 15px;
+    }
+    .menu-header {
+      padding: 40px 30px 30px;
+    }
+    .menu-title {
+      font-size: 2em;
+      letter-spacing: 2px;
+    }
+    .menu-subtitle {
+      font-size: 1em;
+    }
+    .menu-content {
+      padding: 40px 30px 50px;
+    }
+    :global(.course-title) {
+      font-size: 1.2em;
+    }
+    :global(.dish-name) {
+      font-size: 1.05em;
+    }
+  }
+</style>

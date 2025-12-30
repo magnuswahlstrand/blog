@@ -1,0 +1,135 @@
+---
+import { SITE } from "../../config";
+import menusData from "./_menus.json";
+
+const menus = menusData.menus;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={canonicalURL} />
+    <meta name="generator" content={Astro.generator} />
+    <title>Menus - {SITE.title}</title>
+    <meta name="title" content="Menus" />
+    <meta name="description" content={SITE.desc} />
+    <meta name="author" content={SITE.author} />
+  </head>
+  <body>
+    <main class="menu-list-container">
+      <header class="menu-list-header">
+        <h1 class="menu-list-title">Menus</h1>
+      </header>
+
+      <section class="menu-list">
+        {
+          menus.map(menu => (
+            <a href={`/menu/${menu.slug}`} class="menu-card">
+              <h2 class="menu-card-title">{menu.title}</h2>
+              {menu.date && <div class="menu-card-date">{menu.date}</div>}
+            </a>
+          ))
+        }
+      </section>
+    </main>
+  </body>
+</html>
+
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: Garamond, Georgia, serif;
+    background: #fafaf8;
+    min-height: 100vh;
+    padding: 60px 20px;
+  }
+
+  .menu-list-container {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .menu-list-header {
+    text-align: center;
+    margin-bottom: 60px;
+  }
+
+  .menu-list-title {
+    font-size: 3em;
+    font-weight: 400;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #1a1a1a;
+  }
+
+  .menu-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 30px;
+  }
+
+  .menu-card {
+    background: #fff;
+    border: 1px solid #e8e8e6;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    padding: 50px 40px;
+    text-align: center;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.3s ease;
+  }
+
+  .menu-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  }
+
+  .menu-card-title {
+    font-size: 2em;
+    font-weight: 400;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #1a1a1a;
+    margin-bottom: 15px;
+  }
+
+  .menu-card-date {
+    font-size: 0.9em;
+    color: #999;
+    font-style: italic;
+    margin-top: 15px;
+  }
+
+  @media (max-width: 768px) {
+    body {
+      padding: 30px 15px;
+    }
+    .menu-list-header {
+      margin-bottom: 40px;
+    }
+    .menu-list-title {
+      font-size: 2em;
+      letter-spacing: 2px;
+    }
+    .menu-list {
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+    .menu-card {
+      padding: 40px 30px;
+    }
+    .menu-card-title {
+      font-size: 1.5em;
+    }
+  }
+</style>

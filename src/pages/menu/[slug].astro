@@ -1,0 +1,65 @@
+---
+import MenuLayout from "../../layouts/MenuLayout.astro";
+import menusData from "./_menus.json";
+
+export async function getStaticPaths() {
+  const menus = menusData.menus;
+
+  return menus.map(menu => ({
+    params: { slug: menu.slug },
+    props: { menu },
+  }));
+}
+
+const { menu } = Astro.props;
+---
+
+<MenuLayout title={`Le Menu - ${menu.title}`} date={menu.date}>
+  <section class="course" aria-labelledby="course-entree">
+    <h3 class="course-title" id="course-entree">Entrée</h3>
+    {
+      menu.entree.map(item => (
+        <div class="menu-item">
+          <div class="dish-header">
+            <div class="dish-name">{item.name}</div>
+          </div>
+          {item.description && (
+            <div class="dish-description">{item.description}</div>
+          )}
+        </div>
+      ))
+    }
+  </section>
+
+  <section class="course" aria-labelledby="course-main">
+    <h3 class="course-title" id="course-main">Plat Principal</h3>
+    {
+      menu.main.map(item => (
+        <div class="menu-item">
+          <div class="dish-header">
+            <div class="dish-name">{item.name}</div>
+          </div>
+          {item.description && (
+            <div class="dish-description">{item.description}</div>
+          )}
+        </div>
+      ))
+    }
+  </section>
+
+  <section class="course" aria-labelledby="course-dessert">
+    <h3 class="course-title" id="course-dessert">Dessert</h3>
+    {
+      menu.dessert.map(item => (
+        <div class="menu-item">
+          <div class="dish-header">
+            <div class="dish-name">{item.name}</div>
+          </div>
+          {item.description && (
+            <div class="dish-description">{item.description}</div>
+          )}
+        </div>
+      ))
+    }
+  </section>
+</MenuLayout>
