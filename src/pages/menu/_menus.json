@@ -7,44 +7,41 @@
       "entree": [
         {
           "name": "Baconlindade dadlar",
-          "description": ""
+          "description": "Söta dadlar lindade i knaprig bacon"
         },
         {
           "name": "Ägghalvor",
-          "description": ""
+          "description": "Klassiska ägghalvor med räkor och majonäs"
         },
         {
-          "name": "Krustader med räkröra",
-          "description": ""
-        },
-        {
-          "name": "Krustader med svamp, rökt gräddfil och cheddarchips",
-          "description": ""
-        },
-        {
-          "name": "Baguette med smör",
-          "description": ""
+          "name": "Krustader",
+          "description": "Med räkröra samt svamp, rökt gräddfil och cheddarchips"
         },
         {
           "name": "Gravad lax",
-          "description": ""
+          "description": "Traditionellt gravad lax med mild kryddning"
         }
       ],
       "main": [
         {
           "name": "Långbakad högrev",
-          "description": "Med tomat och vitlökssmör."
+          "description": "Serveras med tomat, vitlökssmör och baguette"
         }
       ],
       "dessert": [
         {
           "name": "Crème brûlée",
-          "description": ""
+          "description": "Len vaniljkräm med karamelliserad yta"
         },
         {
           "name": "Glass och bär",
-          "description": ""
+          "description": "Vaniljglass serverad med säsongens bär"
         }
+      ],
+      "sources": [
+        "https://www.coop.se/recept/krustader-med-rakrora/",
+        "https://www.arla.se/recept/krustader-med-svamp-rokt-graddfil-och-cheddarchips/",
+        "https://www.ica.se/recept/langbakad-hogrev-med-tomat-och-vitlokssmor-712674/"
       ]
     }
   ]

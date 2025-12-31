@@ -14,7 +14,7 @@ export async function getStaticPaths() {
 const { menu } = Astro.props;
 ---
 
-<MenuLayout title={`Le Menu - ${menu.title}`} date={menu.date}>
+<MenuLayout title={menu.title} date={menu.date}>
   <section class="course" aria-labelledby="course-entree">
     <h3 class="course-title" id="course-entree">Entrée</h3>
     {

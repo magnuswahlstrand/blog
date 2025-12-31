@@ -10,6 +10,7 @@ const { title, date } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const socialImageURL = new URL(SITE.ogImage, Astro.url.origin);
+const htmlTitle = `${title} - Le Menu`;
 ---
 
 <!doctype html>
@@ -20,8 +21,8 @@ const socialImageURL = new URL(SITE.ogImage, Astro.url.origin);
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="canonical" href={canonicalURL} />
     <meta name="generator" content={Astro.generator} />
-    <title>{title}</title>
-    <meta name="title" content={title} />
+    <title>{htmlTitle}</title>
+    <meta name="title" content={htmlTitle} />
     <meta name="description" content={SITE.desc} />
     <meta name="author" content={SITE.author} />
   </head>
