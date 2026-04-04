@@ -1,0 +1,186 @@
+---
+export interface Props {
+  images: { src: string; alt?: string }[];
+}
+
+const { images } = Astro.props;
+---
+
+<div class="carousel-wrapper my-6">
+  <div class="carousel-clip">
+    <div class="carousel">
+      {
+        images.map((img, i) => (
+          <div class="carousel-slide">
+            <img src={img.src} alt={img.alt ?? ""} loading="lazy" />
+            {img.alt && <span class="caption">{img.alt}</span>}
+          </div>
+        ))
+      }
+    </div>
+  </div>
+  {
+    images.length > 1 && (
+      <>
+        <button class="arrow arrow-prev" aria-label="Previous image">
+          &#8592;
+        </button>
+        <button class="arrow arrow-next" aria-label="Next image">
+          &#8594;
+        </button>
+        <div class="carousel-dots">
+          {images.map((_, i) => (
+            <button
+              class="dot"
+              aria-label={`Go to image ${i + 1}`}
+              data-index={i}
+            />
+          ))}
+        </div>
+      </>
+    )
+  }
+</div>
+
+<style>
+  .carousel-wrapper {
+    position: relative;
+    width: 100%;
+  }
+
+  .carousel-clip {
+    border-radius: 0.5rem;
+    overflow: hidden;
+  }
+
+  .carousel {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    gap: 0;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .carousel::-webkit-scrollbar {
+    display: none;
+  }
+
+  .carousel-slide {
+    flex: 0 0 100%;
+    scroll-snap-align: start;
+  }
+
+  .carousel-slide {
+    position: relative;
+    font-size: 0;
+  }
+
+  .carousel-slide img {
+    width: 100%;
+    height: 320px;
+    object-fit: cover;
+    display: block;
+  }
+
+  .caption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 0.4rem 0.75rem;
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    font-size: 0.8rem;
+    line-height: 1.4;
+    text-align: center;
+    font-style: italic;
+  }
+
+  .arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-calc(50% + 20px));
+    background: rgba(0, 0, 0, 0.45);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 2.2rem;
+    height: 2.2rem;
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+    z-index: 10;
+  }
+
+  .arrow:hover {
+    background: rgba(0, 0, 0, 0.7);
+  }
+
+  .arrow-prev {
+    left: 0.6rem;
+  }
+
+  .arrow-next {
+    right: 0.6rem;
+  }
+
+  .carousel-dots {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+  }
+
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #cbd5e1;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    transition: background 0.2s;
+  }
+
+  .dot.active {
+    background: #64748b;
+  }
+</style>
+
+<script>
+  const wrapper = document.querySelector(".carousel-wrapper") as HTMLElement;
+  const carousel = wrapper?.querySelector(".carousel") as HTMLElement;
+  const dots = wrapper?.querySelectorAll<HTMLButtonElement>(".dot");
+  const prev = wrapper?.querySelector<HTMLButtonElement>(".arrow-prev");
+  const next = wrapper?.querySelector<HTMLButtonElement>(".arrow-next");
+
+  function currentIndex() {
+    return Math.round(carousel.scrollLeft / carousel.clientWidth);
+  }
+
+  function goTo(i: number) {
+    carousel.scrollTo({ left: carousel.clientWidth * i, behavior: "smooth" });
+  }
+
+  function updateDots() {
+    const i = currentIndex();
+    dots?.forEach((dot, j) => dot.classList.toggle("active", j === i));
+  }
+
+  prev?.addEventListener("click", () => goTo(Math.max(0, currentIndex() - 1)));
+  next?.addEventListener("click", () =>
+    goTo(Math.min((dots?.length ?? 1) - 1, currentIndex() + 1))
+  );
+
+  dots?.forEach((dot, i) => dot.addEventListener("click", () => goTo(i)));
+
+  if (dots && dots.length > 0) {
+    dots[0].classList.add("active");
+    carousel?.addEventListener("scroll", updateDots, { passive: true });
+  }
+</script>
