@@ -69,6 +69,9 @@ importers:
       '@types/react':
         specifier: ^18.0.24
         version: 18.3.10
+      '@types/react-dom':
+        specifier: ^18.0.6
+        version: 18.3.0
       commitizen:
         specifier: ^4.2.5
         version: 4.3.1(@types/node@22.7.4)(typescript@5.6.2)
