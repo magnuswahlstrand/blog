@@ -1,6 +1,21 @@
 {
   "entries": [
     {
+      "date": "2026-06-05",
+      "dish": "Pulled pork i pita bröd med kålsallad, fetaostkräm, ugnsrostade tomater och aubergine",
+      "image": "/img/food-log/2026-06-05-pulled-pork-pita-brod.jpg"
+    },
+    {
+      "date": "2026-06-03",
+      "dish": "Chili- och spiskumminkyckling med ris",
+      "image": "/img/food-log/2026-06-03-chili-spiskummin-kyckling.jpg"
+    },
+    {
+      "date": "2026-06-01",
+      "dish": "Smördegsknyten med brie och fikonmarmelad & Yakiniku med ris",
+      "image": "/img/food-log/2026-06-01-smorgsdegsknyten-yakiniku.jpg"
+    },
+    {
       "date": "2026-05-31",
       "dish": "Raggmunk",
       "image": "/img/food-log/2026-05-31-raggmunk.jpg"
