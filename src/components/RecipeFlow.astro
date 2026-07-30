@@ -1,0 +1,209 @@
+---
+import { recipeFlowSchema, type RecipeFlow } from "../lib/recipe-flow/schema";
+import { layoutRecipeFlow } from "../lib/recipe-flow/layout";
+import { wrapLabel } from "../lib/recipe-flow/wrap-text";
+import { validateRecipeFlow } from "../lib/recipe-flow/validate";
+
+export interface Props {
+  recipe: RecipeFlow;
+  compact?: boolean;
+}
+
+const { compact = false } = Astro.props;
+
+const parsed = recipeFlowSchema.parse(Astro.props.recipe);
+validateRecipeFlow(parsed);
+const layout = layoutRecipeFlow(parsed);
+
+const fontSize = compact ? 12 : 14;
+const fontFamily = "system-ui, -apple-system, sans-serif";
+const ingredientMaxChars = Math.floor(
+  (layout.ingredientWidth - 12) / (fontSize * 0.6)
+);
+const operationMaxChars = Math.floor(
+  (layout.operationWidth - 8) / (fontSize * 0.6)
+);
+const textLineHeight = Math.round(fontSize * 1.3);
+
+const svgStyles = [
+  ".cell-ingredient { fill: #fafdfa; stroke: #5aa05a; stroke-width: 1; }",
+  ".cell-operation { fill: #fff; stroke: #5aa05a; stroke-width: 1; }",
+  ".cell-header { fill: #f0f7f0; stroke: #5aa05a; stroke-width: 1; }",
+  `.label { font-family: ${fontFamily}; font-size: ${fontSize}px; fill: #111; }`,
+  ".label-ingredient { font-weight: 500; }",
+  `.label-stage { fill: #888; font-size: ${fontSize - 2}px; }`,
+].join("\n");
+
+interface TspanDef {
+  text: string;
+  x: number;
+  y: number;
+}
+
+function buildTspans(
+  label: string,
+  maxChars: number,
+  cellX: number,
+  cellY: number,
+  cellWidth: number,
+  cellHeight: number
+): TspanDef[] {
+  const lines = wrapLabel(label, maxChars);
+  const centerX = cellX + cellWidth / 2;
+  const totalTextHeight = lines.length * textLineHeight;
+  const startY =
+    cellY + (cellHeight - totalTextHeight) / 2 + textLineHeight * 0.65;
+  return lines.map((line, i) => ({
+    text: escapeXml(line.text),
+    x: centerX,
+    y: Math.round(startY + i * textLineHeight),
+  }));
+}
+
+function escapeXml(s: string): string {
+  return s
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+---
+
+<div class="recipe-flow-wrapper">
+  <svg
+    viewBox={`0 0 ${layout.width} ${layout.height}`}
+    width={layout.width}
+    height={layout.height}
+    role="img"
+    class="recipe-flow"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <title>{parsed.title}</title>
+
+    <defs>
+      <style set:html={svgStyles}></style>
+    </defs>
+
+    <!-- Header row background -->
+    <rect
+      x="0"
+      y="0"
+      width={layout.width}
+      height={layout.headerHeight}
+      class="cell-header"></rect>
+
+    <!-- Stage headers -->
+    {
+      Array.from(
+        {
+          length: Math.ceil(
+            (layout.width - layout.ingredientWidth) / layout.operationWidth
+          ),
+        },
+        (_, i) => {
+          const stageNum = i + 1;
+          const x = Math.round(
+            layout.ingredientWidth +
+              i * layout.operationWidth +
+              layout.operationWidth / 2
+          );
+          return (
+            <text x={x} y="38" text-anchor="middle" class="label label-stage">
+              Stage {stageNum}
+            </text>
+          );
+        }
+      )
+    }
+
+    <!-- Ingredient cells -->
+    {
+      layout.cells
+        .filter(c => c.type === "ingredient")
+        .map(cell => (
+          <>
+            <rect
+              x={cell.x}
+              y={cell.y}
+              width={cell.width}
+              height={cell.height}
+              class="cell-ingredient"
+            />
+            <text
+              x={cell.x + 8}
+              y={Math.round(cell.y + cell.height / 2)}
+              dominant-baseline="middle"
+              class="label label-ingredient"
+            >
+              {escapeXml(cell.label)}
+            </text>
+          </>
+        ))
+    }
+
+    <!-- Operation cells -->
+    {
+      layout.cells
+        .filter(c => c.type === "operation")
+        .map(cell => {
+          const tspans = buildTspans(
+            cell.label,
+            operationMaxChars,
+            cell.x,
+            cell.y,
+            cell.width,
+            cell.height
+          );
+          return (
+            <>
+              <rect
+                x={cell.x}
+                y={cell.y}
+                width={cell.width}
+                height={cell.height}
+                class="cell-operation"
+              />
+              <text
+                x={Math.round(cell.x + cell.width / 2)}
+                y={cell.y}
+                text-anchor="middle"
+                class="label"
+              >
+                {tspans.map(ts => (
+                  <tspan x={ts.x} y={ts.y}>
+                    {ts.text}
+                  </tspan>
+                ))}
+              </text>
+            </>
+          );
+        })
+    }
+  </svg>
+</div>
+
+<style>
+  .recipe-flow-wrapper {
+    overflow-x: auto;
+    max-width: 100%;
+    margin: 1rem 0;
+  }
+
+  .recipe-flow {
+    width: auto;
+    max-width: 100%;
+    height: auto;
+  }
+
+  @media print {
+    .recipe-flow-wrapper {
+      overflow: visible;
+    }
+
+    .recipe-flow {
+      width: 100%;
+      height: auto;
+      max-width: none;
+    }
+  }
+</style>

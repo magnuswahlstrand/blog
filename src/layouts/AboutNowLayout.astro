@@ -1,10 +1,22 @@
 ---
 import { SITE } from "src/config";
-import Breadcrumbs from "@components/Breadcrumbs.astro";
 import Footer from "@components/Footer.astro";
 import Header from "@components/Header.astro";
 import ImageCarousel from "@components/ImageCarousel.astro";
+import RecipeFlow from "@components/RecipeFlow.astro";
 import Layout from "./Layout.astro";
+import type { RecipeFlow } from "../lib/recipe-flow/schema";
+import { kimchi } from "../content/recipes/kimchi";
+import { babaGhanoush } from "../content/recipes/baba-ghanoush";
+import { sousVideScrambledEggs } from "../content/recipes/sous-vide-scrambled-eggs";
+import { zucchiniRolls } from "../content/recipes/zucchini-rolls";
+
+const recipeFlows: Record<string, RecipeFlow> = {
+  kimchi,
+  "baba-ghanoush": babaGhanoush,
+  "sous-vide-scrambled-eggs": sousVideScrambledEggs,
+  "zucchini-rolls": zucchiniRolls,
+};
 
 export interface Props {
   frontmatter: {
@@ -12,10 +24,15 @@ export interface Props {
     navName?: string;
     description?: string;
     images?: { src: string; alt?: string }[];
+    recipeId?: string;
   };
 }
 
 const { frontmatter } = Astro.props;
+const cookingMode = Astro.url.pathname.startsWith("/recipes/");
+const recipeData = frontmatter.recipeId
+  ? recipeFlows[frontmatter.recipeId]
+  : null;
 ---
 
 <Layout title={`${frontmatter.title} | ${SITE.title}`}>
@@ -27,22 +44,31 @@ const { frontmatter } = Astro.props;
         {frontmatter.title}
       </h1>
       <hr class="w-48 mx-auto border-2 text-center rounded mt-2" />
-      <div class="flex justify-end gap-2 -mt-2 mb-4">
-        <label for="cooking-mode" class="text-xs text-stone-400"
-          >Cooking mode</label
-        >
-        <button
-          id="cooking-mode"
-          role="switch"
-          aria-checked="false"
-          class="cooking-toggle relative inline-flex h-4 w-7 items-center rounded-full bg-skin-card text-[0px] transition-colors"
-        >
-          <span
-            class="cooking-dot inline-block h-3 w-3 rounded-full bg-skin-fill transition-transform translate-x-0.5"
-          ></span>
-        </button>
-      </div>
+      {
+        cookingMode && (
+          <div class="flex justify-end gap-2 -mt-2 mb-4">
+            <label for="cooking-mode" class="text-xs text-stone-400">
+              Cooking mode
+            </label>
+            <button
+              id="cooking-mode"
+              role="switch"
+              aria-checked="false"
+              class="cooking-toggle relative inline-flex h-4 w-7 items-center rounded-full bg-skin-card text-[0px] transition-colors"
+            >
+              <span class="cooking-dot inline-block h-3 w-3 rounded-full bg-skin-fill transition-transform translate-x-0.5" />
+            </button>
+          </div>
+        )
+      }
       <slot />
+      {
+        recipeData && (
+          <div class="not-prose">
+            <RecipeFlow recipe={recipeData} />
+          </div>
+        )
+      }
       {
         frontmatter.images && frontmatter.images.length > 0 && (
           <ImageCarousel images={frontmatter.images} />
@@ -63,25 +89,28 @@ const { frontmatter } = Astro.props;
 
   <script>
     const btn = document.getElementById("cooking-mode");
-    let wakeLock = null;
+    if (btn) {
+      const dot = btn.querySelector(".cooking-dot");
+      let wakeLock = null;
 
-    btn.addEventListener("click", async () => {
-      if (wakeLock) {
-        await wakeLock.release();
-        return;
-      }
-      try {
-        wakeLock = await navigator.wakeLock.request("screen");
-        btn.dataset.on = "true";
-        btn.setAttribute("aria-checked", "true");
-        wakeLock.addEventListener("release", () => {
-          wakeLock = null;
-          delete btn.dataset.on;
-          btn.setAttribute("aria-checked", "false");
-        });
-      } catch {
-        btn.style.display = "none";
-      }
-    });
+      btn.addEventListener("click", async () => {
+        if (wakeLock) {
+          await wakeLock.release();
+          return;
+        }
+        try {
+          wakeLock = await navigator.wakeLock.request("screen");
+          btn.dataset.on = "true";
+          btn.setAttribute("aria-checked", "true");
+          wakeLock.addEventListener("release", () => {
+            wakeLock = null;
+            delete btn.dataset.on;
+            btn.setAttribute("aria-checked", "false");
+          });
+        } catch {
+          btn.style.display = "none";
+        }
+      });
+    }
   </script>
 </Layout>

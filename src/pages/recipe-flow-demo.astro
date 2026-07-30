@@ -1,0 +1,35 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import RecipeFlow from "../components/RecipeFlow.astro";
+import { kimchi } from "../content/recipes/kimchi";
+import { babaGhanoush } from "../content/recipes/baba-ghanoush";
+import { sousVideScrambledEggs } from "../content/recipes/sous-vide-scrambled-eggs";
+import { zucchiniRolls } from "../content/recipes/zucchini-rolls";
+---
+
+<Layout title="Recipe Flow Demo">
+  <Header />
+  <main id="main-content">
+    <article class="prose max-w-3xl mx-auto px-4 mt-12 mb-28">
+      <h1>Recipe Flow Diagram Demo</h1>
+      <p>
+        All recipes rendered as Cooking for Engineers–style process diagrams.
+      </p>
+
+      <h2>Kimchi</h2>
+      <RecipeFlow recipe={kimchi} />
+
+      <h2>Baba Ghanoush</h2>
+      <RecipeFlow recipe={babaGhanoush} />
+
+      <h2>Sous Vide Scrambled Eggs</h2>
+      <RecipeFlow recipe={sousVideScrambledEggs} />
+
+      <h2>Zucchini Tapenade Rolls</h2>
+      <RecipeFlow recipe={zucchiniRolls} />
+    </article>
+  </main>
+  <Footer />
+</Layout>
