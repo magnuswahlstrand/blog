@@ -6,9 +6,14 @@ import Header from "@components/Header.astro";
 import Footer from "@components/Footer.astro";
 import Search from "@components/Search";
 import type { Frontmatter } from "src/types";
+import type { MarkdownInstance } from "astro";
 
 // Retrieve all articles
-const posts = await Astro.glob<Frontmatter>("../contents/**/*.{md,mdx}");
+const posts = Object.values(
+  import.meta.glob<MarkdownInstance<Frontmatter>>("../contents/**/*.{md,mdx}", {
+    eager: true,
+  })
+);
 
 // List of items to search in
 const searchList = posts

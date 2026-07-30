@@ -8,7 +8,9 @@ import Tag from "@components/Tag.astro";
 import getCountedTags from "@utils/getCountedTags";
 import type { Frontmatter } from "src/types";
 
-const posts = await Astro.glob<Frontmatter>("../../contents/**/*.{md,mdx}");
+const posts = Object.values(
+  import.meta.glob("../../contents/**/*.{md,mdx}", { eager: true })
+);
 
 let countedTags = getCountedTags(posts);
 let sortedTags = countedTags.map(t => t.tag);

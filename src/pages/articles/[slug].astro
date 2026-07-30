@@ -14,7 +14,12 @@ type PostResult = {
 }[];
 
 export async function getStaticPaths() {
-  const posts = await Astro.glob<Frontmatter>("../../contents/**/*.{md,mdx}");
+  const posts = Object.values(
+    import.meta.glob<MarkdownInstance<Frontmatter>>(
+      "../../contents/**/*.{md,mdx}",
+      { eager: true }
+    )
+  );
 
   let postResult: PostResult = posts.map(post => {
     return {
@@ -29,7 +34,7 @@ export async function getStaticPaths() {
 }
 
 const { slug } = Astro.params;
-const content = `0; url=/posts/${slug}`
+const content = `0; url=/posts/${slug}`;
 ---
 
-<head><meta http-equiv="refresh" content={content} /></head
+<head><meta http-equiv="refresh" content={content} /></head </head>
