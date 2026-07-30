@@ -4,13 +4,13 @@ title: "What I'm Doing Now"
 navName: "now"
 ---
 
-It’s 2024. I’m working freelancer, mostly from home from my house outside of Stockholm. My son is three years old.
+It’s 2026. I work as a freelancing developer, currently at TV4. My son is five years old.
 
 Some things I’m working on:
 
-- **Learning NodeJS** - On the job
-- **Becoming stronger** - Being able to do 15 pull-ups
-- **Mastering AWS** - Getting certified
+- **Losing weight** - Goal to reach 85 kg
+- **Experimenting with AI development** - Some examples at [wahlstrand.dev/tools](https://wahlstrand.dev/tools)
+- **Becoming a better chef** - Some of my favorite recipes [here](https://wahlstrand.dev/recipes)
 
 <div>
   <img src="/assets/reading.svg" class="sm:w-1/2 mx-auto" alt="coding dev illustration">

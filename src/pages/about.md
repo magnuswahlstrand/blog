@@ -29,7 +29,8 @@ I have the following qualities:
 - 2019: Worked at a fintech startup in Stockholm
 - 2021: Started freelancing
 - 2021: My son was born
-- 2025: ?
+- 2024: Started working at [TV4](https://tv4.se)
+- 2026: ?
 
 ### Technology I Love
 
@@ -39,7 +40,7 @@ I have the following qualities:
 - Postgres
 - My Macbook
 - Serverless
-- [Goland](https://www.jetbrains.com/go/) IDE
+- OpenCode
 - [Ebiten](https://ebiten.org)
 - [ThreeJS](https://threejs.org/)
 
@@ -47,3 +48,4 @@ I have the following qualities:
 
 - [2D vision](https://github.com/magnuswahlstrand/2d-vision) - one my of first experiments with 2D graphics and Go
 - [Particle system](https://github.com/magnuswahlstrand/particles) - also written in Go
+- [Tools](https://wahlstrand.dev/tools) - Developed with the help of AI
