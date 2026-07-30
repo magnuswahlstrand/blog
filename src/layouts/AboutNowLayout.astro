@@ -24,15 +24,15 @@ export interface Props {
     navName?: string;
     description?: string;
     images?: { src: string; alt?: string }[];
-    recipeId?: string;
   };
 }
 
 const { frontmatter } = Astro.props;
 const cookingMode = Astro.url.pathname.startsWith("/recipes/");
-const recipeData = frontmatter.recipeId
-  ? recipeFlows[frontmatter.recipeId]
+const recipeKey = cookingMode
+  ? Astro.url.pathname.replace(/^\/recipes\//, "").replace(/\/$/, "")
   : null;
+const recipeData = recipeKey ? recipeFlows[recipeKey] : null;
 ---
 
 <Layout title={`${frontmatter.title} | ${SITE.title}`}>
