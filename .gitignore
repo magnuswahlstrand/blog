@@ -21,3 +21,6 @@ pnpm-debug.log*
 
 .astro
 .claude
+
+# Playwright MCP session artifacts
+.playwright-mcp/
