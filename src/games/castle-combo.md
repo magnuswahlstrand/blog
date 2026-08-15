@@ -1,6 +1,7 @@
 ---
 title: Castle Combo
 year: 2024
+players: 2–5
 status: considering
 bggId: 416851
 bggRating: 7.6

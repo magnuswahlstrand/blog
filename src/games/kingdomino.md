@@ -1,6 +1,7 @@
 ---
 title: Kingdomino
 year: 2016
+players: 2–4
 status: owned
 bggId: 204583
 bggRating: 7.29

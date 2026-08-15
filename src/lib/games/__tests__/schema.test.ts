@@ -6,6 +6,7 @@ describe("gameSchema", () => {
     const result = gameSchema.safeParse({
       title: "Castle Combo",
       year: 2024,
+      players: "2–5",
       status: "owned",
       bggId: 416851,
       bggRating: 7.6,

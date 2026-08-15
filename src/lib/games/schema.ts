@@ -5,6 +5,7 @@ export const gameStatusSchema = z.enum(["owned", "considering"]);
 export const gameSchema = z.object({
   title: z.string(),
   year: z.number().int().min(1900).max(2100),
+  players: z.string(),
   status: gameStatusSchema,
   purchased: z.number().int().min(1900).max(2100).optional(),
   bggId: z.number().int().positive().optional(),

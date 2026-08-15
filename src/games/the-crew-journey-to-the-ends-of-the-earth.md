@@ -1,6 +1,7 @@
 ---
 title: "The Crew: Journey to the Ends of the Earth"
 year: 2026
+players: 2–5
 status: considering
 bggId: 462192
 bggRating: 8.09

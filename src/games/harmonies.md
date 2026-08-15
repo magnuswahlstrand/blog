@@ -1,6 +1,7 @@
 ---
 title: Harmonies
 year: 2024
+players: 1–4
 status: owned
 purchased: 2025
 bggId: 414317

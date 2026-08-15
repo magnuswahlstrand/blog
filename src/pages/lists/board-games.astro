@@ -14,6 +14,7 @@ const games = loadGames().filter(game => game.status === "owned");
       <tr>
         <th data-sort="asc" data-type="text">Title</th>
         <th data-type="number">Year</th>
+        <th data-type="text">Players</th>
         <th data-type="number">Purchased</th>
         <th data-type="text">Status</th>
         <th data-type="number">BGG Rating</th>
@@ -26,6 +27,7 @@ const games = loadGames().filter(game => game.status === "owned");
           <tr>
             <td>{game.title}</td>
             <td>{game.year}</td>
+            <td>{game.players}</td>
             <td>{game.purchased ?? "–"}</td>
             <td>
               <span class={`status ${game.status}`}>{game.status}</span>
