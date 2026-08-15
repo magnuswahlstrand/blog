@@ -1,39 +1,38 @@
 import type { RecipeFlow } from "../../lib/recipe-flow/schema";
 
 export const kinesiskKrossadGurksallad: RecipeFlow = {
-  title: "Kinesisk krossad gurksallad",
-  servings: "per 1 frilandsgurka",
+  title: "Smashed Cucumber Salad",
+  servings: "per cucumber",
   ingredients: [
-    { id: "cucumber", label: "1 frilandsgurka" },
-    { id: "salt", label: "Lätt salt" },
-    { id: "rice-vinegar", label: "1 msk risvinäger" },
-    { id: "light-soy", label: "1–2 tsk ljus soja" },
-    { id: "sesame-oil", label: "1 tsk sesamolja" },
-    { id: "sugar", label: "½–1 tsk socker" },
-    { id: "garlic", label: "1 liten riven/pressad vitlöksklyfta" },
-    { id: "chili-crisp", label: "Chili crisp/chiliolja efter smak" },
+    { id: "cucumber", label: "1 cucumber" },
+    { id: "salt", label: "Light salt" },
+    { id: "rice-vinegar", label: "1 tbsp rice vinegar" },
+    { id: "light-soy", label: "1–2 tsp light soy sauce" },
+    { id: "sesame-oil", label: "1 tsp sesame oil" },
+    { id: "sugar", label: "½–1 tsp sugar" },
+    { id: "garlic", label: "1 small garlic clove, grated or pressed" },
+    { id: "chili-crisp", label: "Chili crisp/chili oil to taste" },
   ],
   steps: [
-    "Krossa eller skär gurkan grovt, salta lätt och låt stå 10 min.",
-    "Häll av vätskan.",
-    "Blanda risvinäger, ljus soja, sesamolja, socker, vitlök och chili crisp/chiliolja.",
-    "Rör samman med gurkan.",
+    "Smash or coarsely cut the cucumber, salt lightly, and let sit for 10 min.",
+    "Drain off the liquid.",
+    "Mix rice vinegar, light soy sauce, sesame oil, sugar, garlic, and chili crisp/chili oil.",
+    "Toss with the cucumber.",
   ],
-  notes: ["Nästan perfekt till spiskummin-lammet."],
   operations: [
     {
       id: "crack-salt",
-      label: "Krossa, salta, stå 10 min",
+      label: "Smash, salt, rest 10 min",
       inputs: ["cucumber", "salt"],
     },
     {
       id: "drain",
-      label: "Häll av vätskan",
+      label: "Drain liquid",
       inputs: ["crack-salt"],
     },
     {
       id: "mix-dressing",
-      label: "Blanda",
+      label: "Mix",
       inputs: [
         "rice-vinegar",
         "light-soy",
@@ -45,7 +44,7 @@ export const kinesiskKrossadGurksallad: RecipeFlow = {
     },
     {
       id: "combine",
-      label: "Rör samman",
+      label: "Toss",
       inputs: ["drain", "mix-dressing"],
     },
   ],
