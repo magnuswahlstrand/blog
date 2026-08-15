@@ -1,82 +1,32 @@
 ---
 import MySiteLayout from "../layouts/AboutNowLayout.astro";
+import SortableTable from "../components/SortableTable.astro";
 import { recipes } from "../recipes";
 ---
 
 <MySiteLayout frontmatter={{ title: "Recipes", navName: "lists" }}>
-  <div class="not-prose my-4">
-    <table class="sortable w-full text-sm">
-      <thead>
-        <tr>
-          <th data-sort="asc">Recipe</th>
-          <th>Servings</th>
-          <th data-nosort>Source</th>
-        </tr>
-      </thead>
-      <tbody>
-        {
-          Object.entries(recipes).map(([slug, recipe]) => (
-            <tr>
-              <td>
-                <a href={`/recipes/${slug}`}>{recipe.title}</a>
-              </td>
-              <td>{recipe.servings ?? "–"}</td>
-              <td>
-                {recipe.sources?.[0] && (
-                  <a href={recipe.sources[0].url}>link</a>
-                )}
-              </td>
-            </tr>
-          ))
-        }
-      </tbody>
-    </table>
-    <p class="text-xs text-stone-400 mt-2">Click a column header to sort.</p>
-  </div>
+  <SortableTable>
+    <thead>
+      <tr>
+        <th data-sort="asc" data-type="text">Recipe</th>
+        <th data-type="text">Servings</th>
+        <th data-type="none">Source</th>
+      </tr>
+    </thead>
+    <tbody>
+      {
+        Object.entries(recipes).map(([slug, recipe]) => (
+          <tr>
+            <td>
+              <a href={`/recipes/${slug}`}>{recipe.title}</a>
+            </td>
+            <td>{recipe.servings ?? "–"}</td>
+            <td>
+              {recipe.sources?.[0] && <a href={recipe.sources[0].url}>link</a>}
+            </td>
+          </tr>
+        ))
+      }
+    </tbody>
+  </SortableTable>
 </MySiteLayout>
-
-<style>
-  table.sortable {
-    border-collapse: collapse;
-  }
-  table.sortable th,
-  table.sortable td {
-    @apply px-3 py-1.5 text-left;
-  }
-  table.sortable thead th {
-    @apply cursor-pointer select-none border-b border-skin-line whitespace-nowrap;
-  }
-  table.sortable thead th:hover {
-    @apply text-skin-accent;
-  }
-  table.sortable thead th[data-nosort] {
-    @apply cursor-default;
-  }
-  table.sortable tbody tr {
-    @apply border-b border-skin-line;
-  }
-</style>
-
-<script>
-  document.querySelectorAll("table.sortable").forEach(table => {
-    const tbody = table.querySelector("tbody");
-    const headers = table.querySelectorAll("thead th:not([data-nosort])");
-    headers.forEach(header => {
-      header.addEventListener("click", () => {
-        const index = Array.from(headers).indexOf(header);
-        const rows = Array.from(tbody.querySelectorAll("tr"));
-        const current = header.getAttribute("data-sort");
-        const next = current === "asc" ? "desc" : "asc";
-        rows.sort((a, b) => {
-          const av = a.children[index].textContent.trim();
-          const bv = b.children[index].textContent.trim();
-          const cmp = av.localeCompare(bv);
-          return next === "asc" ? cmp : -cmp;
-        });
-        rows.forEach(row => tbody.appendChild(row));
-        headers.forEach(h => h.removeAttribute("data-sort"));
-        header.setAttribute("data-sort", next);
-      });
-    });
-  });
-</script>
