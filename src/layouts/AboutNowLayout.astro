@@ -5,18 +5,7 @@ import Header from "@components/Header.astro";
 import ImageCarousel from "@components/ImageCarousel.astro";
 import RecipeFlow from "@components/RecipeFlow.astro";
 import Layout from "./Layout.astro";
-import type { RecipeFlow } from "../lib/recipe-flow/schema";
-import { kimchi } from "../recipes/kimchi";
-import { babaGhanoush } from "../recipes/baba-ghanoush";
-import { sousVideScrambledEggs } from "../recipes/sous-vide-scrambled-eggs";
-import { zucchiniRolls } from "../recipes/zucchini-rolls";
-
-const recipeFlows: Record<string, RecipeFlow> = {
-  kimchi,
-  "baba-ghanoush": babaGhanoush,
-  "sous-vide-scrambled-eggs": sousVideScrambledEggs,
-  "zucchini-rolls": zucchiniRolls,
-};
+import { recipes as recipeFlows } from "../recipes";
 
 export interface Props {
   frontmatter: {

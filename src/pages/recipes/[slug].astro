@@ -1,0 +1,50 @@
+---
+import MySiteLayout from "../../layouts/AboutNowLayout.astro";
+import type { RecipeFlow } from "../../lib/recipe-flow/schema";
+import { recipes } from "../../recipes";
+
+export interface Props {
+  recipe: RecipeFlow;
+}
+
+export function getStaticPaths() {
+  return Object.entries(recipes).map(([slug, recipe]) => ({
+    params: { slug },
+    props: { recipe },
+  }));
+}
+
+const { recipe } = Astro.props;
+---
+
+<MySiteLayout frontmatter={{ title: recipe.title, images: recipe.images }}>
+  {recipe.servings && <p>Servings: {recipe.servings}</p>}
+  {recipe.notes?.map(note => <p key={note}>{note}</p>)}
+  <h2>Ingredients</h2>
+  <ul>
+    {
+      recipe.ingredients.map(ingredient => (
+        <li key={ingredient.id}>{ingredient.label}</li>
+      ))
+    }
+  </ul>
+  {
+    recipe.steps && (
+      <>
+        <h2>How to</h2>
+        <ol>
+          {recipe.steps.map(step => (
+            <li key={step}>{step}</li>
+          ))}
+        </ol>
+      </>
+    )
+  }
+  {
+    recipe.sources?.map(source => (
+      <p key={source.url}>
+        {source.label} - <a href={source.url}>{source.url}</a>
+      </p>
+    ))
+  }
+</MySiteLayout>

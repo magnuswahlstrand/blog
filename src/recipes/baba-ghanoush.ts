@@ -11,6 +11,23 @@ export const babaGhanoush: RecipeFlow = {
     { id: "tahini", label: "0.6 dl tahini" },
     { id: "olive-oil", label: "2 tbsp olive oil" },
   ],
+  steps: [
+    "Heat the oven to 250° C",
+    "Poke a few holes in the eggplants (to avoid an explosion in the oven)",
+    "Cook the eggplant for 25 minutes",
+    "Flip them",
+    "Cook for another 25 minutes",
+    "Take out and cool (> 30 minutes)",
+    "Crush and mince the garlic and put in a large bowl",
+    "Add 1 teaspoon of salt and juice of 1/2 lemon",
+    "Let it rest for 10 minutes",
+    "Cut up the eggplants and scoop out the flesh",
+    "Cut it finely into a fine paste",
+    "Put the eggplant into the bowl with the lemon and garlic",
+    "Add 0.6 dl tahini and 2 tablespoons of olive oil",
+    "Let sit for 30 min (only gets better the longer it rests)",
+  ],
+  notes: ["Prep time: 15 minutes", "Total time: 90 minutes"],
   operations: [
     {
       id: "bake-eggplant",

@@ -1,24 +1,14 @@
 ---
-import type { MarkdownInstance } from "astro";
 import MySiteLayout from "../layouts/AboutNowLayout.astro";
-import ResumeItem from "../components/ResumeItem.astro";
-import type { Frontmatter } from "../types";
-import slugify from "../utils/slugify";
-import Card from "../components/Card";
-
-const recipes = Object.values(
-  import.meta.glob<MarkdownInstance<Frontmatter>>("./recipes/*.{md,mdx}", {
-    eager: true,
-  })
-);
+import { recipes } from "../recipes";
 ---
 
 <MySiteLayout frontmatter={{ title: "Recipes" }}>
   <ul>
     {
-      recipes.map(recipe => (
+      Object.entries(recipes).map(([slug, recipe]) => (
         <li>
-          <a href={recipe.url}>{recipe.frontmatter.title}</a>
+          <a href={`/recipes/${slug}`}>{recipe.title}</a>
         </li>
       ))
     }
