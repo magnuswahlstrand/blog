@@ -1,0 +1,114 @@
+---
+import AboutNowLayout from "../../layouts/AboutNowLayout.astro";
+import { loadGames, bggUrl } from "../../lib/games";
+import type { Game } from "../../lib/games/schema";
+import { gameStatusSchema } from "../../lib/games/schema";
+
+const games = loadGames().filter(game => game.status === "owned");
+---
+
+<AboutNowLayout frontmatter={{ title: "Board Games", navName: "lists" }}>
+  <div class="not-prose my-4">
+    <table class="sortable w-full text-sm">
+      <thead>
+        <tr>
+          <th data-sort="asc">Title</th>
+          <th>Year</th>
+          <th>Purchased</th>
+          <th>Status</th>
+          <th>BGG Rating</th>
+          <th data-nosort>BGG</th>
+        </tr>
+      </thead>
+      <tbody>
+        {
+          games.map(game => (
+            <tr>
+              <td>{game.title}</td>
+              <td>{game.year}</td>
+              <td>{game.purchased ?? "–"}</td>
+              <td>
+                <span class={`status ${game.status}`}>{game.status}</span>
+              </td>
+              <td>{game.bggRating?.toFixed(1) ?? "–"}</td>
+              <td>{bggUrl(game) && <a href={bggUrl(game)}>link</a>}</td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+    <p class="text-xs text-stone-400 mt-2">Click a column header to sort.</p>
+  </div>
+</AboutNowLayout>
+
+<style>
+  table.sortable {
+    border-collapse: collapse;
+  }
+  table.sortable th,
+  table.sortable td {
+    @apply px-3 py-1.5 text-left;
+  }
+  table.sortable thead th {
+    @apply cursor-pointer select-none border-b border-skin-line whitespace-nowrap;
+  }
+  table.sortable thead th:hover {
+    @apply text-skin-accent;
+  }
+  table.sortable tbody tr {
+    @apply border-b border-skin-line;
+  }
+  td .status {
+    @apply rounded-full px-2 py-0.5 text-xs uppercase tracking-wide;
+  }
+  td .status.owned {
+    @apply bg-green-100 text-green-800;
+  }
+  td .status.considering {
+    @apply bg-yellow-100 text-yellow-800;
+  }
+</style>
+
+<script>
+  document.querySelectorAll("table.sortable").forEach(table => {
+    const tbody = table.querySelector("tbody");
+    const headers = table.querySelectorAll("thead th:not([data-nosort])");
+    headers.forEach(header => {
+      header.addEventListener("click", () => {
+        const index = Array.from(headers).indexOf(header);
+        const rows = Array.from(tbody.querySelectorAll("tr"));
+        const isNumeric =
+          header.textContent?.trim() === "Year" ||
+          header.textContent?.trim() === "Purchased" ||
+          header.textContent?.trim() === "BGG Rating";
+        const current = header.getAttribute("data-sort");
+        const next = current === "asc" ? "desc" : "asc";
+        rows.sort((a, b) => {
+          const avText = a.children[index].textContent.trim();
+          const bvText = b.children[index].textContent.trim();
+          const isSet = (t: string) => t && t !== "–";
+          const numeric = (t: string): number =>
+            isSet(t) ? parseFloat(t) : Infinity;
+          const aSet = isSet(avText);
+          const bSet = isSet(bvText);
+          let cmp: number;
+          if (aSet !== bSet) {
+            // unset values always go last in ascending order
+            cmp = aSet ? -1 : 1;
+          } else if (isNumeric) {
+            // present years: newest first in ascending order
+            cmp = bSet ? numeric(bvText) - numeric(avText) : 0;
+            if (next === "desc") cmp = -cmp;
+          } else {
+            cmp = avText.localeCompare(bvText);
+            if (next === "desc") cmp = -cmp;
+          }
+          return next === "asc" ? cmp : -cmp;
+        });
+        rows.forEach(row => tbody.appendChild(row));
+        headers.forEach(h => h.removeAttribute("data-sort"));
+        header.setAttribute("data-sort", next);
+      });
+    });
+  });
+</script>
