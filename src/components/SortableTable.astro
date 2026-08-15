@@ -13,7 +13,7 @@ const { note = "Click a column header to sort." } = Astro.props;
   <p class="text-xs text-stone-400 mt-2">{note}</p>
 </div>
 
-<style>
+<style is:global>
   table.sortable {
     border-collapse: collapse;
   }
