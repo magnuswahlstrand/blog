@@ -3,6 +3,7 @@ import { babaGhanoush } from "./baba-ghanoush";
 import { kimchi } from "./kimchi";
 import { kinesiskKrossadGurksallad } from "./kinesisk-krossad-gurksallad";
 import { sousVideScrambledEggs } from "./sous-vide-scrambled-eggs";
+import { xinjiangCuminLamb } from "./xinjiang-cumin-lamb";
 import { zucchiniRolls } from "./zucchini-rolls";
 
 export const recipes: Record<string, RecipeFlow> = {
@@ -10,5 +11,6 @@ export const recipes: Record<string, RecipeFlow> = {
   "baba-ghanoush": babaGhanoush,
   "kinesisk-krossad-gurksallad": kinesiskKrossadGurksallad,
   "sous-vide-scrambled-eggs": sousVideScrambledEggs,
+  "xinjiang-cumin-lamb": xinjiangCuminLamb,
   "zucchini-rolls": zucchiniRolls,
 };
