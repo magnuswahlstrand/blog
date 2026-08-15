@@ -2,6 +2,10 @@
 import MySiteLayout from "../layouts/AboutNowLayout.astro";
 import SortableTable from "../components/SortableTable.astro";
 import { recipes } from "../recipes";
+
+const entries = Object.entries(recipes).sort(
+  (a, b) => (b[1].added ?? 0) - (a[1].added ?? 0)
+);
 ---
 
 <MySiteLayout frontmatter={{ title: "Recipes", navName: "lists" }}>
@@ -9,18 +13,18 @@ import { recipes } from "../recipes";
     <thead>
       <tr>
         <th data-sort="asc" data-type="text">Recipe</th>
-        <th data-type="text">Servings</th>
+        <th data-sort="desc" data-type="number">Added</th>
         <th data-type="none">Source</th>
       </tr>
     </thead>
     <tbody>
       {
-        Object.entries(recipes).map(([slug, recipe]) => (
+        entries.map(([slug, recipe]) => (
           <tr>
             <td>
               <a href={`/recipes/${slug}`}>{recipe.title}</a>
             </td>
-            <td>{recipe.servings ?? "–"}</td>
+            <td>{recipe.added ?? "–"}</td>
             <td>
               {recipe.sources?.[0] && <a href={recipe.sources[0].url}>link</a>}
             </td>

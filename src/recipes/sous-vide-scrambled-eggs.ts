@@ -2,6 +2,7 @@ import type { RecipeFlow } from "../../lib/recipe-flow/schema";
 
 export const sousVideScrambledEggs: RecipeFlow = {
   title: "Brown Butter Sous Vide Scrambled Eggs",
+  added: 2026,
   servings: "2",
   ingredients: [
     { id: "eggs", label: "6 eggs" },

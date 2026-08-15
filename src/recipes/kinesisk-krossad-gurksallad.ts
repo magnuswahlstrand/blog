@@ -2,6 +2,7 @@ import type { RecipeFlow } from "../../lib/recipe-flow/schema";
 
 export const kinesiskKrossadGurksallad: RecipeFlow = {
   title: "Smashed Cucumber Salad",
+  added: 2026,
   ingredients: [
     { id: "cucumber", label: "1 cucumber" },
     { id: "salt", label: "Light salt" },

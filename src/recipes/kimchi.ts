@@ -2,6 +2,7 @@ import type { RecipeFlow } from "../../lib/recipe-flow/schema";
 
 export const kimchi: RecipeFlow = {
   title: "Kimchi",
+  added: 2026,
   servings: "about 500 g",
   ingredients: [
     { id: "cabbage", label: "1/2 napa cabbage" },

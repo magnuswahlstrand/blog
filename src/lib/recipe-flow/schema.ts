@@ -25,6 +25,7 @@ export const recipeSourceSchema = z.object({
 export const recipeFlowSchema = z.object({
   title: z.string(),
   servings: z.string().optional(),
+  added: z.number().int().optional(),
   ingredients: z.array(ingredientSchema),
   operations: z.array(operationSchema),
   steps: z.array(z.string()).optional(),

@@ -1,16 +1,7 @@
----
-export interface Props {
-  note?: string;
-}
-
-const { note = "Click a column header to sort." } = Astro.props;
----
-
 <div class="not-prose my-4">
   <table class="sortable w-full text-sm">
     <slot />
   </table>
-  <p class="text-xs text-stone-400 mt-2">{note}</p>
 </div>
 
 <style is:global>
