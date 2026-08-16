@@ -5,14 +5,22 @@ import { loadGames, bggUrl } from "../../lib/games";
 import type { Game } from "../../lib/games/schema";
 import { gameStatusSchema } from "../../lib/games/schema";
 
-const games = loadGames().filter(game => game.status === "owned");
+const games = loadGames()
+  .filter(game => game.status === "owned")
+  .sort((a, b) => {
+    const aSet = a.purchased != null;
+    const bSet = b.purchased != null;
+    if (aSet !== bSet) return aSet ? -1 : 1;
+    if (!aSet) return 0;
+    return b.purchased! - a.purchased!;
+  });
 ---
 
 <AboutNowLayout frontmatter={{ title: "Board Games", navName: "lists" }}>
   <SortableTable>
     <thead>
       <tr>
-        <th data-sort="asc" data-type="text">Title</th>
+        <th data-type="text">Title</th>
         <th data-type="number">Year</th>
         <th data-type="text">Players</th>
         <th data-type="number">Purchased</th>
