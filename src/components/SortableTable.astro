@@ -1,4 +1,4 @@
-<div class="not-prose my-4">
+<div class="not-prose my-4 overflow-x-auto">
   <table class="sortable w-full text-sm">
     <slot />
   </table>
@@ -10,7 +10,10 @@
   }
   table.sortable th,
   table.sortable td {
-    @apply px-3 py-1.5 text-left;
+    @apply px-3 py-1.5 text-left text-skin-base;
+  }
+  table.sortable a {
+    @apply text-skin-base hover:text-skin-accent;
   }
   table.sortable thead th {
     @apply cursor-pointer select-none border-b border-skin-line whitespace-nowrap;
@@ -20,6 +23,9 @@
   }
   table.sortable tbody tr {
     @apply border-b border-skin-line;
+  }
+  table.sortable tbody tr:last-child {
+    @apply border-b-0;
   }
   table.sortable thead th[data-type="none"] {
     @apply cursor-default;

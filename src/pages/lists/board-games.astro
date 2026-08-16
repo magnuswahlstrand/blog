@@ -26,7 +26,6 @@ const games = loadGames()
         <th data-type="number">Purchased</th>
         <th data-type="text">Status</th>
         <th data-type="number">BGG Rating</th>
-        <th data-type="none">BGG</th>
       </tr>
     </thead>
     <tbody>
@@ -40,8 +39,32 @@ const games = loadGames()
             <td>
               <span class={`status ${game.status}`}>{game.status}</span>
             </td>
-            <td>{game.bggRating?.toFixed(1) ?? "–"}</td>
-            <td>{bggUrl(game) && <a href={bggUrl(game)}>link</a>}</td>
+            <td>
+              {bggUrl(game) ? (
+                <a
+                  class="rating-link"
+                  href={bggUrl(game)}
+                  title="View on BoardGameGeek"
+                >
+                  {game.bggRating?.toFixed(1)}
+                  <svg
+                    aria-hidden="true"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M12 3h-7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                    <path d="M14 3h7v7" />
+                    <path d="M10 14 21 3" />
+                  </svg>
+                </a>
+              ) : (
+                (game.bggRating?.toFixed(1) ?? "–")
+              )}
+            </td>
           </tr>
         ))
       }
@@ -56,7 +79,19 @@ const games = loadGames()
   td .status.owned {
     @apply bg-green-100 text-green-800;
   }
+  :global(.theme-dark) td .status.owned {
+    @apply bg-green-900/70 text-green-200;
+  }
   td .status.considering {
     @apply bg-yellow-100 text-yellow-800;
+  }
+  :global(.theme-dark) td .status.considering {
+    @apply bg-yellow-900/70 text-yellow-200;
+  }
+  td .rating-link {
+    @apply inline-flex items-center gap-0.5 min-w-0 text-skin-base hover:text-skin-accent;
+  }
+  td .rating-link svg {
+    @apply h-3 w-3 shrink-0 fill-none;
   }
 </style>
