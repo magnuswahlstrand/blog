@@ -2,7 +2,7 @@ import type { RecipeFlow } from "../../lib/recipe-flow/schema";
 
 export const babaGhanoush: RecipeFlow = {
   title: "Baba Ghanoush",
-  added: 2024,
+  added: "2024-01",
   servings: "4",
   ingredients: [
     { id: "eggplant", label: "2 eggplants" },

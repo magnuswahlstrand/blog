@@ -2,7 +2,7 @@ import type { RecipeFlow } from "../../lib/recipe-flow/schema";
 
 export const xinjiangCuminLamb: RecipeFlow = {
   title: "Xinjiang Cumin Lamb",
-  added: 2026,
+  added: "2026-08",
   ingredients: [
     { id: "lamb", label: "700 g lamb stew chunks" },
     { id: "cumin-seeds", label: "2–3 tsp cumin seeds, coarsely crushed" },

@@ -2,7 +2,7 @@ import type { RecipeFlow } from "../../lib/recipe-flow/schema";
 
 export const gomaDressing: RecipeFlow = {
   title: "Japanese Sesame Dressing (Goma Dressing)",
-  added: 2026,
+  added: "2026-08",
   ingredients: [
     { id: "mayonnaise", label: "3 tbsp mayonnaise" },
     { id: "tahini", label: "2 tbsp tahini" },

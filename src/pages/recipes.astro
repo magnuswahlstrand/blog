@@ -3,8 +3,8 @@ import MySiteLayout from "../layouts/AboutNowLayout.astro";
 import SortableTable from "../components/SortableTable.astro";
 import { recipes } from "../recipes";
 
-const entries = Object.entries(recipes).sort(
-  (a, b) => (b[1].added ?? 0) - (a[1].added ?? 0)
+const entries = Object.entries(recipes).sort((a, b) =>
+  (b[1].added ?? "").localeCompare(a[1].added ?? "")
 );
 ---
 
@@ -13,7 +13,7 @@ const entries = Object.entries(recipes).sort(
     <thead>
       <tr>
         <th data-sort="asc" data-type="text">Recipe</th>
-        <th data-sort="desc" data-type="number">Added</th>
+        <th data-sort="desc" data-type="text">Added</th>
         <th data-type="none">Source</th>
       </tr>
     </thead>
@@ -24,7 +24,14 @@ const entries = Object.entries(recipes).sort(
             <td>
               <a href={`/recipes/${slug}`}>{recipe.title}</a>
             </td>
-            <td>{recipe.added ?? "–"}</td>
+            <td>
+              {recipe.added
+                ? new Date(recipe.added + "-01").toLocaleDateString("en-US", {
+                    month: "short",
+                    year: "numeric",
+                  })
+                : "–"}
+            </td>
             <td>
               {recipe.sources?.[0] && <a href={recipe.sources[0].url}>link</a>}
             </td>

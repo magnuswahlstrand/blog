@@ -2,7 +2,7 @@ import type { RecipeFlow } from "../../lib/recipe-flow/schema";
 
 export const zucchiniRolls: RecipeFlow = {
   title: "Zucchini Tapenade Rolls",
-  added: 2026,
+  added: "2026-07",
   servings: "4",
   ingredients: [
     { id: "zucchini", label: "2 zucchini (long, straight)" },

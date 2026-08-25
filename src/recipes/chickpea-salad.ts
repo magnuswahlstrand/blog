@@ -2,7 +2,7 @@ import type { RecipeFlow } from "../../lib/recipe-flow/schema";
 
 export const chickpeaSalad: RecipeFlow = {
   title: "5-Minute Chickpea Salad",
-  added: 2026,
+  added: "2026-08",
   ingredients: [
     { id: "chickpeas", label: "1 can chickpeas, rinsed" },
     { id: "cucumber", label: "½ cucumber, diced" },

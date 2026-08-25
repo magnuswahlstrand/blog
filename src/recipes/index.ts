@@ -3,7 +3,7 @@ import { babaGhanoush } from "./baba-ghanoush";
 import { chickpeaSalad } from "./chickpea-salad";
 import { gomaDressing } from "./goma-dressing";
 import { kimchi } from "./kimchi";
-import { kinesiskKrossadGurksallad } from "./kinesisk-krossad-gurksallad";
+import { kinesiskKrossadGurksallad } from "./chinese-cucumber-sallad.ts";
 import { sousVideScrambledEggs } from "./sous-vide-scrambled-eggs";
 import { xinjiangCuminLamb } from "./xinjiang-cumin-lamb";
 import { zucchiniRolls } from "./zucchini-rolls";
