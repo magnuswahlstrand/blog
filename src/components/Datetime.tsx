@@ -1,7 +1,7 @@
 import formatDatetime from "@utils/formatDatetime";
 
 export interface Props {
-  datetime: string;
+  datetime: string | Date;
   size?: "sm" | "lg";
   className?: string;
 }

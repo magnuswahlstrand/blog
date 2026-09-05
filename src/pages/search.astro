@@ -5,15 +5,10 @@ import Main from "@layouts/Main.astro";
 import Header from "@components/Header.astro";
 import Footer from "@components/Footer.astro";
 import Search from "@components/Search";
-import type { Frontmatter } from "src/types";
-import type { MarkdownInstance } from "astro";
+import { loadPosts } from "../lib/posts";
 
 // Retrieve all articles
-const posts = Object.values(
-  import.meta.glob<MarkdownInstance<Frontmatter>>("../contents/**/*.{md,mdx}", {
-    eager: true,
-  })
-);
+const posts = loadPosts();
 
 // List of items to search in
 const searchList = posts

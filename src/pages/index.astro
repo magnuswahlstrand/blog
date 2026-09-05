@@ -8,12 +8,10 @@ import Card from "@components/Card";
 import Welcome from "@components/Welcome.astro";
 import getSortedPosts from "@utils/getSortedPosts";
 import slugify from "@utils/slugify";
-import type { Frontmatter } from "src/types";
+import { loadPosts } from "../lib/posts";
 import Socials from "@components/Socials.astro";
 
-const posts = Object.values(
-  import.meta.glob("../contents/**/*.{md,mdx}", { eager: true })
-);
+const posts = loadPosts();
 
 const sortedPosts = getSortedPosts(posts);
 ---

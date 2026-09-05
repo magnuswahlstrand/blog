@@ -3,15 +3,9 @@ import { SITE } from "src/config";
 import Posts from "@layouts/Posts.astro";
 import getSortedPosts from "@utils/getSortedPosts";
 import getPageNumbers from "@utils/getPageNumbers";
-import type { Frontmatter } from "src/types";
-import type { MarkdownInstance } from "astro";
+import { loadPosts } from "../../lib/posts";
 
-const posts = Object.values(
-  import.meta.glob<MarkdownInstance<Frontmatter>>(
-    "../../contents/**/*.{md,mdx}",
-    { eager: true }
-  )
-);
+const posts = loadPosts();
 
 const sortedPosts = getSortedPosts(posts);
 

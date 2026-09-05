@@ -1,4 +1,4 @@
-const formatDatetime = (datetime: string) => {
+const formatDatetime = (datetime: string | Date) => {
   const myDatetime = new Date(datetime);
   return myDatetime.toLocaleDateString([], {
     year: "numeric",

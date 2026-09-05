@@ -1,11 +1,6 @@
 ---
-import type { MarkdownInstance } from "astro";
-import type { Frontmatter } from "src/types";
+import { loadPosts } from "../../lib/posts";
 import slugify from "@utils/slugify";
-
-export interface Props {
-  post: MarkdownInstance<Frontmatter>;
-}
 
 type PostResult = {
   params: {
@@ -14,12 +9,7 @@ type PostResult = {
 }[];
 
 export async function getStaticPaths() {
-  const posts = Object.values(
-    import.meta.glob<MarkdownInstance<Frontmatter>>(
-      "../../contents/**/*.{md,mdx}",
-      { eager: true }
-    )
-  );
+  const posts = loadPosts();
 
   let postResult: PostResult = posts.map(post => {
     return {
@@ -37,4 +27,4 @@ const { slug } = Astro.params;
 const content = `0; url=/posts/${slug}`;
 ---
 
-<head><meta http-equiv="refresh" content={content} /></head </head>
+<meta http-equiv="refresh" content={content} />

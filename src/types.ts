@@ -1,14 +1,8 @@
-export interface Frontmatter {
-  title: string;
-  ogImage?: string;
-  description: string;
-  author: string;
-  datetime: string;
-  slug: string;
-  featured: boolean;
-  draft: boolean;
-  tags: string[];
-}
+/**
+ * Post frontmatter. Derived from the zod schema in `@lib/posts/schema` so the
+ * type and the build-time validation can't drift apart.
+ */
+export type { Post as Frontmatter } from "./lib/posts/schema";
 
 export type SocialsObject = {
   name: SocialMedia;

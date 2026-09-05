@@ -6,7 +6,7 @@ import type { Frontmatter } from "src/types";
 
 type SearchItem = {
   title: string;
-  description: string;
+  description?: string;
   headings: string[];
   frontmatter: Frontmatter;
 };

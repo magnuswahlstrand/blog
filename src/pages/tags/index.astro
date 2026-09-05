@@ -6,11 +6,9 @@ import Layout from "@layouts/Layout.astro";
 import Main from "@layouts/Main.astro";
 import Tag from "@components/Tag.astro";
 import getCountedTags from "@utils/getCountedTags";
-import type { Frontmatter } from "src/types";
+import { loadPosts } from "../../lib/posts";
 
-const posts = Object.values(
-  import.meta.glob("../../contents/**/*.{md,mdx}", { eager: true })
-);
+const posts = loadPosts();
 
 let countedTags = getCountedTags(posts);
 let sortedTags = countedTags.map(t => t.tag);

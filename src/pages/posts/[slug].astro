@@ -6,6 +6,7 @@ import getSortedPosts from "@utils/getSortedPosts";
 import getPageNumbers from "@utils/getPageNumbers";
 import type { MarkdownInstance } from "astro";
 import type { Frontmatter } from "src/types";
+import { loadPosts } from "../../lib/posts";
 import slugify from "@utils/slugify";
 
 export interface Props {
@@ -28,12 +29,7 @@ type PagePaths = {
 }[];
 
 export async function getStaticPaths() {
-  const posts = Object.values(
-    import.meta.glob<MarkdownInstance<Frontmatter>>(
-      "../../contents/**/*.{md,mdx}",
-      { eager: true }
-    )
-  );
+  const posts = loadPosts();
 
   let postResult: PostResult = posts.map(post => {
     return {
@@ -55,12 +51,7 @@ export async function getStaticPaths() {
 const { slug } = Astro.params;
 const { post } = Astro.props;
 
-const posts = Object.values(
-  import.meta.glob<MarkdownInstance<Frontmatter>>(
-    "../../contents/**/*.{md,mdx}",
-    { eager: true }
-  )
-);
+const posts = loadPosts();
 
 const sortedPosts = getSortedPosts(posts);
 
