@@ -7,6 +7,7 @@ import { kinesiskKrossadGurksallad } from "./chinese-cucumber-sallad.ts";
 import { sousVideScrambledEggs } from "./sous-vide-scrambled-eggs";
 import { xinjiangCuminLamb } from "./xinjiang-cumin-lamb";
 import { zucchiniRolls } from "./zucchini-rolls";
+import { katsuSando } from "./katsu-sando";
 
 export const recipes: Record<string, RecipeFlow> = {
   kimchi,
@@ -17,4 +18,5 @@ export const recipes: Record<string, RecipeFlow> = {
   "sous-vide-scrambled-eggs": sousVideScrambledEggs,
   "xinjiang-cumin-lamb": xinjiangCuminLamb,
   "zucchini-rolls": zucchiniRolls,
+  "katsu-sando": katsuSando,
 };
