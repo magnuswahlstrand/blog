@@ -30,10 +30,13 @@ Vitest only picks up `src/**/__tests__/**/*.test.ts` (node environment, globals 
 Astro components and pages are not covered by tests — the testable logic lives in
 `src/lib/`.
 
-Deployment is automatic: pushing to `main` triggers `.github/workflows/deploy.yml`
-(GitHub Pages). `scripts/deploy.sh` / `pnpm deploy` is an older manual path that
-copies `dist/` into a sibling `../magnuswahlstrand.github.io` repo — don't use it
-unless asked.
+Deployment is automatic: pushing to `main` triggers `.github/workflows/deploy.yml`,
+which builds with pnpm and publishes `dist/` to GitHub Pages via
+`upload-pages-artifact` + `deploy-pages`. The live site is <https://wahlstrand.dev>;
+the custom domain is held by *this* repo's Pages site and `public/CNAME` carries it
+into every build — don't delete that file. There is no manual deploy path any more
+(the old `scripts/deploy.sh`, which copied `dist/` into a sibling
+`../magnuswahlstrand.github.io` repo, is gone).
 
 `.husky/pre-commit` runs `lint-staged`, which prettier-formats every staged file.
 
