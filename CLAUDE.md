@@ -22,7 +22,7 @@ pnpm format:check   # prettier --check .
 Single test file / single test:
 
 ```bash
-npx vitest run src/lib/recipe-flow/__tests__/layout.test.ts
+npx vitest run src/lib/posts/__tests__/schema.test.ts
 npx vitest run -t "some test name"
 ```
 
@@ -65,28 +65,22 @@ There are **no Astro content collections**. Each kind of content has its own loa
 2. **Board games** — `src/games/*.md`, loaded by `src/lib/games/index.ts`, same
    glob-and-validate pattern as posts (`gameSchema`). Rendered by
    `src/pages/lists/board-games.astro`.
-3. **Recipes** — TypeScript modules in `src/recipes/*.ts`, registered by hand in
-   `src/recipes/index.ts` as a `Record<slug, RecipeFlow>`. Adding a recipe means
-   creating the module *and* adding its slug to that map.
+3. **Recipes** — plain markdown pages in `src/pages/recipes/*.md`, routed
+   *directly* by Astro (`layout: ../../layouts/AboutNowLayout.astro` in the
+   frontmatter, body is just `## Ingredients` / `## How to`). Adding a recipe means
+   dropping in a file — the URL is the filename, and there is no route file or
+   registry to update.
+   Because Astro renders these pages itself, `src/lib/recipes/` is not in the render
+   path; it globs the same directory so `src/pages/recipes.astro` (the index table)
+   can **zod-validate every recipe's frontmatter** against `recipeSchema`. That page
+   is always built, so an invalid recipe still fails the build with its path — the
+   same guarantee posts and games get, just enforced from the side.
+   `title` is required; `added` (`YYYY-MM`) and `source` (`{ label, url }`) feed the
+   table, `images` feeds the carousel in the layout.
+   These recipes used to be TS modules carrying an `operations` DAG rendered as a
+   flow diagram; that subsystem (`src/lib/recipe-flow/`) was removed.
 4. **JSON data** — `src/data/food-log.json`, `src/pages/menu/_menus.json`,
    imported directly by their pages (`_`-prefixed files are not routed by Astro).
-
-### Recipe flow (`src/lib/recipe-flow/`)
-
-The one non-trivial subsystem. A recipe is a DAG: `ingredients` (leaves) plus
-`operations` that take `inputs` (ids of ingredients or other operations).
-
-- `schema.ts` — zod schema + inferred `RecipeFlow` types.
-- `validate.ts` — semantic checks zod can't express (duplicate ids, unknown input
-  references, operations with no inputs); throws `ValidationError`.
-- `layout.ts` — pure layout pass: assigns stages/rows and emits `LayoutRect` cells
-  with pixel geometry.
-- `wrap-text.ts` — text wrapping for the SVG labels.
-- `RecipeFlow.astro` parses → validates → lays out → renders inline SVG at build
-  time. A malformed recipe therefore fails the build, which is intended.
-
-The layout and validation modules are the ones with test coverage; keep them pure
-so they stay testable.
 
 ### Routing
 

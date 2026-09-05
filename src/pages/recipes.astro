@@ -1,11 +1,9 @@
 ---
 import MySiteLayout from "../layouts/AboutNowLayout.astro";
 import SortableTable from "../components/SortableTable.astro";
-import { recipes } from "../recipes";
+import { getSortedRecipes } from "../lib/recipes";
 
-const entries = Object.entries(recipes).sort((a, b) =>
-  (b[1].added ?? "").localeCompare(a[1].added ?? "")
-);
+const recipes = getSortedRecipes();
 ---
 
 <MySiteLayout frontmatter={{ title: "Recipes", navName: "lists" }}>
@@ -19,21 +17,26 @@ const entries = Object.entries(recipes).sort((a, b) =>
     </thead>
     <tbody>
       {
-        entries.map(([slug, recipe]) => (
+        recipes.map(recipe => (
           <tr>
             <td>
-              <a href={`/recipes/${slug}`}>{recipe.title}</a>
+              <a href={recipe.url}>{recipe.frontmatter.title}</a>
             </td>
             <td>
-              {recipe.added
-                ? new Date(recipe.added + "-01").toLocaleDateString("en-US", {
-                    month: "short",
-                    year: "numeric",
-                  })
+              {recipe.frontmatter.added
+                ? new Date(recipe.frontmatter.added + "-01").toLocaleDateString(
+                    "en-US",
+                    {
+                      month: "short",
+                      year: "numeric",
+                    }
+                  )
                 : "–"}
             </td>
             <td>
-              {recipe.sources?.[0] && <a href={recipe.sources[0].url}>link</a>}
+              {recipe.frontmatter.source && (
+                <a href={recipe.frontmatter.source.url}>link</a>
+              )}
             </td>
           </tr>
         ))

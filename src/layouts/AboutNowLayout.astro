@@ -3,9 +3,7 @@ import { SITE } from "src/config";
 import Footer from "@components/Footer.astro";
 import Header from "@components/Header.astro";
 import ImageCarousel from "@components/ImageCarousel.astro";
-import RecipeFlow from "@components/RecipeFlow.astro";
 import Layout from "./Layout.astro";
-import { recipes as recipeFlows } from "../recipes";
 
 export interface Props {
   frontmatter: {
@@ -13,15 +11,12 @@ export interface Props {
     navName?: string;
     description?: string;
     images?: { src: string; alt?: string }[];
+    source?: { label: string; url: string };
   };
 }
 
 const { frontmatter } = Astro.props;
 const cookingMode = Astro.url.pathname.startsWith("/recipes/");
-const recipeKey = cookingMode
-  ? Astro.url.pathname.replace(/^\/recipes\//, "").replace(/\/$/, "")
-  : null;
-const recipeData = recipeKey ? recipeFlows[recipeKey] : null;
 ---
 
 <Layout title={`${frontmatter.title} | ${SITE.title}`}>
@@ -52,10 +47,13 @@ const recipeData = recipeKey ? recipeFlows[recipeKey] : null;
       }
       <slot />
       {
-        recipeData && (
-          <div class="not-prose">
-            <RecipeFlow recipe={recipeData} />
-          </div>
+        frontmatter.source && (
+          <p>
+            <em>
+              {frontmatter.source.label} —{" "}
+              <a href={frontmatter.source.url}>{frontmatter.source.url}</a>
+            </em>
+          </p>
         )
       }
       {
